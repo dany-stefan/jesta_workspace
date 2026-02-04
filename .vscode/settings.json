@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^/Users/danystefan/Documents/Work/Jesta/workspace/\\.venv/bin/python3 -c \"import polars as pl; import pandas as pd; df = pl\\.read_csv\\('/Users/danystefan/Documents/Work/Jesta/workspace/dany_stefan_ml_assessment/data/fashion_sample\\.csv'\\); print\\('Shape:', df\\.shape\\); print\\(df\\.head\\(\\)\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
