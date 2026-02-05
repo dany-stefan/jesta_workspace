@@ -73,14 +73,14 @@
             </div>
         </div>
 
-        <svg width="1550" height="1150" viewBox="0 0 1550 1150">
+        <svg width="1550" height="1200" viewBox="0 0 1550 1200">
             <defs>
                 <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
                     <polygon points="0 0, 10 3, 0 6" fill="#333" />
                 </marker>
             </defs>
             
-            <rect width="1550" height="1150" fill="#fafafa"/>
+            <rect width="1550" height="1200" fill="#fafafa"/>
             
             <text x="775" y="30" font-size="22" font-weight="bold" text-anchor="middle" fill="#1a237e">Product Qualification Pipeline Architecture</text>
             
@@ -178,8 +178,8 @@
             
             <!-- Dead Stock Box -->
             <rect x="560" y="870" width="430" height="50" fill="#ffcdd2" rx="5" stroke="#d32f2f" stroke-width="2"/>
-            <text x="775" y="850" font-size="13" font-weight="bold" text-anchor="middle" fill="#b71c1c">Dead Stock Criteria (Auto-Exclude)</text>
-            <text x="580" y="870" font-size="10" fill="#d32f2f">Zero sales 180+d | No restock 120+d | Discontinued | Clearance > 90d with no sales</text>
+            <text x="775" y="890" font-size="13" font-weight="bold" text-anchor="middle" fill="#b71c1c">Dead Stock Criteria (Auto-Exclude)</text>
+            <text x="580" y="910" font-size="10" fill="#d32f2f">Zero sales 180+d | No restock 120+d | Discontinued | Clearance > 90d with no sales</text>
 
             <path d="M 1010 420 L 1050 420" stroke="#333" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
             
@@ -215,25 +215,27 @@
             <text x="1275" y="365" font-size="11" font-weight="bold" text-anchor="middle" fill="#2e7d32">Feeds directly into forecast model</text>
 
             <!-- SCALE Section -->
-            <rect x="50" y="420" width="450" height="250" fill="#e1bee7" rx="8" stroke="#8e24aa" stroke-width="2"/>
+            <rect x="50" y="420" width="450" height="290" fill="#e1bee7" rx="8" stroke="#8e24aa" stroke-width="2"/>
             <text x="275" y="450" font-size="18" font-weight="bold" text-anchor="middle" fill="#6a1b9a">4. SCALE (No OOM)</text>
             
             <text x="70" y="480" font-size="13" font-weight="bold" fill="#6a1b9a">Memory Optimization:</text>
             <text x="80" y="500" font-size="10">• Chunked processing: 500k rows/batch (Polars lazy)</text>
             <text x="80" y="515" font-size="10">• Data types: categorical (SKU/store), int16, float32</text>
             <text x="80" y="530" font-size="10">• Streaming: Never load full 9.15M into memory</text>
+            <text x="80" y="545" font-size="10">• Filter early: Apply logic ASAP in pipeline</text>
             
-            <text x="70" y="555" font-size="13" font-weight="bold" fill="#6a1b9a">Parallel Processing:</text>
-            <text x="80" y="575" font-size="10">• Multi-threading: Polars native parallelism (CPU)</text>
-            <text x="80" y="590" font-size="10">• Store-level parallel: Process 61 stores independently</text>
-            <text x="80" y="605" font-size="10">• Category batching: Split by Footwear/Sportswear/etc.</text>
+            <text x="70" y="570" font-size="13" font-weight="bold" fill="#6a1b9a">Parallel Processing:</text>
+            <text x="80" y="590" font-size="10">• Multi-threading: Polars native parallelism (CPU)</text>
+            <text x="80" y="605" font-size="10">• Store-level parallel: Process 61 stores independently</text>
+            <text x="80" y="620" font-size="10">• Category batching: Split by Footwear/Sportswear/etc.</text>
+            <text x="80" y="635" font-size="10">• Incremental: Only reprocess changed products</text>
             
-            <text x="70" y="630" font-size="13" font-weight="bold" fill="#6a1b9a">Scalability:</text>
-            <text x="80" y="650" font-size="10">• Current: 150k × 61 = 9.15M rows (~2GB)</text>
-            <text x="80" y="665" font-size="10">• Future: 500k × 200 = 100M rows (~20GB, still OK)</text>
+            <text x="70" y="660" font-size="13" font-weight="bold" fill="#6a1b9a">Storage & Efficiency:</text>
+            <text x="80" y="680" font-size="10">• Parquet files: Compressed, columnar, fast I/O</text>
+            <text x="80" y="695" font-size="10">• Hash joins: Pre-hash SKU/store for fast lookups</text>
             
             <!-- VALIDATION Section -->
-            <rect x="1050" y="420" width="450" height="420" fill="#f3e5f5" rx="8" stroke="#8e24aa" stroke-width="2"/>
+            <rect x="1050" y="420" width="450" height="460" fill="#f3e5f5" rx="8" stroke="#8e24aa" stroke-width="2"/>
             <text x="1275" y="450" font-size="18" font-weight="bold" text-anchor="middle" fill="#6a1b9a">5. VALIDATION</text>
             
             <text x="1070" y="480" font-size="13" font-weight="bold" fill="#6a1b9a">Operational Metrics:</text>
@@ -244,43 +246,46 @@
             
             <text x="1070" y="570" font-size="13" font-weight="bold" fill="#6a1b9a">Business Metrics:</text>
             <text x="1080" y="590" font-size="10">• Qualification rate by category: 20-30% overall</text>
-            <text x="1080" y="605" font-size="10">• False negatives: Products marked dead but sold (audit)</text>
-            <text x="1080" y="620" font-size="10">• False positives: Forecasted but never sold (audit)</text>
+            <text x="1080" y="605" font-size="10">• False negatives: Products marked dead but sold</text>
+            <text x="1080" y="620" font-size="10">• False positives: Forecasted but never sold</text>
             <text x="1080" y="635" font-size="10">• Forecast coverage: > 95% of actual sales</text>
             
             <text x="1070" y="660" font-size="13" font-weight="bold" fill="#6a1b9a">Model Impact:</text>
-            <text x="1080" y="680" font-size="10">• WMAPE improvement: 15-25% reduction expected</text>
+            <text x="1080" y="680" font-size="10">• WMAPE: 15-25% reduction expected</text>
             <text x="1080" y="695" font-size="10">• OOM crashes: Target 0 crashes</text>
             <text x="1080" y="710" font-size="10">• Training speed: 30-40% faster</text>
             <text x="1080" y="725" font-size="10">• Accuracy by category: Before/after comparison</text>
             
             <text x="1070" y="750" font-size="13" font-weight="bold" fill="#6a1b9a">Validation Workflow:</text>
-            <text x="1080" y="770" font-size="10">✓ Weekly: Sample 100 random products, verify sales</text>
-            <text x="1080" y="785" font-size="10">✓ Monthly: Dashboard with qualification trends</text>
+            <text x="1080" y="770" font-size="10">✓ Weekly: Sample 100 products, verify sales</text>
+            <text x="1080" y="785" font-size="10">✓ Monthly: Dashboard qualification trends</text>
             <text x="1080" y="800" font-size="10">✓ Quarterly: SME review, adjust thresholds</text>
-            <text x="1080" y="815" font-size="10">✓ A/B Testing: Parallel forecasts with/without</text>
+            <text x="1080" y="815" font-size="10">✓ A/B Testing: Parallel forecasts comparison</text>
+            <text x="1080" y="830" font-size="10">✓ Audits: Manual review qualified/excluded</text>
+            <text x="1080" y="845" font-size="10">✓ Alerts: Abnormal rates, time, memory</text>
+            <text x="1080" y="860" font-size="10">✓ Log discards: Track if excluded items resell</text>
             
             <!-- Success Box -->
-            <rect x="50" y="700" width="450" height="160" fill="#c8e6c9" rx="8" stroke="#388e3c" stroke-width="2"/>
-            <text x="275" y="730" font-size="16" font-weight="bold" text-anchor="middle" fill="#1b5e20">Success Criteria</text>
+            <rect x="50" y="740" width="450" height="160" fill="#c8e6c9" rx="8" stroke="#388e3c" stroke-width="2"/>
+            <text x="275" y="770" font-size="16" font-weight="bold" text-anchor="middle" fill="#1b5e20">Success Criteria</text>
             
-            <text x="70" y="760" font-size="11" fill="#2e7d32">✓ WMAPE reduced by at least 15% from qualification alone</text>
-            <text x="70" y="780" font-size="11" fill="#2e7d32">✓ Zero OOM crashes for 4 consecutive weeks</text>
-            <text x="70" y="800" font-size="11" fill="#2e7d32">✓ Processing time stable at < 15 minutes</text>
-            <text x="70" y="820" font-size="11" fill="#2e7d32">✓ False negative rate < 5%</text>
-            <text x="70" y="840" font-size="11" fill="#2e7d32">✓ Stakeholder sign-off on qualification logic</text>
+            <text x="70" y="800" font-size="11" fill="#2e7d32">✓ WMAPE ↓ 15%+ from qualification alone</text>
+            <text x="70" y="820" font-size="11" fill="#2e7d32">✓ Zero OOM crashes for 4 consecutive weeks</text>
+            <text x="70" y="840" font-size="11" fill="#2e7d32">✓ Processing time stable at < 15 minutes</text>
+            <text x="70" y="860" font-size="11" fill="#2e7d32">✓ False negative rate < 5%</text>
+            <text x="70" y="880" font-size="11" fill="#2e7d32">✓ Stakeholder sign-off on logic</text>
             
             <!-- Processing Flow -->
-            <rect x="540" y="880" width="470" height="160" fill="#fff9c4" rx="8" stroke="#fbc02d" stroke-width="2"/>
-            <text x="775" y="910" font-size="16" font-weight="bold" text-anchor="middle" fill="#f57f17">Processing Flow (Polars Pipeline)</text>
+            <rect x="540" y="940" width="470" height="180" fill="#fff9c4" rx="8" stroke="#fbc02d" stroke-width="2"/>
+            <text x="775" y="970" font-size="16" font-weight="bold" text-anchor="middle" fill="#f57f17">Processing Flow (Polars Pipeline)</text>
             
-            <text x="560" y="935" font-size="11" fill="#333">1. Load data in chunks (500k rows) → Lazy evaluation</text>
-            <text x="560" y="955" font-size="11" fill="#333">2. Apply business rules per chunk → Parallel execution</text>
-            <text x="560" y="975" font-size="11" fill="#333">3. Write qualified products to Parquet → Incremental</text>
-            <text x="560" y="995" font-size="11" fill="#333">4. Generate metrics & alerts → Real-time monitoring</text>
-            <text x="560" y="1015" font-size="11" fill="#333">5. Feed to forecast model → Pre-processing complete</text>
+            <text x="560" y="995" font-size="11" fill="#333">1. Load in chunks (500k rows) → Lazy evaluation</text>
+            <text x="560" y="1015" font-size="11" fill="#333">2. Apply business rules/chunk → Parallel execution</text>
+            <text x="560" y="1035" font-size="11" fill="#333">3. Write qualified to Parquet → Incremental</text>
+            <text x="560" y="1055" font-size="11" fill="#333">4. Generate metrics/alerts → Real-time monitoring</text>
+            <text x="560" y="1075" font-size="11" fill="#333">5. Feed to forecast model → Pre-processing done</text>
             
-            <text x="775" y="1040" font-size="10" font-style="italic" text-anchor="middle" fill="#666">Total processing time: ~15 minutes | Memory peak: ~4GB | Zero OOM crashes</text>
+            <text x="775" y="1105" font-size="10" font-style="italic" text-anchor="middle" fill="#666">Time: ~15 min | Memory: ~4GB peak | Scale: 100M rows OK</text>
             
         </svg>
     </div>

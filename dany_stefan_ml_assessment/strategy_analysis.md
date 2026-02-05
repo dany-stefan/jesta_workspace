@@ -204,7 +204,7 @@ To handle the scale of 150k SKUs across 61 stores without running into Out of Me
 - Use distiruted framworks like Docker containers or Kubernetes to scale horizontally across multiple machines if needed.
 - Efficient use of datatypes in Polars (using categorical types for string columns, appropriate integer sizes) to minimize memory footprint.  
 
-### 4.Validation
+### 4. Validation
 How do you know it's working? What would you measure?
 To validate that the Product Qualification component is working effectively, we can implement several validation strategies and measure key performance indicators (KPIs). We can measure operational metrics are tracked, including the reduction in product count, peak memory usage, processing time, and error rates in a data engeering POV. In a buisness POV, we measure qualification rate by category, false negatives (excluded products that later sell), false positives (included products that never sell), and forecast coverage improvement.  
 - Qualification Rate by Category: Measure the percentage of products qualified for forecasting within each category. This helps identify if certain categories are being over or under-filtered.  
