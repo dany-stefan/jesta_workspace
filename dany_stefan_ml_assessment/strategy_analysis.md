@@ -68,7 +68,6 @@ Key risk: [what could go wrong] → Mitigation: [how you'd handle it]
 - Filtering may remove too many products → Mitigation: validate filtering logic with SMEs and run A/B tests (X window period) on a small subset before full rollout [POSSIBLE and CRUCIAL]
 
 
-
 Month 2 Goal: [WMAPE target = reduce further by up to 1/4 -> new target number : (WMAPE <= 37-18%)]  
 GOAL: Feature engineer, address censored demand, and ajust price sensitivity.  
 IMPACT: HIGH IMPACT, HIGH EFFORT  
