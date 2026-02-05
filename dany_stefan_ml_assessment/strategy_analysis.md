@@ -117,10 +117,34 @@ What data goes in? What comes out? How does it fit into existing pipeline?
 **Outputs:** The output will be a cleaned and enriched dataset containing only active, replenishable products with engineered features ready for model training. This dataset will have reduced noise from irrelevant products, leading to improved model accuracy and efficiency. The output dataset will include engineered features such as stockout indicators, price elasticity metrics, and seasonality flags. These features will enhance the model's ability to capture demand patterns accurately. The output dataset will be structured in a format compatible with the existing modeling pipeline, ensuring seamless integration. It will be stored in a data lake or database accessible by the modeling component. Nomralizing the data converting categorical to numerical features; Lag features for stockouts and price changes; Interaction features between price and seasonality. The second compoenent that eats this output is for the modeling step, which will use this enriched dataset to train and generate demand forecasts; thus, this data must be normalized, encoded and normally distributed. We want to limit skewness and outliers. We must look at standard deviations and variance on each feature column (category and SKU and variantion of an SKU).
 
 ### 2. Business Rules  
-How do you decide what to forecast? DiGerent logic for:  
+How do you decide what to forecast? Different logic for:    
 **Physical stores vs ecom:**  
 Physical stores: Focus on products with consistent in-store sales history, prioritize SKUs that are replenished regularly, and consider local demand patterns. We must consider the inventory pipeline and supply chain logistics that affect in-store availability. Local events, weather patterns, and regional preferences can influence demand for physical stores. We also consider the size of the product and availbale space in the store to store and display the product. Crucially, we must consider the shelf life of products in physical stores, especially for seasonal items and the lookback window period to evaluate sales history. We can take 90 days as a starting point for recent sales, but this can be adjusted based on category dynamics. Then, 60 days for the upper limit of replenishable products. If no new net stock in the last 60 days, we can mark it as non-replenishable. Afterwhich, that product is not active anymore. high-velocity categories like Footwear use a shorter lookback window, while low-velocity categories like Made-to-Measure use a longer window.  
-E-commerce: Emphasize products with strong online sales trends, account for digital marketing impact, and include SKUs with high web traffic and conversion rates.
+
+E-commerce: Emphasize products with strong online sales trends, account for digital marketing impact, and include SKUs with high web traffic and conversion rates or abondaning rate. The window can aslo be stretched if we consider costs to store the item in teh warehouse. E-commerce can have a longer shelf life for products, as they are not limited by physical shelf space. We can consider a 120-day lookback window for online sales history and a 90-day replenishment window. Online demand can be more volatile due to flash sales, promotions, and digital marketing campaigns. We must consider the impact of these factors on demand patterns. Storing in the warehouse is less impactful than in store to fufill orders, so we can have a longer replenishment window. Dead stock can be identified by looking at products with no web traffic or conversions over a longer period, say 180 days. I would elongate this window for e-commerce. This is because products in e-commerce can remain in the warehouse longer without the space constraints of a physical shelf, and the cost of holding inventory is typically lower. Additionally, online demand can be more volatile due to digital marketing, flash sales, and broader geographic reach, so a product that appears inactive for a short period may still experience future demand spikes. However, since website traffic and conversion data are easily accessible, we can also monitor engagement closely and adjust the window if a product shows no web activity or conversions for an extended period. Ultimately, it’s a balance. There can be a balance where a store can have limited inventory of a prodcut but a mass ive web traffic for it. We must consider both channels holistically. Thus, in the warehouse and for online stockage we can have a longer window and not mark it as dead stock too quickly and neither a limited un-replenshibale item. Maybe that only stays the case in-stores since online we can restock from the warehouse more easily and reach a wider marketing audiance.  
+**example:**  
+High-velocity categories (e.g., Footwear):  
+- Use shorter lookback windows (60 days) to capture recent sales trends.
+- Prioritize SKUs with frequent restocking and rapid inventory turnover.
+- Apply a 30-day replenishment window to identify active products.
+- Filtering logic must be agile to capture frequent stockouts and replenishments.
+- Incorporate seasonality flags to account for demand fluctuations (back-to-school, holidays).
+- Monitor for aggressive markdowns and frequent promotions.  
+
+Low-velocity categories (e.g., Made-to-Measure):  
+- Use longer lookback windows (120 days) to account for infrequent sales.
+- Focus on SKUs with stable inventory levels and longer replenishment cycles.
+- Apply a 90-day replenishment window to identify active products.
+- Filtering logic can be less reactive due to more stable demand patterns.
+- Seasonality may be less pronounced, but still consider for certain categories (wedding season).
+- Monitor for custom orders and niche demand signals.  
+
+**New products vs mature products:**  
+New Products: 
+
+
+
+
 ---
 
 ## Summary & Recommendations
