@@ -58,7 +58,7 @@ Assumptions:
 **Week 1:** [Filter out inactive or non-replenishable products, inventory=0, known rule-set] → Expected impact: Reduce batch load size. [Batch size in MB reduced by 25% for training set.] [15h to analyse drops in inventory, speak to SMEs about non-replenishable products + 10h to implement filtering logic + 5h to test and validate + 5h buffer + 5h ramp-up on tools = 40h]  
 **Week 2:** [Filter dead stock, sales=0, research a window of X time for zero sales period, mark no longer active purge] → Expected impact: Reduce batch load size and training time. [Batch size in MB reduced by 25%, faster training in ms compare with benchmark.] [20h research the best window period with SME and experiment with small set + 10h implement filtering logic and combinations + 5h test training speed + 5h buffer = 40h]  
 **Checkpoint:** Validate reduced memory usage and training time without OOM crashes. (Dataset reduced from 12.6M to ~3-4M products.)  
-**Week 3:** [Explore threads and parallel processing of the batch load in Python, no cloud ETL services, make it elegant and reproducible and scalable for other clients and more datapoints] → Expected impact: Even faster data processing in parallel by splitting in chunks, ready for training. [The ETL load should go at least twice as fast, reduce deadlocking and hanging, hit the CPU not the memory.] [15h research best practices for parallel processing in Polars + 20h implement and test for re-stitching correctly the chunks or keep separate for downstream + 5h buffer = 40h]  
+**Week 3:** [Explore threads and parallel processing of the batch load in Python, no cloud ETL services, make it elegant and reproducible and scalable for other clients and more data points] → Expected impact: Even faster data processing in parallel by splitting in chunks, ready for training. [The ETL load should go at least twice as fast, reduce deadlocking and hanging, hit the CPU not the memory.] [15h research best practices for parallel processing in Polars + 20h implement and test for re-stitching correctly the chunks or keep separate for downstream + 5h buffer = 40h]  
 **Week 4:** [Make last week's code modular and reusable components, no API blackbox or agentic orchestration, setup monitoring tools for training speed will use in the future, have time to start Month 2 tasks] → Expected impact: Futureproof, think high-level, train the junior what it means to document and leave your code to the next guy. [Learn a new design pattern almost creating in-house SDK, object-oriented or polymorphism - learn something new.] [20h refactor code to be modular + 3h document and create examples + 17h buffer = 40h]  
 
 **Key risk:** [What could go wrong] → Mitigation: [How you'd handle it]  
@@ -113,7 +113,7 @@ Assumptions:
 
 ---
 
-## Task 3: System Design
+## Task 3: System Desin
 hjgjhffhj
 
 ### [Section headers to be filled based on task requirements]
