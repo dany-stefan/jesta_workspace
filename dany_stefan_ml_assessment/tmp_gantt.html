@@ -1,39 +1,245 @@
-<!-- tmp_gantt.html -->
-<div style="font-family:sans-serif;">
-  <h3>90-Day Roadmap: Problem → Approach → Results</h3>
-  <svg width="900" height="320" style="background:#f9f9f9;">
-    <!-- Timeline axis -->
-    <line x1="80" y1="40" x2="820" y2="40" stroke="#333" stroke-width="2" />
-    <!-- Month markers -->
-    <text x="80" y="30" font-size="16">Month 1</text>
-    <text x="340" y="30" font-size="16">Month 2</text>
-    <text x="600" y="30" font-size="16">Month 3</text>
-    <!-- Tasks as colored bars -->
-    <rect x="90" y="60" width="180" height="30" fill="#b3e5fc" />
-    <text x="100" y="80" font-size="14">Filter dead stock (Impact: ↓WMAPE, fix OOM)</text>
-    <rect x="90" y="100" width="180" height="30" fill="#ffe082" />
-    <text x="100" y="120" font-size="14">Stockout-aware modeling (Impact: ↑accuracy)</text>
-    <rect x="90" y="140" width="180" height="30" fill="#c8e6c9" />
-    <text x="100" y="160" font-size="14">Add price/markdown features (Impact: ↑clearance forecasts)</text>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90-Day Implementation Roadmap</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a237e;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+        .goals {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .goal {
+            margin-bottom: 15px;
+        }
+        .goal-title {
+            font-weight: bold;
+            color: #1a237e;
+        }
+        .goal-metric {
+            color: #388e3c;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>90-Day Implementation Roadmap</h1>
+        <p class="subtitle">Problem → Approach → Results</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #4fc3f7;"></div>
+                <span>Data Engineering & Filtering</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #ffb74d;"></div>
+                <span>ML Modeling & Features</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #81c784;"></div>
+                <span>Infrastructure & Monitoring</span>
+            </div>
+        </div>
 
-    <rect x="350" y="60" width="180" height="30" fill="#b3e5fc" />
-    <text x="360" y="80" font-size="14">Engineer time features (Impact: ↓Sportswear error)</text>
-    <rect x="350" y="100" width="180" height="30" fill="#ffe082" />
-    <text x="360" y="120" font-size="14">Retrain & validate (Impact: stable WMAPE)</text>
-    <rect x="350" y="140" width="180" height="30" fill="#c8e6c9" />
-    <text x="360" y="160" font-size="14">Dashboards (Impact: faster feedback)</text>
+        <svg width="1350" height="650" viewBox="0 0 1350 650">
+            <!-- Background -->
+            <rect width="1350" height="650" fill="#fafafa"/>
+            
+            <!-- Timeline axis -->
+            <line x1="80" y1="80" x2="1270" y2="80" stroke="#333" stroke-width="3"/>
+            
+            <!-- Month markers with background -->
+            <rect x="60" y="40" width="360" height="35" fill="#e3f2fd" rx="5"/>
+            <text x="240" y="65" font-size="18" font-weight="bold" text-anchor="middle">Month 1 (WMAPE ≤25-35%)</text>
+            
+            <rect x="460" y="40" width="360" height="35" fill="#fff3e0" rx="5"/>
+            <text x="640" y="65" font-size="18" font-weight="bold" text-anchor="middle">Month 2 (WMAPE ≤18-37%)</text>
+            
+            <rect x="860" y="40" width="360" height="35" fill="#e8f5e9" rx="5"/>
+            <text x="1040" y="65" font-size="18" font-weight="bold" text-anchor="middle">Month 3 (WMAPE ≤13-28%)</text>
 
-    <rect x="610" y="60" width="180" height="30" fill="#b3e5fc" />
-    <text x="620" y="80" font-size="14">Optimize batch (Impact: speed, stability)</text>
-    <rect x="610" y="100" width="180" height="30" fill="#ffe082" />
-    <text x="620" y="120" font-size="14">Monitoring (Impact: maintain accuracy)</text>
-    <rect x="610" y="140" width="180" height="30" fill="#c8e6c9" />
-    <text x="620" y="160" font-size="14">Demo & feedback (Impact: client sign-off)</text>
+            <!-- Month 1 - Week 1 -->
+            <g>
+                <rect x="90" y="100" width="280" height="60" fill="#4fc3f7" rx="5" stroke="#0288d1" stroke-width="2"/>
+                <text x="230" y="120" font-size="13" font-weight="bold" text-anchor="middle">Week 1: Filter Inactive Products</text>
+                <text x="100" y="138" font-size="11" fill="#333">↓ Batch 25% | inventory=0 non-replenish</text>
+                <text x="100" y="152" font-size="11" fill="#333">⏱ 30h | 15h analyze + 10h implement + 5h test</text>
+            </g>
+            
+            <!-- Month 1 - Week 2 -->
+            <g>
+                <rect x="90" y="175" width="280" height="60" fill="#4fc3f7" rx="5" stroke="#0288d1" stroke-width="2"/>
+                <text x="230" y="195" font-size="13" font-weight="bold" text-anchor="middle">Week 2: Dead Stock Filter</text>
+                <text x="100" y="213" font-size="11" fill="#333">↓ Batch 25% + ↑ Training speed | sales=0</text>
+                <text x="100" y="227" font-size="11" fill="#333">⏱ 35h | 20h research + 10h implement + 5h test</text>
+            </g>
+            
+            <!-- Month 1 - Week 3 -->
+            <g>
+                <rect x="90" y="250" width="280" height="60" fill="#81c784" rx="5" stroke="#388e3c" stroke-width="2"/>
+                <text x="230" y="270" font-size="13" font-weight="bold" text-anchor="middle">Week 3: Parallel Processing</text>
+                <text x="100" y="288" font-size="11" fill="#333">↑ ETL 2x faster | Polars threads chunks</text>
+                <text x="100" y="302" font-size="11" fill="#333">⏱ 35h | 15h research + 20h implement</text>
+            </g>
 
-    <!-- Results annotation -->
-    <text x="80" y="200" font-size="16" fill="#388e3c">Results: WMAPE drops, system stable, client-ready</text>
-    <!-- Risks annotation -->
-    <text x="80" y="230" font-size="14" fill="#d32f2f">Risks: Pipeline instability, feature bugs, model drift</text>
-    <text x="80" y="250" font-size="14" fill="#1976d2">Mitigation: Staged rollout, ablation tests, monitoring</text>
-  </svg>
-</div>
+            <!-- Month 1 - Week 4 -->
+            <g>
+                <rect x="90" y="325" width="280" height="60" fill="#81c784" rx="5" stroke="#388e3c" stroke-width="2"/>
+                <text x="230" y="345" font-size="13" font-weight="bold" text-anchor="middle">Week 4: Modular Refactor</text>
+                <text x="100" y="363" font-size="11" fill="#333">→ Reusable SDK | OOP design patterns</text>
+                <text x="100" y="377" font-size="11" fill="#333">⏱ 23h | 20h refactor + 3h docs</text>
+            </g>
+
+            <!-- Month 2 - Week 1 -->
+            <g>
+                <rect x="490" y="100" width="280" height="60" fill="#ffb74d" rx="5" stroke="#f57c00" stroke-width="2"/>
+                <text x="630" y="120" font-size="13" font-weight="bold" text-anchor="middle">Week 1: Time Features</text>
+                <text x="500" y="138" font-size="11" fill="#333">Seasonality, events, day-of-week</text>
+                <text x="500" y="152" font-size="11" fill="#333">Feature engineering pipeline</text>
+            </g>
+            
+            <!-- Month 2 - Week 2 -->
+            <g>
+                <rect x="490" y="175" width="280" height="60" fill="#ffb74d" rx="5" stroke="#f57c00" stroke-width="2"/>
+                <text x="630" y="195" font-size="13" font-weight="bold" text-anchor="middle">Week 2: Censored Demand</text>
+                <text x="500" y="213" font-size="11" fill="#333">↑ Footwear/Sportswear accuracy</text>
+                <text x="500" y="227" font-size="11" fill="#333">Stockout modeling features</text>
+            </g>
+            
+            <!-- Month 2 - Week 3 -->
+            <g>
+                <rect x="490" y="250" width="280" height="60" fill="#ffb74d" rx="5" stroke="#f57c00" stroke-width="2"/>
+                <text x="630" y="270" font-size="13" font-weight="bold" text-anchor="middle">Week 3: Price Sensitivity</text>
+                <text x="500" y="288" font-size="11" fill="#333">Markdown & clearance features</text>
+                <text x="500" y="302" font-size="11" fill="#333">↑ Promotional forecast accuracy</text>
+            </g>
+
+            <!-- Month 2 - Week 4 -->
+            <g>
+                <rect x="490" y="325" width="280" height="60" fill="#81c784" rx="5" stroke="#388e3c" stroke-width="2"/>
+                <text x="630" y="345" font-size="13" font-weight="bold" text-anchor="middle">Week 4: Retrain & Dashboards</text>
+                <text x="500" y="363" font-size="11" fill="#333">Model validation + error tracking</text>
+                <text x="500" y="377" font-size="11" fill="#333">Stakeholder reporting setup</text>
+            </g>
+
+            <!-- Month 3 - Week 1 -->
+            <g>
+                <rect x="890" y="100" width="280" height="60" fill="#81c784" rx="5" stroke="#388e3c" stroke-width="2"/>
+                <text x="1030" y="120" font-size="13" font-weight="bold" text-anchor="middle">Week 1: Optimize Batch</text>
+                <text x="900" y="138" font-size="11" fill="#333">Memory efficiency improvements</text>
+                <text x="900" y="152" font-size="11" fill="#333">Processing speed optimization</text>
+            </g>
+            
+            <!-- Month 3 - Week 2 -->
+            <g>
+                <rect x="890" y="175" width="280" height="60" fill="#81c784" rx="5" stroke="#388e3c" stroke-width="2"/>
+                <text x="1030" y="195" font-size="13" font-weight="bold" text-anchor="middle">Week 2: Production Monitoring</text>
+                <text x="900" y="213" font-size="11" fill="#333">Automated alerts & CI/CD</text>
+                <text x="900" y="227" font-size="11" fill="#333">Regression detection systems</text>
+            </g>
+            
+            <!-- Month 3 - Week 3 -->
+            <g>
+                <rect x="890" y="250" width="280" height="60" fill="#4fc3f7" rx="5" stroke="#0288d1" stroke-width="2"/>
+                <text x="1030" y="270" font-size="13" font-weight="bold" text-anchor="middle">Week 3: Client Demo Prep</text>
+                <text x="900" y="288" font-size="11" fill="#333">Final validation & testing</text>
+                <text x="900" y="302" font-size="11" fill="#333">Documentation & handoff</text>
+            </g>
+
+            <!-- Month 3 - Week 4 -->
+            <g>
+                <rect x="890" y="325" width="280" height="60" fill="#4fc3f7" rx="5" stroke="#0288d1" stroke-width="2"/>
+                <text x="1030" y="345" font-size="13" font-weight="bold" text-anchor="middle">Week 4: Iteration & Feedback</text>
+                <text x="900" y="363" font-size="11" fill="#333">Client feedback collection</text>
+                <text x="900" y="377" font-size="11" fill="#333">Edge case handling</text>
+            </g>
+
+            <!-- Checkpoint annotation for Month 1 -->
+            <text x="230" y="405" font-size="12" font-weight="bold" fill="#0288d1" text-anchor="middle">
+                ✓ Checkpoint: Dataset 12.6M → 3-4M products
+            </text>
+
+            <!-- Results section -->
+            <rect x="80" y="440" width="1190" height="50" fill="#c8e6c9" rx="5" stroke="#388e3c" stroke-width="2"/>
+            <text x="675" y="465" font-size="16" font-weight="bold" text-anchor="middle" fill="#1b5e20">
+                ✓ Results: WMAPE drops from 50% to ~20% (±5%), system stable, client-ready
+            </text>
+
+            <!-- Risks section -->
+            <rect x="80" y="510" width="1190" height="120" fill="#ffccbc" rx="5" stroke="#d32f2f" stroke-width="2"/>
+            <text x="90" y="530" font-size="14" font-weight="bold" fill="#b71c1c">⚠ Key Risks:</text>
+            <text x="100" y="550" font-size="12" fill="#d32f2f">• Junior stuck on Polars/threading → Pair programming, resources Week 2</text>
+            <text x="100" y="570" font-size="12" fill="#d32f2f">• Week 4 over-engineering → Senior mid-week review, scope control</text>
+            <text x="100" y="590" font-size="12" fill="#d32f2f">• Data corruption in chunks → Unit tests + validation after processing</text>
+            <text x="100" y="610" font-size="12" fill="#d32f2f">• Over-filtering products → SME validation, A/B tests on subsets</text>
+        </svg>
+
+        <div class="goals">
+            <div class="goal">
+                <span class="goal-title">Month 1 Goal:</span>
+                <span class="goal-metric">WMAPE ≤25-35% (from 50%)</span>
+                <p>Focus: Reduce batch size, eliminate OOM crashes, filter dead stock. Dataset reduction from 12.6M to 3-4M products. Total: 123h effort.</p>
+            </div>
+            <div class="goal">
+                <span class="goal-title">Month 2 Goal:</span>
+                <span class="goal-metric">WMAPE ≤18-37%</span>
+                <p>Focus: Address censored demand, price sensitivity, seasonality. Feature engineering for category-specific patterns.</p>
+            </div>
+            <div class="goal">
+                <span class="goal-title">Month 3 Goal:</span>
+                <span class="goal-metric">WMAPE ≤13-28%</span>
+                <p>Focus: Production stability, monitoring setup, client handoff. Optimize performance and establish CI/CD.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
