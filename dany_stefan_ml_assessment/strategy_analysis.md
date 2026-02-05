@@ -108,7 +108,12 @@ Assumptions:
 ---
 
 ## Task 3: System Design
-[Section headers to be filled based on task requirements.]
+
+This component will sit in the ETL pipeline as a data processing and feature engineering module before the modeling step. It will take raw sales and inventory data as input, process it to filter out inactive products, engineer relevant features, and output a cleaned and enriched dataset ready for model training. This can be a Lambda function that is stateless and can scale horizontally as needed. It can have cutom Python code using Polars for data processing, leveraging its speed and low memory footprint. The module will be containerized using Docker for easy deployment and scalability. You can use Kubernetes for orchestration if needed. Monitoring will be set up using Prometheus and Grafana to track performance metrics and alert on any issues. You can finally for portability bound it with API endpoints using FastAPI for easy integration with other services. The Product Qualification component is designed to solve the critical issue of forecasting for products that should not be included in demand predictions—such as dead stock, discontinued items, or SKUs not available in the relevant channel. This component ensures that only active, replenishable, and relevant products are passed to the forecasting model, dramatically improving accuracy and operational efficiency.
+
+### 1. Inputs/Outputs
+What data goes in? What comes out? How does it fit into existing pipeline?
+**Inputs:** Input data will include raw sales data, inventory levels, product metadata (e.g., category, price, seasonality), and promotional event data. It can have product metadata, category flags and stocking historiy with its curent levels. Historical sales data allows to identfy active products. Inventory levels help determine stock status. Promotional event data provides context for demand fluctuations. Each hiostircal product data can help idenitfy patterns in the SKU lifecycle. Inventory data reveals which products get restocked regularly.
 
 ---
 
