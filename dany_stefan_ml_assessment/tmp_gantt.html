@@ -90,9 +90,9 @@
             </div>
         </div>
 
-        <svg width="1350" height="680" viewBox="0 0 1350 680">
+        <svg width="1350" height="720" viewBox="0 0 1350 720">
             <!-- Background -->
-            <rect width="1350" height="680" fill="#fafafa"/>
+            <rect width="1350" height="720" fill="#fafafa"/>
             
             <!-- Timeline axis -->
             <line x1="80" y1="80" x2="1270" y2="80" stroke="#333" stroke-width="3"/>
@@ -215,36 +215,37 @@
                 <text x="900" y="384" font-size="10" fill="#333">⏱ 40h total (25h integration + 10h dry run + 5h buffer)</text>
             </g>
 
-            <!-- Checkpoint annotation for Month 1 -->
-            <text x="230" y="410" font-size="12" font-weight="bold" fill="#0288d1" text-anchor="middle">
+            <!-- Checkpoint annotations - separated vertically -->
+            <rect x="80" y="410" width="360" height="35" fill="#e3f2fd" rx="3" opacity="0.3"/>
+            <text x="260" y="432" font-size="11" font-weight="bold" fill="#0288d1" text-anchor="middle">
                 ✓ Checkpoint: 12.6M → 3-4M products | ↓50% memory | No OOM
             </text>
 
-            <!-- Checkpoint annotation for Month 2 -->
-            <text x="630" y="410" font-size="12" font-weight="bold" fill="#f57c00" text-anchor="middle">
+            <rect x="460" y="410" width="360" height="35" fill="#fff3e0" rx="3" opacity="0.3"/>
+            <text x="640" y="432" font-size="11" font-weight="bold" fill="#f57c00" text-anchor="middle">
                 ✓ Checkpoint: Features validated | ↓WMAPE 5%+ from Month 1
             </text>
 
-            <!-- Checkpoint annotation for Month 3 -->
-            <text x="1030" y="410" font-size="12" font-weight="bold" fill="#388e3c" text-anchor="middle">
-                ✓ Checkpoint: Deployable model ready | ↓WMAPE 5%+ from Month 2
+            <rect x="840" y="410" width="380" height="35" fill="#e8f5e9" rx="3" opacity="0.3"/>
+            <text x="1030" y="432" font-size="11" font-weight="bold" fill="#388e3c" text-anchor="middle">
+                ✓ Checkpoint: Deployable model | ↓WMAPE 5%+ from Month 2
             </text>
 
             <!-- Results section -->
-            <rect x="80" y="440" width="1190" height="50" fill="#c8e6c9" rx="5" stroke="#388e3c" stroke-width="2"/>
-            <text x="675" y="465" font-size="16" font-weight="bold" text-anchor="middle" fill="#1b5e20">
+            <rect x="80" y="465" width="1190" height="50" fill="#c8e6c9" rx="5" stroke="#388e3c" stroke-width="2"/>
+            <text x="675" y="490" font-size="16" font-weight="bold" text-anchor="middle" fill="#1b5e20">
                 ✓ Results: WMAPE 50% → 20% (±5%) | 12.6M → 3-4M products | 0 OOM crashes | Client-ready
             </text>
 
             <!-- Risks section -->
-            <rect x="80" y="510" width="1190" height="150" fill="#ffccbc" rx="5" stroke="#d32f2f" stroke-width="2"/>
-            <text x="90" y="530" font-size="14" font-weight="bold" fill="#b71c1c">⚠ Key Risks & Mitigations:</text>
-            <text x="100" y="550" font-size="11" fill="#d32f2f">• M1-W2: Junior stuck Polars/threads → Pair programming early, senior resources | Deadlocks → CPU-focused approach</text>
-            <text x="100" y="568" font-size="11" fill="#d32f2f">• M1-W4: Over-engineering refactor → Senior mid-week review, scope control | No scope bleed</text>
-            <text x="100" y="586" font-size="11" fill="#d32f2f">• M1: Data corruption chunks → Unit tests, validation after each step | Over-filtering → SME validation, A/B tests</text>
-            <text x="100" y="604" font-size="11" fill="#d32f2f">• M2-W1: Wrong lag calculations → Senior backward engineering, focus top features first</text>
-            <text x="100" y="622" font-size="11" fill="#d32f2f">• M2: Overfitting → Holdout sets, remove low-importance features, early stopping | Balance sportswear to luxury ranges</text>
-            <text x="100" y="640" font-size="11" fill="#d32f2f">• M3: Integration issues → Early requirement meetings | Performance bottlenecks → Profiling, feature selection</text>
+            <rect x="80" y="535" width="1190" height="150" fill="#ffccbc" rx="5" stroke="#d32f2f" stroke-width="2"/>
+            <text x="90" y="555" font-size="14" font-weight="bold" fill="#b71c1c">⚠ Key Risks & Mitigations:</text>
+            <text x="100" y="575" font-size="11" fill="#d32f2f">• M1-W2: Junior stuck Polars/threads → Pair programming early, senior resources | Deadlocks → CPU-focused approach</text>
+            <text x="100" y="593" font-size="11" fill="#d32f2f">• M1-W4: Over-engineering refactor → Senior mid-week review, scope control | No scope bleed</text>
+            <text x="100" y="611" font-size="11" fill="#d32f2f">• M1: Data corruption chunks → Unit tests, validation after each step | Over-filtering → SME validation, A/B tests</text>
+            <text x="100" y="629" font-size="11" fill="#d32f2f">• M2-W1: Wrong lag calculations → Senior backward engineering, focus top features first</text>
+            <text x="100" y="647" font-size="11" fill="#d32f2f">• M2: Overfitting → Holdout sets, remove low-importance features, early stopping | Balance sportswear to luxury ranges</text>
+            <text x="100" y="665" font-size="11" fill="#d32f2f">• M3: Integration issues → Early requirement meetings | Performance bottlenecks → Profiling, feature selection</text>
         </svg>
 
         <div class="goals">
