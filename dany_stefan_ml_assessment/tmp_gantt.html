@@ -1,0 +1,39 @@
+<!-- tmp_gantt.html -->
+<div style="font-family:sans-serif;">
+  <h3>90-Day Roadmap: Problem → Approach → Results</h3>
+  <svg width="900" height="320" style="background:#f9f9f9;">
+    <!-- Timeline axis -->
+    <line x1="80" y1="40" x2="820" y2="40" stroke="#333" stroke-width="2" />
+    <!-- Month markers -->
+    <text x="80" y="30" font-size="16">Month 1</text>
+    <text x="340" y="30" font-size="16">Month 2</text>
+    <text x="600" y="30" font-size="16">Month 3</text>
+    <!-- Tasks as colored bars -->
+    <rect x="90" y="60" width="180" height="30" fill="#b3e5fc" />
+    <text x="100" y="80" font-size="14">Filter dead stock (Impact: ↓WMAPE, fix OOM)</text>
+    <rect x="90" y="100" width="180" height="30" fill="#ffe082" />
+    <text x="100" y="120" font-size="14">Stockout-aware modeling (Impact: ↑accuracy)</text>
+    <rect x="90" y="140" width="180" height="30" fill="#c8e6c9" />
+    <text x="100" y="160" font-size="14">Add price/markdown features (Impact: ↑clearance forecasts)</text>
+
+    <rect x="350" y="60" width="180" height="30" fill="#b3e5fc" />
+    <text x="360" y="80" font-size="14">Engineer time features (Impact: ↓Sportswear error)</text>
+    <rect x="350" y="100" width="180" height="30" fill="#ffe082" />
+    <text x="360" y="120" font-size="14">Retrain & validate (Impact: stable WMAPE)</text>
+    <rect x="350" y="140" width="180" height="30" fill="#c8e6c9" />
+    <text x="360" y="160" font-size="14">Dashboards (Impact: faster feedback)</text>
+
+    <rect x="610" y="60" width="180" height="30" fill="#b3e5fc" />
+    <text x="620" y="80" font-size="14">Optimize batch (Impact: speed, stability)</text>
+    <rect x="610" y="100" width="180" height="30" fill="#ffe082" />
+    <text x="620" y="120" font-size="14">Monitoring (Impact: maintain accuracy)</text>
+    <rect x="610" y="140" width="180" height="30" fill="#c8e6c9" />
+    <text x="620" y="160" font-size="14">Demo & feedback (Impact: client sign-off)</text>
+
+    <!-- Results annotation -->
+    <text x="80" y="200" font-size="16" fill="#388e3c">Results: WMAPE drops, system stable, client-ready</text>
+    <!-- Risks annotation -->
+    <text x="80" y="230" font-size="14" fill="#d32f2f">Risks: Pipeline instability, feature bugs, model drift</text>
+    <text x="80" y="250" font-size="14" fill="#1976d2">Mitigation: Staged rollout, ablation tests, monitoring</text>
+  </svg>
+</div>

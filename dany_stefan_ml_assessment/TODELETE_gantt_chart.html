@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90-Day Forecast Model Improvement Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        .legend-text {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .gantt-chart {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .task-name {
+            font-weight: 500;
+            min-width: 250px;
+            font-size: 13px;
+        }
+        .milestone {
+            font-style: italic;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .week-cell {
+            text-align: center;
+            min-width: 80px;
+            position: relative;
+        }
+        .task-bar {
+            height: 25px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .month1 {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+        .month2 {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+        }
+        .month3 {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+        }
+        .checkpoint {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            font-style: italic;
+        }
+        .metrics {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .metric-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .metric-card h3 {
+            margin-top: 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .metric-detail {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        .impact-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .high-impact {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .medium-impact {
+            background-color: #f39c12;
+            color: white;
+        }
+        .low-impact {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>90-Day Forecast Model Improvement Plan</h1>
+        <p class="subtitle">Target: Reduce WMAPE from 50% to ~20% (±5%) | Focus: Dead Stock → Features → Production</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color month1"></div>
+                <div class="legend-text">Month 1: Data Cleanup (High Impact, Low Effort)</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color month2"></div>
+                <div class="legend-text">Month 2: Feature Engineering (High Impact, High Effort)</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color month3"></div>
+                <div class="legend-text">Month 3: Optimization & Production (Low Impact, Medium Effort)</div>
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white;">
+                <h3>Month 1 Target</h3>
+                <div class="metric-value">25-50%</div>
+                <div class="metric-detail" style="color: rgba(255,255,255,0.9);">WMAPE Reduction</div>
+            </div>
+            <div class="metric-card" style="background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%); color: white;">
+                <h3>Month 2 Target</h3>
+                <div class="metric-value">18-37%</div>
+                <div class="metric-detail" style="color: rgba(255,255,255,0.9);">WMAPE Reduction</div>
+            </div>
+            <div class="metric-card" style="background: linear-gradient(135deg, #2980b9 0%, #3498db 100%); color: white;">
+                <h3>Month 3 Target</h3>
+                <div class="metric-value">13-28%</div>
+                <div class="metric-detail" style="color: rgba(255,255,255,0.9);">WMAPE Reduction</div>
+            </div>
+        </div>
+
+        <div class="gantt-chart">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task / Milestone</th>
+                        <th class="week-cell">Week 1</th>
+                        <th class="week-cell">Week 2</th>
+                        <th class="week-cell">Week 3</th>
+                        <th class="week-cell">Week 4</th>
+                        <th class="week-cell">Week 5</th>
+                        <th class="week-cell">Week 6</th>
+                        <th class="week-cell">Week 7</th>
+                        <th class="week-cell">Week 8</th>
+                        <th class="week-cell">Week 9</th>
+                        <th class="week-cell">Week 10</th>
+                        <th class="week-cell">Week 11</th>
+                        <th class="week-cell">Week 12</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Month 1: Data Cleanup Phase -->
+                    <tr>
+                        <td class="task-name">
+                            <strong>Filter Inactive/Non-Replenishable Products</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Reduce batch size 25% | 40h effort</small>
+                        </td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month1">Week 1</div>
+                        </td>
+                        <td colspan="11"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Filter Dead Stock (Zero Sales Window)</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Reduce batch 25%, faster training | 40h effort</small>
+                        </td>
+                        <td class="week-cell"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month1">Week 2</div>
+                        </td>
+                        <td colspan="10"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name milestone">
+                            ✓ CHECKPOINT: Validate Memory & Speed
+                            <br><small>Dataset: 12.6M → 3-4M products | No OOM crashes</small>
+                        </td>
+                        <td colspan="2"></td>
+                        <td class="week-cell">
+                            <div class="task-bar checkpoint">✓</div>
+                        </td>
+                        <td colspan="9"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Refine Active Catalog Rules</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Replenishment window tuning | 35h effort</small>
+                        </td>
+                        <td colspan="2"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month1">Week 3</div>
+                        </td>
+                        <td colspan="9"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Validate WMAPE Improvement & Document</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Business demo ready | 30h effort</small>
+                        </td>
+                        <td colspan="3"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month1">Week 4</div>
+                        </td>
+                        <td colspan="8"></td>
+                    </tr>
+
+                    <!-- Month 2: Feature Engineering Phase -->
+                    <tr>
+                        <td class="task-name">
+                            <strong>Address Censored Demand (Stockout Features)</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Capture true demand signals | 45h effort</small>
+                        </td>
+                        <td colspan="4"></td>
+                        <td class="week-cell" colspan="2">
+                            <div class="task-bar month2">Week 5-6</div>
+                        </td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Price Sensitivity Features (Markdowns)</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Clearance events, discounts | 40h effort</small>
+                        </td>
+                        <td colspan="6"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month2">Week 7</div>
+                        </td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Category-Specific Seasonality (Footwear)</strong>
+                            <span class="impact-badge high-impact">HIGH IMPACT</span>
+                            <br><small>Weather, location features | 40h effort</small>
+                        </td>
+                        <td colspan="7"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month2">Week 8</div>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+
+                    <!-- Month 3: Optimization & Production Phase -->
+                    <tr>
+                        <td class="task-name">
+                            <strong>Model Hyperparameter Tuning (Grid Search)</strong>
+                            <span class="impact-badge low-impact">MED IMPACT</span>
+                            <br><small>Optimize Prophet params | 35h effort</small>
+                        </td>
+                        <td colspan="8"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month3">Week 9</div>
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Compute Optimization (Parallelism)</strong>
+                            <span class="impact-badge low-impact">MED IMPACT</span>
+                            <br><small>Polars, batch processing | 30h effort</small>
+                        </td>
+                        <td colspan="9"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month3">Week 10</div>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Monitoring & Alerting Setup</strong>
+                            <span class="impact-badge low-impact">MED IMPACT</span>
+                            <br><small>Error tracking, drift detection | 30h effort</small>
+                        </td>
+                        <td colspan="10"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month3">Week 11</div>
+                        </td>
+                        <td colspan="1"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">
+                            <strong>Production Readiness & CI/CD</strong>
+                            <span class="impact-badge low-impact">MED IMPACT</span>
+                            <br><small>Edge cases, deployment pipeline | 35h effort</small>
+                        </td>
+                        <td colspan="11"></td>
+                        <td class="week-cell" colspan="1">
+                            <div class="task-bar month3">Week 12</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="task-name milestone">
+                            ✓ FINAL: WMAPE Target Achieved
+                            <br><small>Target: 20% (±5%) | Production ready</small>
+                        </td>
+                        <td colspan="11"></td>
+                        <td class="week-cell">
+                            <div class="task-bar checkpoint">✓</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background-color: #ecf0f1; border-radius: 5px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">Key Risks & Mitigations</h3>
+            <ul style="line-height: 1.8;">
+                <li><strong>Month 1:</strong> Data quality issues → Early SME validation, conservative filtering rules</li>
+                <li><strong>Month 2:</strong> Feature complexity spill-over → Agile sprints, early roadblock alerts, senior support</li>
+                <li><strong>Month 3:</strong> Last-minute edge cases → Buffer time, devil's advocate reviews, comprehensive testing</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

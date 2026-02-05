@@ -38,9 +38,62 @@ For business folks, I can show them progress. Even tackling the memory issue fir
 
 ---
 
-## Task 2: [Task Title]
+## Task 2: 90-Day Plan
+Assumptions:
+- Junior has senior support for architecture and code reviews.
+- Access to necessary data and computing resources is available.
+- Already onboarded with Pandas and half onboarderd with Polars (senior will provide ressrouces to onboard him quicly).
+- Tracking is agile in Jira tickets with weekly check-ins.
+- Quick wins are prioritized to show progress.
+- Alarms are sounded early for any blockers.
 
-dfsdfsds
+
+Month 1 Goal: [WMAPE target = reduce further by up to 1/2 -> new target number : (WMAPE <= 50-25%)]
+GOAL: Reduce batch size, reduce OOM crashes, error reduction, and demonstrate initial WMAPE improvement.
+IMPACT: HIGH IMPACT, LOW EFFORT
+RISK SPILLING OVER: LOW
+NORTH STAR: Finish early to start month 2 early. (senior to ensure all tools at disposal)
+
+Week #: [Task] → Expected impact: [metric] [effort]
+Week 1: [Filter out inactive or non-replenishable products, inventory=0, known rule-set] → Expected impact: reduce batch load size [batch size in MB reduced by 25% for training set] [15h to analyse drops in inventory, speak to SMEs about non-replenishable products + 10h to implement filtering logic + 5h to test and validate + 5h buffer + 5h ramp-up on tools = 40h]
+Week 2: [Filter dead stock, sales=0, research a window of X time for zero sales period, mark no longer active purge] → Expected impact: reduce batch load size and trainig time [batch size in MB reduced by 25%, faster training in ms compare with benchmark] [20h research the best window period with SME and experiment with small set + 10h implement filtering logic and combinations + 5h test training speed + 5h buffer = 40h]
+Checkpoint: Validate reduced memory usage and training time without OOM crashes. (dataset reduced from 12.6M to ~3-4M products)
+Week 3: [Explore threads and parallel processing of the batch load in Python, no cloud ETL services, make it elegant and reproducable and scallable for other clients and more datapoints] → Expected impact: even faster data processing in parallel by splitting in chunks, ready for training [the ETL load should go at least twice as fast, reduce deadlocking and hanging, hit the CPU not the memory] [15h research best practices for parallel processing in Polaris + 20h implement and test for restitiching correctly the chunks or keep seperate for downstream + 5h buffer = 40h]
+Week 4: [Make last week's code modular and reusable components, no API blackbox or agentic orchestration, have time to start month 2 tasks] → Expected impact: futureproof, think high-level, train the junior what it means to document and leave your code to the next guy [learn a new design pattern almost creating in-house SDK, object-oriented or polymorphism - learn soemthing new] [20h refactor code to be modular + 3h document and create examples + 17h buffer = 40h]
+Key risk: [what could go wrong] → Mitigation: [how you'd handle it]
+- Junior gets stuck on Polars and parallel processing → Mitigation: senior to provide resources and do pair programming sessions early in week 2 (deadlocks happening with threads, hanging time) [LIKELY TO HAPPEN, important to unblock fast]
+- Get lost in week 4 with refactoring and over-engineering → Mitigation: senior to review progress mid-week and ensure scope is controlled, no scope blead [LESS LIKELY, easy to catch, skip and move on if happens]
+- Data can corrupt itself when splitting in chunks → Mitigation: add unit tests and data validation after each processing step to ensure integrity [POSSIBLE, but easy to catch with tests, number of rows should match after re-stitching]
+- Filtering may remove too many products → Mitigation: validate filtering logic with SMEs and run A/B tests (X window period) on a small subset before full rollout [POSSIBLE and CRUCIAL]
+
+
+
+Month 2 Goal: [WMAPE target = reduce further by up to 1/4 -> new target number : (WMAPE <= 37-18%)]
+GOAL: Feature engineer, address censored demand, and ajust price sensitivity.
+IMPACT: HIGH IMPACT, HIGH EFFORT
+RISK SPILLING OVER: HIGH
+NORTH STAR: Don't over-engineer. Stick to set of features. Address roadblocks quickly to not spill over. (senior to prompt for roadblocks early because we tend to smile and not say anything)
+Week 1: [Task] → Expected impact: [metric] [effort]
+Week 2: [Task] → Expected impact: [metric] [effort]
+Week 3: [Task] → Expected impact: [metric] [effort]
+Week 4: [Task] → Expected impact: [metric] [effort]
+Key risk: [what could go wrong] → Mitigation: [how you'd handle it]
+
+
+Month 3 Goal: [WMAPE target = reduce further by up to 1/4 -> new target number : (WMAPE <= 28-13%)]
+GOAL: Finalize feature enhancements, optimize model parameters (grid search) and compute (parallelism), monitoring and production 
+readiness (CI/CD).
+IMPACT: LOW IMPACT, MEDIUM EFFORT
+RISK SPILLING OVER: MEDIUM (last-minute issues, procrastination from month 2)
+NORTH STAR: Stabilize and think of edge cases. Cover all bases to limit omissions. (senior to play devil's advocate here) 
+Week 1: [Task] → Expected impact: [metric] [effort]
+Week 2: [Task] → Expected impact: [metric] [effort]
+Week 3: [Task] → Expected impact: [metric] [effort]
+Week 4: [Task] → Expected impact: [metric] [effort]
+Key risk: [what could go wrong] → Mitigation: [how you'd handle it]
+
+
+== 3-month timeline => WMPAE reduced from 50% to [target ~ 20% +/- 5%]
 
 ### [Section headers to be filled based on task requirements]
 

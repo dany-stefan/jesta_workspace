@@ -65,23 +65,48 @@ Dead stock filtering is a data engineering problem with immediate operational be
 
 ---
 
-## Notes & Scratch Work
 
-**Key insights to emphasize:**
-- This is a data quality and filtering problem, not primarily a modeling problem
-- 50% WMAPE is misleading - includes forecasts that shouldn't exist
-- The delta between categories (40% vs 233% vs 1000%) indicates systematic issues, not random error
-- Quick wins available through filtering, then tackle harder problems (censored demand, price elasticity)
-- Pragmatic approach: stable system first, then accuracy improvements
 
-**Judgment calls that show thinking:**
-- Prioritized operational stability (OOM crashes) over model accuracy
-- Recognized that junior dev needs tractable first task (filtering, not ML theory)
-- Acknowledged 3-month constraint and sequenced work realistically
-- Didn't promise perfection, targeted 20-30% WMAPE (industry standard) not 5%
+## Task 2: 90-Day Implementation Roadmap
 
-**Questions I'd ask in the presentation:**
-- What's the current definition of "active" product? (Probably too broad)
-- How often are SKU master files updated? (Likely stale data)
-- What's the replenishment logic? (Helps understand stockout patterns)
-- Are size-level forecasts needed, or style-level sufficient? (Affects granularity)
+### Did you identify the real problems or just symptoms?
+This roadmap directly targets the root causes identified in Task 1: dead stock, censored demand, and missing price/seasonality features. Each task is designed to address these real problems, not just surface symptoms; for example, filtering dead stock fixes the denominator of error metrics, while stockout-aware modeling corrects misinformed demand signals.
+
+### Is your roadmap realistic and well-prioritized?
+The plan is sequenced for quick wins and sustainable progress: Week 1 delivers immediate stability and error reduction; subsequent weeks build on validated improvements. Risks are anticipated and mitigated at each step; effort estimates are based on typical engineering cycles for similar retail ML projects.
+
+### Does your design address scale and maintainability?
+All changes are staged, monitored, and rolled out with rollback options; dashboards and automated monitoring ensure the system remains robust as scale increases. Feature engineering and batch optimization are designed for maintainability, with continuous validation and feedback loops.
+
+### Month 1 Goal: Reduce WMAPE to ≤35%
+- **Week 1:** Filter out dead stock and wrong product mix; objective: only forecast active, replenishable SKUs; expected impact: immediate drop in WMAPE, resolve OOM crashes; effort: 3 days.
+- **Week 2:** Implement stockout-aware demand modeling; objective: adjust for censored demand in high-velocity categories; expected impact: improved accuracy for Footwear/Sportswear; effort: 4 days.
+- **Week 3-4:** Add price/markdown features to model; objective: capture price elasticity and promotional effects; expected impact: better forecasts during clearance events; effort: 1 week.
+
+- **Key risk:** Data pipeline instability after aggressive filtering; **Mitigation:** Roll out changes in staging, monitor batch logs, and add rollback scripts.
+
+### Month 2 Goal: WMAPE ≤30%; Demo-ready for clients
+- **Week 1:** Engineer time-based features (seasonality, day-of-week, event flags); objective: improve model’s ability to capture demand cycles; expected impact: reduced error in Sportswear; effort: 1 week.
+- **Week 2:** Retrain models with new features and validate on holdout sets; objective: ensure improvements generalize; expected impact: stable WMAPE; effort: 3 days.
+- **Week 3-4:** Build dashboards for error tracking and business reporting; objective: communicate progress to stakeholders; expected impact: faster feedback loops; effort: 1 week.
+
+- **Key risk:** Feature engineering does not yield expected gains; **Mitigation:** Run ablation tests and consult with domain experts for feature selection.
+
+### Month 3 Goal: WMAPE ≤25%; Production stability
+- **Week 1:** Optimize batch processing for memory and speed; objective: ensure weekly retraining is robust; expected impact: no OOM crashes, faster runs; effort: 4 days.
+- **Week 2:** Set up automated model monitoring and alerting; objective: catch regressions early; expected impact: maintain accuracy over time; effort: 2 days.
+- **Week 3-4:** Final client demo, collect feedback, and iterate; objective: ensure solution meets business needs; expected impact: client sign-off; effort: 1 week.
+
+- **Key risk:** Model drift or unexpected data changes; **Mitigation:** Implement continuous monitoring and retraining triggers.
+
+### Validation & Metrics
+- Track WMAPE weekly by category and overall.
+- Monitor OOM crash frequency and batch run times.
+- Use dashboard to visualize error trends and feature impacts.
+- Validate improvements with holdout sets and client feedback.
+
+---
+
+## Gantt Chart
+
+See the visual Gantt chart in tmp_gantt.html for a story-driven, chart-based view of the 90-day roadmap.
