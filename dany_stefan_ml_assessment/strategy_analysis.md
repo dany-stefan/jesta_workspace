@@ -100,6 +100,7 @@ Assumptions:
 **Week 2:** [Run end-to-end to see processing and training and testing speed and debug errors] → Expected impact: Polish data type errors, identify where it takes too long to process. [Seconds timestamp, logging, verify no memory crashes occur, if feature selection takes too much memory = trim down.] [30h run and rerun + 5h debug (always unexpected caching bugs) + 5h buffer = 40h]  
 **Week 3:** [Integrate logging in an alerts and monitoring platform, release the model using CI/CD and model VCS] → Expected impact: Readiness for production and reusable for other clients. [See how well the model maintains accuracy, systems integration tests.] [15h monitoring platform + 20h CI/CD pipeline + 5h buffer = 40h]  
 **Week 4:** [Prep a MVP BETA of the model and dataset to present] → Expected impact: Show that the model can be deployed and integrated in the client's infrastructure. [Uptime, CPU compute, build time, dependencies can download.] [25h integration and prep + 10h dry run + 5h buffer = 40h]  
+**Checkpoint:** Deployable model that is trained and tested ready to integrate for the client's stack. (Aim for at least 5% WMAPE reduction from Month 2.)
 
 **Key risk:** [What could go wrong] → Mitigation: [How you'd handle it]  
 - Integration with CI/CD and client's infrastructure (lack of requirements from client) → Mitigation: Early meetings to gather requirements and align on expectations. [POSSIBLE, but easy to catch with early meetings]
