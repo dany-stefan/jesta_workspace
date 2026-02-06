@@ -93,25 +93,33 @@ def detect_stockouts(
 
 def test_stockouts_basic():
     """Test clear stockout case"""
+    print("BASIC test running")
     df = pl.DataFrame({
         "date": ["2026-01-01", "2026-01-02", "2026-01-03"],
         "sales": [5, 3, 0],
         "inventory": [10, 0, 0],
     })
     result = detect_stockouts(df, lookback_days=2)  # Function call
-    assert result.select(pl.col("is_stockout")).to_series().to_list() == [False, True, True]
+    
+    is_stockout_list = result.select(pl.col("is_stockout")).to_series().to_list()
+    expected = [False, True, True]
+    if is_stockout_list != expected:
+        raise AssertionError(f"is_stockout values do not match expected.\nGot: {is_stockout_list}\nExpected: {expected}")
 
 
 def test_stockouts_edge_cases():
     """Test no data, missing columns, etc"""
+    print("EDGE CASES test running")
     # Edge case 1
     df_empty = pl.DataFrame({
         "date": [],
         "sales": [],
         "inventory": [],
     })
-    result_empty = detect_stockouts(df_empty, lookback_days=1)
-    assert result_empty.height == 0
+    result_empty = detect_stockouts(df_empty, lookback_days=1)  # Function call
+    if result_empty.height != 0:
+        raise AssertionError(f"Expected empty result (height=0) for empty input, got {result_empty.height}")
+
 
     # Edge case 2
     df_missing = pl.DataFrame({
@@ -119,7 +127,7 @@ def test_stockouts_edge_cases():
         "sales": [1],
     })
     try:
-        detect_stockouts(df_missing)
+        detect_stockouts(df_missing)    # Function call
         assert False, "Expected ValueError for missing columns"
     except ValueError:
         pass
