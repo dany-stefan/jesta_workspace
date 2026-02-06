@@ -11,21 +11,20 @@ This assessment demonstrates ML engineering capabilities for demand forecasting 
 dany_stefan_ml_assessment/
 ├── README.md                    # This file
 ├── strategy_analysis.md         # Part 1: Strategic analysis (Tasks 1-3)
-├── tmp_answers.md              # Working notes and answers
-├── tmp_answers_part2.ipynb     # Part 2: Experimental work (Polars + Pandas comparison)
-├── engineering.ipynb            # Part 2: ML engineering work (Tasks 4-5)
-├── production_code.py           # Part 2: Production-ready code (Task 6)
+├── engineering.ipynb            # Part 2: ML engineering work with Polars (Tasks 4-5)
+├── production_code.py           # Part 2: Production-ready forecasting utilities (Task 6)
 ├── requirements.txt             # Python dependencies
 ├── presentation.html            # Technical presentation (10-12 slides)
-└── data/
-    └── fashion_sample.csv       # Sample data (100 days, 1 product, 1 store)
+├── data/
+│   └── fashion_sample.csv       # Sample data (100 days, 1 product, 1 store)
+└── [archived files]             # tmp_answers*.ipynb, tmp_answers.md, etc.
 ```
 
 ## Setup Instructions
 
 ### Prerequisites
-- Python 3.9 or higher
-- pip
+- Python 3.9+ (tested on Python 3.11)
+- pip or pip3
 
 ### Installation
 ```bash
@@ -36,55 +35,114 @@ cd dany_stefan_ml_assessment
 python3 -m venv venv
 
 # Activate virtual environment
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On macOS/Linux
+# venv\Scripts\activate  # On Windows
+
+# Upgrade pip (recommended)
+pip install --upgrade pip
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Verify installation
-python -c "import polars as pl; print(f'Polars {pl.__version__} installed successfully')"
+python -c "import polars as pl; import sklearn; print(f'✓ Polars {pl.__version__}'); print(f'✓ scikit-learn {sklearn.__version__}')"
 ```
+[strategy_analysis.md](strategy_analysis.md) to review:
+- Strategic analysis and business requirements
+- Product qualification rules and filtering logic
+- Implementation roadmap and recommendations
 
-## Running the Code
-
-### 1. Strategy Analysis (Part 1)
-Open `strategy_analysis.md` to review strategic analysis, business rules, and implementation roadmap.
-
-### 2. Experimental Notebook (Part 2)
+### 2. Engineering Notebook (Part 2)
 ```bash
-# Launch Jupyter and open tmp_answers_part2.ipynb
-jupyter notebook tmp_answers_part2.ipynb
-```
+# Ensure virtual environment is activated
+source venv/bin/activate
 
-This notebook contains:
-- Data loading and profiling with Polars
-- Filtering logic for inactive products
-- Feature engineering (one-hot encoding, stockout features, price elasticity)
-- Parallel processing examples
-- Pandas equivalents in comments for reference
-
-### 3. Main Engineering Notebook
-```bash
+# Launch Jupyter
 jupyter notebook engineering.ipynb
 ```
 
-### 4. Production Code
-```bash
-# Run production code
-python production_code.py
+**Notebook Contents:**
+- Data loading and profiling with Polars
+- Product qualification and filtering logic
+- Feature engineering (lag features, stockout detection, one-hot encoding)
+- Gradient Boosting models (scikit-learn, LightGBM)
+- Model evaluation (MAE, RMSE, WMAPE)
+- Feature importance analysis
 
-# Run tests (if implemented)
-python -m pytest tests/
+**Key Findings:**
+- Baseline model (lag features only): WMAPE ~16%
+- Custom features model: WMAPE ~10% (37% improvement)
+- LightGBM showed best performance with lag + engineered features
+
+### 3. Production Code
+```bash
+# Import and use production utilities
+python -c "from production_code import detect_stockouts, engineer_time_features; help(detect_stockouts)"
+
+# Run in production pipeline
+python production_code.py
+```
+
+**Available Functions:**
+- `detect_stockouts()`: Identify stockout periods
+- `engineer_time_features()`: Create time-based features
+- Data validation and quality checkshon -m pytest tests/
 
 # Import and use functions
 python -c "import production_code as pc; help(pc)"
+```macOS/Linux
+# venv\Scripts\activate  # Windows
+
+# Update dependencies
+pip install --upgrade -r requirements.txt
+
+# List installed packages
+pip list
+
+# Freeze current environment (for reproducibility)
+pip freeze > requirements_freeze.txt
+### Engineering Notebook (engineering.ipynb)
+- **Polars-first approach** for efficient data processing
+- **Gradient Boosting models** (scikit-learn, LightGBM) for demand forecasting
+- **Feature engineering**: lag features, stockout detection, time-based features
+- **Model comparison**: Baseline vs. custom features (37% WMAPE improvement)
+- **Visualization**: matplotlib/seaborn for EDA and feature importance
+
+### Production Code (production_code.py)
+- Type-annotated functions with Polars DataFrames
+- Modular utilities for data quality checks and feature engineering
+- Designed for integration into production forecasting pipelines
+- Documentation and examples for each function
+
+## Technologies Used
+- **Polars**: High-performance DataFrame library for data processing
+- **scikit-learn**: Machine learning models (LinearRegression, GradientBoostingRegressor)
+- **LightGBM**: Gradient boosting framework for best model performance
+- **NumPy**: Numerical computing and array operations
+- **matplotlib/seaborn**: Data visualization and plotting
+
+## Contact
+**Candidate:** Dany Stefan  
+**Date:** February 2026   `ModuleNotFoundError: No module named 'polars'`
+```bash
+# Ensure virtual environment is activated
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-## Virtual Environment Management
-
+**Issue**: Jupyter kernel not found
 ```bash
-# Deactivate virtual environment
-deactivate
+# Install ipykernel in the virtual environment
+pip install ipykernel
+python -m ipykernel install --user --name=venv --display-name "Python (venv)"
+# In Jupyter, select Kernel > Change Kernel > Python (venv)
+```
+
+**Issue**: LightGBM installation fails on macOS
+```bash
+# Install with Homebrew dependencies
+brew install libomp
+pip install lightgbm
 
 # Reactivate when returning to project
 source venv/bin/activate  # On Windows: venv\Scripts\activate
