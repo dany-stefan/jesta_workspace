@@ -37,13 +37,22 @@ def detect_stockouts(
     Example:
         >>> df = detect_stockouts(sales_df, lookback_days=7)
         >>> df.filter(pl.col('is_stockout'))
+        >>> df = pl.DataFrame({
+            ...     "date": ["2026-01-01", "2026-01-02"],
+            ...     "sales": [5, 0],
+            ...     "inventory": [1, 0]
+            ... })
     """
+    assert lookback_days > 0, f"lookback_days must be positive, got {lookback_days}"
+    min_rows = lookback_days  # At least lookback_days worth of data
+    if df.height < min_rows:
+        print(f"Warning: DataFrame has only {df.height} rows, minimum {min_rows} recommended")
+    
     ## Input validation
     # Ensure required columns are present
     required_cols = {"date", "sales", "inventory"}
     if not required_cols.issubset(set(df.columns)):
         raise ValueError(f"Input DataFrame must contain columns: {required_cols}")
-    
     # Ensure correct data types
     try:
         df = df.with_columns([
@@ -64,7 +73,7 @@ def detect_stockouts(
     # Calculate rolling sum of sales over the lookback period
     df = df.with_columns([
         pl.col("sales")
-        .rolling_sum(window_size=lookback_days, min_periods=1)
+        .rolling_sum(window_size=lookback_days, min_samples=1)
         .alias("recent_sales")
     ])
 
@@ -84,14 +93,36 @@ def detect_stockouts(
 
 def test_stockouts_basic():
     """Test clear stockout case"""
-    # TODO: Implementation
-    pass
+    df = pl.DataFrame({
+        "date": ["2026-01-01", "2026-01-02", "2026-01-03"],
+        "sales": [5, 3, 0],
+        "inventory": [10, 0, 0],
+    })
+    result = detect_stockouts(df, lookback_days=2)  # Function call
+    assert result.select(pl.col("is_stockout")).to_series().to_list() == [False, True, True]
 
 
 def test_stockouts_edge_cases():
     """Test no data, missing columns, etc"""
-    # TODO: Implementation
-    pass
+    # Edge case 1
+    df_empty = pl.DataFrame({
+        "date": [],
+        "sales": [],
+        "inventory": [],
+    })
+    result_empty = detect_stockouts(df_empty, lookback_days=1)
+    assert result_empty.height == 0
+
+    # Edge case 2
+    df_missing = pl.DataFrame({
+        "date": ["2026-01-01"],
+        "sales": [1],
+    })
+    try:
+        detect_stockouts(df_missing)
+        assert False, "Expected ValueError for missing columns"
+    except ValueError:
+        pass
 
 
 # ============================================================================
@@ -99,8 +130,14 @@ def test_stockouts_edge_cases():
 # ============================================================================
 
 if __name__ == "__main__":
+     # Check if file exists
+    data_path = Path("./data/fashion_sample.csv")   # Path can be command line args
+    if not data_path.exists():
+        print(f"Error: Data file not found at {data_path}")
+        sys.exit(1)
+
     # Load the data
-    df = pl.read_csv("data/fashion_sample.csv")
+    df = pl.read_csv(str(data_path))
 
     # Convert date columns to proper types and extract date features
     '''
@@ -117,7 +154,7 @@ if __name__ == "__main__":
     ])
 
     # Detect stockouts
-    detected_df = detect_stockouts(df, lookback_days=7)
+    detected_df = detect_stockouts(df, lookback_days=4)
     print(detected_df.filter(pl.col("is_stockout")))
 
     print("Running production code tests...")
