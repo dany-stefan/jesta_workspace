@@ -47,7 +47,11 @@ pip install -r requirements.txt
 # Verify installation
 python -c "import polars as pl; import sklearn; print(f'✓ Polars {pl.__version__}'); print(f'✓ scikit-learn {sklearn.__version__}')"
 ```
-[strategy_analysis.md](strategy_analysis.md) to review:
+
+## Usage
+
+### 1. Strategic Analysis (Part 1)
+Review [strategy_analysis.md](strategy_analysis.md) for:
 - Strategic analysis and business requirements
 - Product qualification rules and filtering logic
 - Implementation roadmap and recommendations
@@ -74,33 +78,37 @@ jupyter notebook engineering.ipynb
 - Custom features model: WMAPE ~10% (37% improvement)
 - LightGBM showed best performance with lag + engineered features
 
-### 3. Production Code
+### 3. Production Code (Task 6)
 ```bash
-# Import and use production utilities
-python -c "from production_code import detect_stockouts, engineer_time_features; help(detect_stockouts)"
+# Ensure virtual environment is activated
+source venv/bin/activate
 
-# Run in production pipeline
+# View available functions and documentation
+python -c "import production_code as pc; help(pc)"
+
+# View specific function documentation
+python -c "from production_code import detect_stockouts; help(detect_stockouts)"
+python -c "from production_code import engineer_time_features; help(engineer_time_features)"
+
+# Run example usage (if main block exists)
 python production_code.py
 ```
 
 **Available Functions:**
-- `detect_stockouts()`: Identify stockout periods
-- `engineer_time_features()`: Create time-based features
-- Data validation and quality checkshon -m pytest tests/
+- `detect_stockouts()`: Identify stockout periods based on inventory and sales patterns
+- `engineer_time_features()`: Create time-based features from date columns
+- `validate_data_quality()`: Perform data quality checks and validation
+- Additional utility functions for production forecasting pipelines
 
-# Import and use functions
-python -c "import production_code as pc; help(pc)"
-```macOS/Linux
-# venv\Scripts\activate  # Windows
+## Technologies Used
+- **Polars**: High-performance DataFrame library for data processing
+- **scikit-learn**: Machine learning models (LinearRegression, GradientBoostingRegressor)
+- **LightGBM**: Gradient boosting framework for best model performance
+- **NumPy**: Numerical computing and array operations
+- **matplotlib/seaborn**: Data visualization and plotting
 
-# Update dependencies
-pip install --upgrade -r requirements.txt
+## Key Features
 
-# List installed packages
-pip list
-
-# Freeze current environment (for reproducibility)
-pip freeze > requirements_freeze.txt
 ### Engineering Notebook (engineering.ipynb)
 - **Polars-first approach** for efficient data processing
 - **Gradient Boosting models** (scikit-learn, LightGBM) for demand forecasting
@@ -114,16 +122,9 @@ pip freeze > requirements_freeze.txt
 - Designed for integration into production forecasting pipelines
 - Documentation and examples for each function
 
-## Technologies Used
-- **Polars**: High-performance DataFrame library for data processing
-- **scikit-learn**: Machine learning models (LinearRegression, GradientBoostingRegressor)
-- **LightGBM**: Gradient boosting framework for best model performance
-- **NumPy**: Numerical computing and array operations
-- **matplotlib/seaborn**: Data visualization and plotting
+## Troubleshooting
 
-## Contact
-**Candidate:** Dany Stefan  
-**Date:** February 2026   `ModuleNotFoundError: No module named 'polars'`
+**Issue**: `ModuleNotFoundError: No module named 'polars'`
 ```bash
 # Ensure virtual environment is activated
 source venv/bin/activate
@@ -143,7 +144,11 @@ python -m ipykernel install --user --name=venv --display-name "Python (venv)"
 # Install with Homebrew dependencies
 brew install libomp
 pip install lightgbm
+```
 
+## Maintenance
+
+```bash
 # Reactivate when returning to project
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
@@ -153,14 +158,6 @@ pip install --upgrade -r requirements.txt
 # Freeze current environment
 pip freeze > requirements_freeze.txt
 ```
-
-## Key Features
-
-- **Polars-first approach** for efficient data processing
-- **Pandas equivalents** documented in code comments
-- **Parallel processing** for large-scale batch operations
-- **Feature engineering** for demand forecasting (stockout detection, price elasticity)
-- **Production-ready** code with error handling and documentation
 
 ## Contact
 For questions or clarifications, please reach out to Dany Stefan.
