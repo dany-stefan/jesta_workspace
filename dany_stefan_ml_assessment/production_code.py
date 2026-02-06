@@ -10,6 +10,9 @@ Date: February 2026
 
 import polars as pl
 from typing import Optional, List, Dict, Any
+import argparse
+import sys
+from pathlib import Path
 
 
 # ============================================================================
@@ -40,10 +43,20 @@ def detect_stockouts(
     required_cols = {"date", "sales", "inventory"}
     if not required_cols.issubset(set(df.columns)):
         raise ValueError(f"Input DataFrame must contain columns: {required_cols}")
+    
     # Ensure correct data types
-    df = df.with_columns(["date", "sales", "inventory"].map(
-        lambda col: pl.col(col).cast(pl.Int32) if col != "date" else pl.col(col).cast(pl.Date)
-    ))
+    try:
+        df = df.with_columns([
+            pl.col("date").cast(pl.Date),
+            pl.col("sales").cast(pl.Int32),
+            pl.col("inventory").cast(pl.Int32)
+        ])
+    except Exception as e:
+        raise TypeError(
+            f"Failed to cast columns to required types. "
+            f"Expected: date (Date), sales (Int32), inventory (Int32). "
+            f"Error: {str(e)}"
+        )
 
     # Sort by date to ensure correct rolling calculations
     df = df.sort("date")
@@ -90,10 +103,12 @@ if __name__ == "__main__":
     df = pl.read_csv("data/fashion_sample.csv")
 
     # Convert date columns to proper types and extract date features
+    '''
     df = df.with_columns([
         pl.col("date").str.to_date().alias("date"),
         pl.col("launch_date").str.to_date().alias("launch_date")
     ])
+    '''
 
     # Add day_number column (Day 1, Day 2, ..., Day N)
     # this can be a function too (reusable)
