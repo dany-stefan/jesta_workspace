@@ -45,78 +45,233 @@
 <!-- Slide 2: Problem Statement -->
 <div class="slide">
     <h2>The Problem</h2>
-    <p>[Content to be added]</p>
+    <ul>
+        <li><strong>50% WMAPE error</strong> in demand forecasting</li>
+        <li>Out-of-Memory (OOM) crashes preventing model execution</li>
+        <li>12.6M products being forecasted (many inactive or non-replenishable)</li>
+        <li>Footwear category shows <strong>worse error</strong> than Made-to-Measure</li>
+    </ul>
+    <p><strong>Key Insight:</strong> This is not a modeling problem—it's a <strong>data engineering</strong> problem.</p>
     <div class="slide-number">2</div>
 </div>
 
 <!-- Slide 3: Root Causes -->
 <div class="slide">
     <h2>Root Causes Identified</h2>
-    <p>[Content to be added]</p>
+    <ul>
+        <li><strong>1. Dead Stock Noise:</strong> Forecasting inactive products that will never sell again
+            <ul><li>Wrong product mix inflates error and wastes compute resources</li></ul>
+        </li>
+        <li><strong>2. Censored Demand:</strong> Zero stock causes zero sales, but doesn't mean zero demand
+            <ul><li>Model learns "no demand" when reality is "could-not-serve demand"</li></ul>
+        </li>
+        <li><strong>3. Missing Price Features:</strong> Model unaware of discounts and clearance events
+            <ul><li>Systematic underprediction during markdown periods</li></ul>
+        </li>
+    </ul>
+    <p><strong>Judgment Call:</strong> Tackle data engineering first (dead stock filtering) for quick wins before feature engineering.</p>
     <div class="slide-number">3</div>
 </div>
 
 <!-- Slide 4: Strategy -->
 <div class="slide">
     <h2>Our Strategy</h2>
-    <p>[Content to be added]</p>
+    <h3>Phased Approach: Agile, Modular, Iterative</h3>
+    <ul>
+        <li><strong>Phase 1 (Month 1):</strong> Product Qualification & Data Processing
+            <ul><li>Filter dead stock and inactive products</li>
+            <li>Implement parallel processing to avoid OOM crashes</li></ul>
+        </li>
+        <li><strong>Phase 2 (Month 2):</strong> Feature Engineering
+            <ul><li>Address censored demand with stockout features</li>
+            <li>Add price elasticity features for markdown periods</li></ul>
+        </li>
+        <li><strong>Phase 3 (Month 3):</strong> Model Optimization & Production
+            <ul><li>Hyperparameter tuning and monitoring setup</li>
+            <li>CI/CD pipeline for deployment</li></ul>
+        </li>
+    </ul>
+    <p><strong>Judgment Call:</strong> Fix what's in my domain (data engineering) first—show quick progress before tackling complex ML.</p>
     <div class="slide-number">4</div>
 </div>
 
 <!-- Slide 5: Data Analysis -->
 <div class="slide">
     <h2>Data Insights</h2>
-    <p>[Content to be added]</p>
+    <h3>Dataset: 100 days, 1 product, 1 store</h3>
+    <ul>
+        <li><strong>Data Quality Issue:</strong> Day 37 had missing sales data
+            <ul><li><strong>Judgment:</strong> Safe to fill with 0 since inventory=0 (no sales possible)</li>
+            <li><strong>Confidence:</strong> Validated by checking days 36 and 38</li></ul>
+        </li>
+        <li><strong>Illogical Data Points:</strong> Sales recorded on same day inventory hits zero
+            <ul><li><strong>Concern:</strong> When are sales captured? End of day or beginning?</li>
+            <li><strong>Recommendation:</strong> Capture sales at end of previous day to avoid confusion</li></ul>
+        </li>
+        <li><strong>Observable Patterns:</strong>
+            <ul><li>Days 41-50: Clear stockout period (inventory=0)</li>
+            <li>Days 70+: Price markdown triggers sales spike</li></ul>
+        </li>
+    </ul>
     <div class="slide-number">5</div>
 </div>
 
 <!-- Slide 6: Feature Engineering -->
 <div class="slide">
     <h2>Feature Engineering</h2>
-    <p>[Content to be added]</p>
+    <h3>From 1 Feature → 19 Features</h3>
+    <ul>
+        <li><strong>Lag Features:</strong> 7d, 14d, 28d moving averages (with 1-day shift to prevent leakage)</li>
+        <li><strong>Momentum Features:</strong> Sales momentum and stage momentum</li>
+        <li><strong>Inventory Features:</strong> Current inventory, 7d/28d trends, momentum
+            <ul><li><strong>Judgment:</strong> Inventory proved most important (63% feature importance)</li></ul>
+        </li>
+        <li><strong>Stockout Flag:</strong> Binary indicator when inventory=0</li>
+        <li><strong>Lifecycle Stages:</strong> New, Growth, Mature, Clearance (one-hot encoded)</li>
+        <li><strong>Price Features:</strong> Current price, original price, cost</li>
+        <li><strong>Time Features:</strong> Weekday, weeks since launch</li>
+    </ul>
+    <p><strong>Key Insight:</strong> Simple lag features underfit regime changes (stockouts, markdowns). Need domain-aware features.</p>
     <div class="slide-number">6</div>
 </div>
 
 <!-- Slide 7: Model Comparison -->
 <div class="slide">
     <h2>Model Selection</h2>
-    <p>[Content to be added]</p>
+    <h3>Gradient Boosting Regressor (scikit-learn)</h3>
+    <table style="border-collapse: collapse; margin: 20px auto; font-size: 1.1em;">
+        <tr style="background: #f0f0f0;">
+            <th style="padding: 10px; border: 1px solid #ccc;">Model</th>
+            <th style="padding: 10px; border: 1px solid #ccc;">Features</th>
+            <th style="padding: 10px; border: 1px solid #ccc;">WMAPE</th>
+            <th style="padding: 10px; border: 1px solid #ccc;">MAE</th>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">Baseline (Linear)</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">1 (28d MA)</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">110.43%</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">12.15</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ccc;">Lag Features (GBR)</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">3 lags</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">141.33%</td>
+            <td style="padding: 10px; border: 1px solid #ccc;">15.55</td>
+        </tr>
+        <tr style="background: #e8f5e9;">
+            <td style="padding: 10px; border: 1px solid #ccc;"><strong>Custom Features (GBR)</strong></td>
+            <td style="padding: 10px; border: 1px solid #ccc;"><strong>19 features</strong></td>
+            <td style="padding: 10px; border: 1px solid #ccc;"><strong>86.94%</strong></td>
+            <td style="padding: 10px; border: 1px solid #ccc;"><strong>9.56</strong></td>
+        </tr>
+    </table>
+    <p><strong>Judgment Call:</strong> Used scikit-learn GBR instead of LightGBM due to MacBook compatibility (mobile processor, libomp issues).</p>
     <div class="slide-number">7</div>
 </div>
 
 <!-- Slide 8: Results -->
 <div class="slide">
     <h2>Results & Performance</h2>
-    <p>[Content to be added]</p>
+    <h3>21% Improvement from Baseline to Custom Features</h3>
+    <ul>
+        <li><strong>WMAPE Reduction:</strong> 110.43% → 86.94%</li>
+        <li><strong>MAE Reduction:</strong> 12.15 → 9.56 (21% improvement)</li>
+        <li><strong>RMSE:</strong> 12.11</li>
+    </ul>
+    <h3>Top Feature Importances:</h3>
+    <ul>
+        <li><strong>Inventory (63.7%):</strong> Most predictive feature—stockouts drive demand patterns</li>
+        <li><strong>28d Inventory Trend (14.3%):</strong> Captures replenishment patterns</li>
+        <li><strong>7d Inventory Trend (5.6%):</strong> Recent stock movements matter</li>
+        <li><strong>Weekday (5.2%):</strong> Day-of-week seasonality</li>
+    </ul>
+    <p><strong>Key Insight:</strong> Inventory features dominate (84% combined). Lag features underfit; domain knowledge beats pure statistics.</p>
     <div class="slide-number">8</div>
 </div>
 
 <!-- Slide 9: Production Architecture -->
 <div class="slide">
     <h2>Production Design</h2>
-    <p>[Content to be added]</p>
+    <h3>Product Qualification Module</h3>
+    <ul>
+        <li><strong>Purpose:</strong> Filter out dead stock, inactive, and non-replenishable products before forecasting</li>
+        <li><strong>Architecture:</strong> Stateless Lambda function with Polars for data processing
+            <ul><li>Containerized with Docker for easy deployment</li>
+            <li>FastAPI endpoints for API integration</li></ul>
+        </li>
+        <li><strong>Business Rules:</strong>
+            <ul><li>Physical stores: 90-day sales lookback, 60-day replenishment window</li>
+            <li>E-commerce: 120-day sales lookback, 90-day replenishment window</li>
+            <li>High-velocity (Footwear): 60-day lookback, 30-day replenishment</li>
+            <li>Low-velocity (Made-to-Measure): 120-day lookback, 90-day replenishment</li></ul>
+        </li>
+    </ul>
+    <p><strong>Judgment Call:</strong> Longer windows for e-commerce due to lower storage costs and broader reach.</p>
     <div class="slide-number">9</div>
 </div>
 
-<!-- Slide 10: Key Decisions -->
+<!-- Slide 10: Technical Decisions -->
 <div class="slide">
     <h2>Technical Decisions</h2>
-    <p>[Content to be added]</p>
+    <ul>
+        <li><strong>1. Polars over Pandas:</strong> 
+            <ul><li><strong>Why:</strong> Faster performance, lower memory footprint, better for 150k SKUs × 61 stores</li>
+            <li><strong>Trade-off:</strong> Steeper learning curve, but worth it for scale</li></ul>
+        </li>
+        <li><strong>2. Gradient Boosting (scikit-learn) over LightGBM:</strong>
+            <ul><li><strong>Why:</strong> No OS dependencies (MacBook mobile processor compatibility)</li>
+            <li><strong>Trade-off:</strong> Slower training, but more portable</li></ul>
+        </li>
+        <li><strong>3. Time-Series Split (80/20):</strong>
+            <ul><li><strong>Why:</strong> Avoids data leakage—test on future data only</li>
+            <li><strong>Concern:</strong> Small sample size (20 days test), need more data for production</li></ul>
+        </li>
+        <li><strong>4. Parallel Processing over Cloud ETL:</strong>
+            <ul><li><strong>Why:</strong> Elegant, reproducible, scalable—hit CPU not memory</li></ul>
+        </li>
+    </ul>
     <div class="slide-number">10</div>
 </div>
 
 <!-- Slide 11: Next Steps -->
 <div class="slide">
     <h2>Roadmap & Next Steps</h2>
-    <p>[Content to be added]</p>
+    <h3>If I Had More Time:</h3>
+    <ul>
+        <li><strong>1. Larger Dataset:</strong> 100 days is too small—need 1-2 years of data for seasonality</li>
+        <li><strong>2. Cross-Validation:</strong> Implement time-series cross-validation for robust evaluation</li>
+        <li><strong>3. Hyperparameter Tuning:</strong> Grid search to optimize GBR parameters</li>
+        <li><strong>4. Category-Specific Models:</strong> Separate models for Footwear vs Made-to-Measure</li>
+        <li><strong>5. Production Monitoring:</strong> 
+            <ul><li>Track false negatives (excluded products that later sell)</li>
+            <li>Track false positives (included products that never sell)</li>
+            <li>Alert on sudden qualification rate changes</li></ul>
+        </li>
+        <li><strong>6. Real-Time Streaming:</strong> Ingest new data continuously for new product launch monitoring</li>
+    </ul>
     <div class="slide-number">11</div>
 </div>
 
-<!-- Slide 12: Questions -->
+<!-- Slide 12: Q&A Section -->
 <div class="slide">
-    <h2>Questions & Discussion</h2>
-    <p>Thank you!</p>
+    <h2>Q&A: Questions for Evaluators</h2>
+    <ul style="font-size: 1.1em;">
+        <li><strong>1. Data Collection:</strong> When are sales captured—end of day or real-time? (Impacts stockout logic)</li>
+        <li><strong>2. Product Lifecycle:</strong> How do you currently define "active" vs "inactive" products?</li>
+        <li><strong>3. Category Priorities:</strong> Should we prioritize reducing error in Footwear or maintaining Made-to-Measure?</li>
+        <li><strong>4. Business Rules:</strong> Are there existing qualification rules I should align with?</li>
+        <li><strong>5. Compute Budget:</strong> What are the production memory and CPU constraints?</li>
+        <li><strong>6. Success Metrics:</strong> Beyond WMAPE, what matters most—MAE, RMSE, forecast coverage?</li>
+        <li><strong>7. Data Availability:</strong> Can I access historical data beyond 100 days?</li>
+    </ul>
     <div class="slide-number">12</div>
+</div>
+
+<!-- Slide 13: Thank You -->
+<div class="slide">
+    <h2>Thank You!</h2>
+    <p>Questions & Discussion</p>
+    <div class="slide-number">13</div>
 </div>
 
 </body>
