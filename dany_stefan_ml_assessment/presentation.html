@@ -1317,10 +1317,15 @@
     <p style="font-size: 1.3em; margin-top: 30px;">Analysis, Features, Model Comparison, Production Quality</p>
 </div>
 
-<!-- Slide 5: Data Analysis -->
+<!-- Slide 16: Data Exploration & Analysis (Merged from old 16 & 17) -->
 <div class="slide">
-    <h2>📈 Task 4A: Data Exploration (100-day sample)</h2>
-    <h3>Dataset: 100 days, 1 product, 1 store</h3>
+    <h2>📈 Task 4A: Data Exploration & Analysis</h2>
+    
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px; margin-bottom: 20px;">
+        <h4>Dataset: 100 days, 1 product, 1 store</h4>
+        <p style="font-size: 0.9em; margin: 8px 0;">Analyzing historical sales data to identify key patterns that affect demand forecasting: missing data, stockouts, price changes, and their impact on observed sales.</p>
+    </div>
+    
     <svg class="chart-container" viewBox="0 0 1100 350" xmlns="http://www.w3.org/2000/svg" style="max-width: 1100px; width: 100%;">
         <!-- Timeline -->
         <line x1="50" y1="180" x2="850" y2="180" stroke="#ccc" stroke-width="3"/>
@@ -1352,13 +1357,13 @@
               stroke="#0066cc" stroke-width="3" fill="none"/>
         
         <!-- Data quality boxes -->
-        <rect x="50" y="240" width="250" height="80" fill="#667eea22" stroke="#667eea" stroke-width="2" rx="8"/>
-        <text x="175" y="265" text-anchor="middle" font-size="12" font-weight="bold">✓ Filled with 0</text>
+        <rect x="50" y="240" width="250" height="80" fill="#EF444422" stroke="#EF4444" stroke-width="2" rx="8"/>
+        <text x="175" y="265" text-anchor="middle" font-size="12" font-weight="bold" fill="#EF4444">✓ Filled with 0</text>
         <text x="175" y="285" text-anchor="middle" font-size="10">Inventory = 0</text>
         <text x="175" y="305" text-anchor="middle" font-size="10">No sales possible</text>
         
-        <rect x="350" y="240" width="250" height="80" fill="#f5576c22" stroke="#f5576c" stroke-width="2" rx="8"/>
-        <text x="475" y="265" text-anchor="middle" font-size="12" font-weight="bold">⚠ Timing Issue</text>
+        <rect x="350" y="240" width="250" height="80" fill="#F59E0B22" stroke="#F59E0B" stroke-width="2" rx="8"/>
+        <text x="475" y="265" text-anchor="middle" font-size="12" font-weight="bold" fill="#F59E0B">⚠ Timing Issue</text>
         <text x="475" y="285" text-anchor="middle" font-size="10">Sales on day inventory hits 0</text>
         <text x="475" y="305" text-anchor="middle" font-size="10">When captured?</text>
         
@@ -1367,33 +1372,49 @@
         <text x="750" y="285" text-anchor="middle" font-size="10">Clear patterns</text>
         <text x="750" y="305" text-anchor="middle" font-size="10">in demand shifts</text>
     </svg>
+    
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px; margin-top: 25px; margin-bottom: 20px;">
+        <h4>📊 Sales vs Inventory vs Price Signals</h4>
+        <p style="font-size: 0.9em; margin: 8px 0;">Actual sample series (scaled). Inventory depletion and price moves explain most demand swings.</p>
+    </div>
+    
+    <svg class="chart-container" viewBox="0 0 1100 320" xmlns="http://www.w3.org/2000/svg" style="max-width: 1100px; width: 100%;">
+        <g transform="translate(50,20)">
+            <!-- Chart border -->
+            <rect x="0" y="0" width="800" height="200" fill="none" stroke="#ddd" stroke-width="1.5"/>
+            
+            <!-- Sales line (blue) -->
+            <polyline points="20.0,134.3 27.7,149.5 35.4,122.9 43.0,138.1 50.7,107.6 58.4,96.2 66.1,111.4 73.7,126.7 81.4,119.0 89.1,130.5 96.8,115.2 104.4,100.0 112.1,84.8 119.8,107.6 127.5,126.7 135.2,119.0 142.8,134.3 150.5,111.4 158.2,122.9 165.9,103.8 173.5,138.1 181.2,130.5 188.9,145.7 196.6,126.7 204.2,134.3 211.9,119.0 219.6,107.6 227.3,122.9 234.9,141.9 242.6,149.5 250.3,153.3 258.0,168.6 265.7,180.0 273.3,180.0 281.0,180.0 288.7,180.0 296.4,180.0 304.0,180.0 311.7,180.0 319.4,180.0 327.1,180.0 334.7,161.0 342.4,149.5 350.1,134.3 357.8,122.9 365.5,145.7 373.1,138.1 380.8,153.3 388.5,141.9 396.2,149.5 403.8,157.1 411.5,145.7 419.2,153.3 426.9,161.0 434.5,157.1 442.2,164.8 449.9,168.6 457.6,172.4 465.3,176.2 472.9,172.4 480.6,180.0 488.3,180.0 496.0,180.0 503.6,180.0 511.3,180.0 519.0,180.0 526.7,180.0 534.3,180.0 542.0,180.0 549.7,180.0 557.4,149.5 565.1,134.3 572.7,122.9 580.4,141.9 588.1,161.0 595.8,180.0 603.4,180.0 611.1,180.0 618.8,111.4 626.5,96.2 634.1,141.9 641.8,180.0 649.5,180.0 657.2,180.0 664.8,180.0 672.5,84.8 680.2,73.3 687.9,61.9 695.6,157.1 703.2,180.0 710.9,180.0 718.6,46.7 726.3,20.0 733.9,35.2 741.6,161.0 749.3,180.0 757.0,180.0 764.6,180.0 772.3,180.0 780.0,180.0" fill="none" stroke="#0066cc" stroke-width="2.5" opacity="0.9"/>
+            
+            <!-- Inventory line (orange) -->
+            <polyline points="20.0,20.0 27.7,22.8 35.4,28.2 43.0,32.1 50.7,38.8 58.4,46.7 66.1,53.1 73.7,58.0 81.4,63.7 89.1,68.4 96.8,74.4 104.4,81.9 112.1,90.8 119.8,97.5 127.5,102.5 135.2,108.2 142.8,112.4 150.5,118.8 158.2,124.2 165.9,131.3 173.5,135.2 181.2,139.8 188.9,143.0 196.6,148.0 204.2,152.3 211.9,158.0 219.6,164.7 227.3,170.0 234.9,173.6 242.6,176.4 250.3,178.9 258.0,180.0 265.7,180.0 273.3,180.0 281.0,180.0 288.7,180.0 296.4,180.0 304.0,180.0 311.7,180.0 319.4,180.0 327.1,180.0 334.7,135.6 342.4,138.4 350.1,142.7 357.8,148.0 365.5,151.2 373.1,155.1 380.8,157.6 388.5,161.2 396.2,164.0 403.8,166.1 411.5,169.3 419.2,171.8 426.9,173.6 434.5,175.7 442.2,177.2 449.9,178.2 457.6,178.9 465.3,179.3 472.9,180.0 480.6,180.0 488.3,180.0 496.0,180.0 503.6,180.0 511.3,180.0 519.0,180.0 526.7,180.0 534.3,180.0 542.0,180.0 549.7,180.0 557.4,165.1 565.1,169.3 572.7,174.7 580.4,178.2 588.1,180.0 595.8,180.0 603.4,180.0 611.1,180.0 618.8,168.6 626.5,176.4 634.1,180.0 641.8,180.0 649.5,180.0 657.2,180.0 664.8,180.0 672.5,156.9 680.2,166.8 687.9,177.9 695.6,180.0 703.2,180.0 710.9,180.0 718.6,149.8 726.3,164.7 733.9,178.2 741.6,180.0 749.3,180.0 757.0,180.0 764.6,180.0 772.3,180.0 780.0,180.0" fill="none" stroke="#F59E0B" stroke-width="2.5" opacity="0.9"/>
+            
+            <!-- Price ratio line (green) -->
+            <polyline points="20.0,20.0 27.7,20.0 35.4,20.0 43.0,20.0 50.7,20.0 58.4,20.0 66.1,20.0 73.7,20.0 81.4,20.0 89.1,20.0 96.8,20.0 104.4,20.0 112.1,20.0 119.8,20.0 127.5,20.0 135.2,20.0 142.8,20.0 150.5,20.0 158.2,20.0 165.9,20.0 173.5,20.0 181.2,20.0 188.9,20.0 196.6,20.0 204.2,20.0 211.9,20.0 219.6,20.0 227.3,20.0 234.9,20.0 242.6,20.0 250.3,20.0 258.0,20.0 265.7,20.0 273.3,20.0 281.0,20.0 288.7,20.0 296.4,20.0 304.0,20.0 311.7,20.0 319.4,20.0 327.1,20.0 334.7,20.0 342.4,20.0 350.1,20.0 357.8,20.0 365.5,20.0 373.1,20.0 380.8,20.0 388.5,20.0 396.2,20.0 403.8,20.0 411.5,20.0 419.2,20.0 426.9,20.0 434.5,20.0 442.2,20.0 449.9,20.0 457.6,20.0 465.3,20.0 472.9,20.0 480.6,20.0 488.3,20.0 496.0,20.0 503.6,20.0 511.3,20.0 519.0,20.0 526.7,20.0 534.3,20.0 542.0,20.0 549.7,56.9 557.4,56.9 565.1,56.9 572.7,56.9 580.4,56.9 588.1,56.9 595.8,56.9 603.4,56.9 611.1,81.5 618.8,81.5 626.5,81.5 634.1,81.5 641.8,81.5 649.5,81.5 657.2,81.5 664.8,106.2 672.5,106.2 680.2,106.2 687.9,106.2 695.6,106.2 703.2,106.2 710.9,118.5 718.6,118.5 726.3,118.5 733.9,118.5 741.6,118.5 749.3,118.5 757.0,118.5 764.6,118.5 772.3,118.5 780.0,118.5" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0.9"/>
+        </g>
+        
+        <!-- Legend box - positioned clearly below the chart -->
+        <rect x="300" y="245" width="500" height="65" fill="#ffffff" stroke="#999" stroke-width="2" rx="8"/>
+        <text x="320" y="265" font-size="13" font-weight="bold" fill="#333">Legend:</text>
+        
+        <circle cx="395" cy="261" r="6" fill="#0066cc"/>
+        <text x="410" y="266" font-size="12" fill="#333">Sales (scaled)</text>
+        
+        <circle cx="540" cy="261" r="6" fill="#F59E0B"/>
+        <text x="555" y="266" font-size="12" fill="#333">Inventory (scaled)</text>
+        
+        <circle cx="320" cy="290" r="6" fill="#10B981"/>
+        <text x="335" y="295" font-size="12" fill="#333">Price Ratio (current/original)</text>
+    </svg>
+    
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 15px; margin-top: 20px; background: #f8f9fa;">
+        <p style="font-size: 0.9em; margin: 0; color: #333;"><strong>Key Takeaways:</strong> Price drops drive clear demand spikes (Days 70+). Stockout periods (Days 41-50) flatten sales despite underlying demand. Inventory depletion correlates strongly with reduced sales velocity. Missing data (Day 37) can be imputed based on inventory status.</p>
+    </div>
+    
     <div class="slide-number">16</div>
 </div>
 
-<!-- NEW SLIDE: Task 4A - Data Signals Chart -->
-<div class="slide">
-    <h2>📈 Task 4A: Signals in the 100-Day Sample</h2>
-    <p style="font-size: 1.08em; color: #666; max-width: 1100px; width: 100%;">
-        Actual sample series (scaled). Inventory and price moves explain most demand swings.
-    </p>
-    <svg class="chart-container" viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" style="max-width: 1100px; width: 100%;">
-        <text x="50" y="30" font-size="16" font-weight="bold">Sales vs Inventory vs Price Ratio (scaled)</text>
-        <g transform="translate(50,60)">
-            <rect x="0" y="0" width="800" height="200" fill="none" stroke="#ddd"/>
-            <polyline points="20.0,134.3 27.7,149.5 35.4,122.9 43.0,138.1 50.7,107.6 58.4,96.2 66.1,111.4 73.7,126.7 81.4,119.0 89.1,130.5 96.8,115.2 104.4,100.0 112.1,84.8 119.8,107.6 127.5,126.7 135.2,119.0 142.8,134.3 150.5,111.4 158.2,122.9 165.9,103.8 173.5,138.1 181.2,130.5 188.9,145.7 196.6,126.7 204.2,134.3 211.9,119.0 219.6,107.6 227.3,122.9 234.9,141.9 242.6,149.5 250.3,153.3 258.0,168.6 265.7,180.0 273.3,180.0 281.0,180.0 288.7,180.0 296.4,180.0 304.0,180.0 311.7,180.0 319.4,180.0 327.1,180.0 334.7,161.0 342.4,149.5 350.1,134.3 357.8,122.9 365.5,145.7 373.1,138.1 380.8,153.3 388.5,141.9 396.2,149.5 403.8,157.1 411.5,145.7 419.2,153.3 426.9,161.0 434.5,157.1 442.2,164.8 449.9,168.6 457.6,172.4 465.3,176.2 472.9,172.4 480.6,180.0 488.3,180.0 496.0,180.0 503.6,180.0 511.3,180.0 519.0,180.0 526.7,180.0 534.3,180.0 542.0,180.0 549.7,180.0 557.4,149.5 565.1,134.3 572.7,122.9 580.4,141.9 588.1,161.0 595.8,180.0 603.4,180.0 611.1,180.0 618.8,111.4 626.5,96.2 634.1,141.9 641.8,180.0 649.5,180.0 657.2,180.0 664.8,180.0 672.5,84.8 680.2,73.3 687.9,61.9 695.6,157.1 703.2,180.0 710.9,180.0 718.6,46.7 726.3,20.0 733.9,35.2 741.6,161.0 749.3,180.0 757.0,180.0 764.6,180.0 772.3,180.0 780.0,180.0" fill="none" stroke="#0066cc" stroke-width="2.5"/>
-            <polyline points="20.0,20.0 27.7,22.8 35.4,28.2 43.0,32.1 50.7,38.8 58.4,46.7 66.1,53.1 73.7,58.0 81.4,63.7 89.1,68.4 96.8,74.4 104.4,81.9 112.1,90.8 119.8,97.5 127.5,102.5 135.2,108.2 142.8,112.4 150.5,118.8 158.2,124.2 165.9,131.3 173.5,135.2 181.2,139.8 188.9,143.0 196.6,148.0 204.2,152.3 211.9,158.0 219.6,164.7 227.3,170.0 234.9,173.6 242.6,176.4 250.3,178.9 258.0,180.0 265.7,180.0 273.3,180.0 281.0,180.0 288.7,180.0 296.4,180.0 304.0,180.0 311.7,180.0 319.4,180.0 327.1,180.0 334.7,135.6 342.4,138.4 350.1,142.7 357.8,148.0 365.5,151.2 373.1,155.1 380.8,157.6 388.5,161.2 396.2,164.0 403.8,166.1 411.5,169.3 419.2,171.8 426.9,173.6 434.5,175.7 442.2,177.2 449.9,178.2 457.6,178.9 465.3,179.3 472.9,180.0 480.6,180.0 488.3,180.0 496.0,180.0 503.6,180.0 511.3,180.0 519.0,180.0 526.7,180.0 534.3,180.0 542.0,180.0 549.7,180.0 557.4,165.1 565.1,169.3 572.7,174.7 580.4,178.2 588.1,180.0 595.8,180.0 603.4,180.0 611.1,180.0 618.8,168.6 626.5,176.4 634.1,180.0 641.8,180.0 649.5,180.0 657.2,180.0 664.8,180.0 672.5,156.9 680.2,166.8 687.9,177.9 695.6,180.0 703.2,180.0 710.9,180.0 718.6,149.8 726.3,164.7 733.9,178.2 741.6,180.0 749.3,180.0 757.0,180.0 764.6,180.0 772.3,180.0 780.0,180.0" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
-            <polyline points="20.0,20.0 27.7,20.0 35.4,20.0 43.0,20.0 50.7,20.0 58.4,20.0 66.1,20.0 73.7,20.0 81.4,20.0 89.1,20.0 96.8,20.0 104.4,20.0 112.1,20.0 119.8,20.0 127.5,20.0 135.2,20.0 142.8,20.0 150.5,20.0 158.2,20.0 165.9,20.0 173.5,20.0 181.2,20.0 188.9,20.0 196.6,20.0 204.2,20.0 211.9,20.0 219.6,20.0 227.3,20.0 234.9,20.0 242.6,20.0 250.3,20.0 258.0,20.0 265.7,20.0 273.3,20.0 281.0,20.0 288.7,20.0 296.4,20.0 304.0,20.0 311.7,20.0 319.4,20.0 327.1,20.0 334.7,20.0 342.4,20.0 350.1,20.0 357.8,20.0 365.5,20.0 373.1,20.0 380.8,20.0 388.5,20.0 396.2,20.0 403.8,20.0 411.5,20.0 419.2,20.0 426.9,20.0 434.5,20.0 442.2,20.0 449.9,20.0 457.6,20.0 465.3,20.0 472.9,20.0 480.6,20.0 488.3,20.0 496.0,20.0 503.6,20.0 511.3,20.0 519.0,20.0 526.7,20.0 534.3,20.0 542.0,20.0 549.7,56.9 557.4,56.9 565.1,56.9 572.7,56.9 580.4,56.9 588.1,56.9 595.8,56.9 603.4,56.9 611.1,81.5 618.8,81.5 626.5,81.5 634.1,81.5 641.8,81.5 649.5,81.5 657.2,81.5 664.8,106.2 672.5,106.2 680.2,106.2 687.9,106.2 695.6,106.2 703.2,106.2 710.9,118.5 718.6,118.5 726.3,118.5 733.9,118.5 741.6,118.5 749.3,118.5 757.0,118.5 764.6,118.5 772.3,118.5 780.0,118.5" fill="none" stroke="#10B981" stroke-width="2.5"/>
-        </g>
-        <rect x="600" y="40" width="260" height="70" fill="#f8f9fa" stroke="#ddd" rx="8"/>
-        <circle cx="620" cy="63" r="5" fill="#0066cc"/><text x="632" y="68" font-size="12">Sales (scaled)</text>
-        <circle cx="620" cy="83" r="5" fill="#F59E0B"/><text x="632" y="88" font-size="12">Inventory (scaled)</text>
-        <circle cx="620" cy="103" r="5" fill="#10B981"/><text x="632" y="108" font-size="12">Price ratio (current/original)</text>
-        <text x="50" y="300" font-size="12" fill="#666">Key takeaways: price drops drive demand spikes; stockouts flatten sales despite demand.</text>
-    </svg>
-    <div class="slide-number">17</div>
-</div>
-
-<!-- Slide 6: Feature Engineering -->
+<!-- Slide 17: Feature Engineering -->
 <div class="slide">
     <h2>🔧 Task 4B: Feature Engineering (19 Features)</h2>
     <h3>From 1 Feature → 19 Features</h3>
@@ -1463,7 +1484,7 @@
             </linearGradient>
         </defs>
     </svg>
-    <div class="slide-number">18</div>
+    <div class="slide-number">17</div>
 </div>
 
 <!-- NEW SLIDE: Task 4B - Feature Implementation Details -->
@@ -1549,7 +1570,7 @@ def calculate_lifecycle_stage(df: pd.DataFrame) -> pd.DataFrame:
         <p><strong>Impact:</strong> Model adapts predictions based on lifecycle stage (e.g., expect higher sales variability in Growth, surge in Clearance).</p>
     </div>
     
-    <div class="slide-number">19</div>
+    <div class="slide-number">18</div>
 </div>
 
 <!-- NEW SLIDE: Task 4B - More Features -->
@@ -1632,7 +1653,7 @@ def calculate_lifecycle_stage(df: pd.DataFrame) -> pd.DataFrame:
         <p><strong>Impact:</strong> Helps model understand inventory pressure → Predicts clearance events and urgency to sell.</p>
     </div>
     
-    <div class="slide-number">20</div>
+    <div class="slide-number">19</div>
 </div>
 
 <!-- NEW SLIDE: Judgment Calls (Part 2) -->
@@ -1666,7 +1687,7 @@ def calculate_lifecycle_stage(df: pd.DataFrame) -> pd.DataFrame:
         <p>In production forecasting, correctness and explainability beat micro-optimizations.</p>
     </div>
     
-    <div class="slide-number">21</div>
+    <div class="slide-number">20</div>
 </div>
 
 <!-- NEW SLIDE: Task 4C - Product Qualification Function -->
@@ -1815,7 +1836,7 @@ test_should_forecast_product()</div>
         <li>❌ Exclude: No sales + no replenishment → Confidence <0.1</li>
     </ul>
     
-    <div class="slide-number">22</div>
+    <div class="slide-number">21</div>
 </div>
 
 <!-- Slide 7: Model Comparison (Task 5) -->
@@ -1883,7 +1904,7 @@ test_should_forecast_product()</div>
             </marker>
         </defs>
     </svg>
-    <div class="slide-number">23</div>
+    <div class="slide-number">22</div>
 </div>
 
 <!-- Slide 8: Results -->
@@ -1930,7 +1951,7 @@ test_should_forecast_product()</div>
         <rect x="350" y="145" width="20" height="20" fill="#8B5CF6" rx="3"/>
         <text x="380" y="160" font-size="14" fill="white">Other Features (11%)</text>
     </svg>
-    <div class="slide-number" style="color: white;">24</div>
+    <div class="slide-number" style="color: white;">23</div>
 </div>
 
 <!-- NEW SLIDE: Task 5 - Where Features Helped Most -->
@@ -2029,7 +2050,7 @@ test_should_forecast_product()</div>
         </ul>
     </div>
     
-    <div class="slide-number">25</div>
+    <div class="slide-number">24</div>
 </div>
 
 <!-- NEW SLIDE: Task 6 - Production Quality Code -->
@@ -2072,7 +2093,7 @@ test_should_forecast_product()</div>
     assert result["is_stockout"].to_list() == [False, True]</div>
     </div>
     
-    <div class="slide-number">26</div>
+    <div class="slide-number">25</div>
 </div>
 
 <!-- ...remaining slides for Part 2 Q&A, Final Summary, Thank You... -->
@@ -2119,7 +2140,7 @@ test_should_forecast_product()</div>
         <p><strong>Trade-off:</strong> LightGBM is faster but adds dependency complexity; GBR is sufficient for the sample.</p>
     </div>
     
-    <div class="slide-number">27</div>
+    <div class="slide-number">26</div>
 </div>
 
 <!-- Continue with existing final slides... -->
@@ -2139,7 +2160,7 @@ test_should_forecast_product()</div>
         <p>✅ Production-ready code with tests and documentation</p>
     </div>
     
-    <div class="slide-number" style="color: white;">28</div>
+    <div class="slide-number" style="color: white;">27</div>
 </div>
 
 </body>
