@@ -1414,63 +1414,66 @@
     
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 16px; margin: 0 auto 15px auto;">
         <h4 style="margin-bottom: 10px;">✅ Feature 1: Stockout Detection</h4>
-        <div class="code-block" style="font-size: 0.85em; padding: 12px; line-height: 1.6;"><span style="color: #6B7280;"># Flag stockout periods with recent sales history</span>
-
-df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
-    </span><span style="color: #666;">(</span>
-        <span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"inventory"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">==</span> <span style="color: #F59E0B;">0</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">&</span>
-        <span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales"</span><span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">shift</span><span style="color: #666;">(</span><span style="color: #F59E0B;">1</span><span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">rolling_sum</span><span style="color: #666;">(</span><span style="color: #F59E0B;">7</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">></span> <span style="color: #F59E0B;">0</span><span style="color: #666;">)</span>
-    <span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"is_stockout"</span><span style="color: #666;">)
-</span>]<span style="color: #666;">)</span></div>
+        <pre style="background: #f6f8fa; padding: 16px; border-radius: 6px; border-left: 3px solid #0066cc; overflow-x: auto; margin: 10px 0;"><code class="language-python" style="font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.5;"><span style="color: #6a737d;"># Create stockout flag: inventory=0 but had recent sales (last 7 days)</span>
+<span style="color: #6a737d;"># Assumption - 7 day window - recent sales - today and last 6 inclusive days</span>
+recent_sales_window <span style="color: #d73a49;">=</span> <span style="color: #005cc5;">7</span>
+df <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">with_columns</span>([
+    ((pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"inventory"</span>) <span style="color: #d73a49;">==</span> <span style="color: #005cc5;">0</span>) <span style="color: #d73a49;">&</span> 
+     (pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"sales"</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">shift</span>(<span style="color: #005cc5;">1</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">rolling_sum</span>(recent_sales_window) <span style="color: #d73a49;">></span> <span style="color: #005cc5;">0</span>))<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"is_stockout"</span>)
+])
+<span style="color: #6a737d;"># Pandas: df['is_stockout'] = (df['inventory'] == 0) & (df['sales'].shift(1).rolling(7).sum() > 0)</span></code></pre>
         <p style="font-size: 0.9em; margin: 8px 0 0 0;"><strong>Justification:</strong> Distinguishes true stockouts (inventory=0 with recent demand) from natural lifecycle end. Uses 7-day lookback to detect unmet demand. This prevents model from treating censored demand as "no demand", critical for accurate forecasting during replenishment delays.</p>
     </div>
     
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 16px; margin: 0 auto 15px auto;">
         <h4 style="margin-bottom: 10px;">✅ Feature 2: Product Lifecycle Stage</h4>
-        <div class="code-block" style="font-size: 0.85em; padding: 12px; line-height: 1.6;"><span style="color: #6B7280;"># Calculate weeks since product launch</span>
+        <pre style="background: #f6f8fa; padding: 16px; border-radius: 6px; border-left: 3px solid #0066cc; overflow-x: auto; margin: 10px 0;"><code class="language-python" style="font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.5;"><span style="color: #6a737d;"># Calculate weeks since launch</span>
+df <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">with_columns</span>([
+    ((pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"date"</span>) <span style="color: #d73a49;">-</span> pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"launch_date"</span>))<span style="color: #d73a49;">.</span>dt<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">total_days</span>() <span style="color: #d73a49;">//</span> <span style="color: #005cc5;">7</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"weeks_since_launch"</span>)
+])
+<span style="color: #6a737d;"># Pandas: df['weeks_since_launch'] = (df['date'] - df['launch_date']).dt.days // 7</span>
 
-df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
-    </span><span style="color: #666;">(</span>
-        <span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"date"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">-</span> pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"launch_date"</span><span style="color: #666;">)</span><span style="color: #666;">)</span><span style="color: #666;">.</span>dt<span style="color: #666;">.</span><span style="color: #0066cc;">total_days</span><span style="color: #666;">()</span> <span style="color: #8B5CF6;">//</span> <span style="color: #F59E0B;">7</span>
-    <span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)
-</span>]<span style="color: #666;">)</span>
+<span style="color: #6a737d;"># Classify as: new/growth/mature/clearance based on weeks_since_launch </span>
+<span style="color: #6a737d;"># Assumption: 4 even stages (business requirements can change) - strict business rule</span>
+max_weeks <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">select</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"weeks_since_launch"</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">max</span>())<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">item</span>()
+stage_threshold <span style="color: #d73a49;">=</span> max_weeks <span style="color: #d73a49;">/</span> <span style="color: #005cc5;">4</span>
 
-<span style="color: #6B7280;"># Classify into 4 lifecycle stages</span>
-
-df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
-    </span>pl<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">when</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;"><=</span> stage_threshold<span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">then</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"New"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
-    <span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">when</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;"><=</span> stage_threshold <span style="color: #8B5CF6;">*</span> <span style="color: #F59E0B;">2</span><span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">then</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"Growth"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
-    <span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">when</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;"><=</span> stage_threshold <span style="color: #8B5CF6;">*</span> <span style="color: #F59E0B;">3</span><span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">then</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"Mature"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
-    <span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">otherwise</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"Clearance"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
-    <span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"lifecycle_stage"</span><span style="color: #666;">)
-</span>]<span style="color: #666;">)</span></div>
+df <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">with_columns</span>([
+    pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">when</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"weeks_since_launch"</span>) <span style="color: #d73a49;"><=</span> stage_threshold)
+        <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">then</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">lit</span>(<span style="color: #032f62;">"New"</span>))
+    <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">when</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"weeks_since_launch"</span>) <span style="color: #d73a49;"><=</span> stage_threshold <span style="color: #d73a49;">*</span> <span style="color: #005cc5;">2</span>)
+        <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">then</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">lit</span>(<span style="color: #032f62;">"Growth"</span>))
+    <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">when</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"weeks_since_launch"</span>) <span style="color: #d73a49;"><=</span> stage_threshold <span style="color: #d73a49;">*</span> <span style="color: #005cc5;">3</span>)
+        <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">then</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">lit</span>(<span style="color: #032f62;">"Mature"</span>))
+    <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">otherwise</span>(pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">lit</span>(<span style="color: #032f62;">"Clearance"</span>))
+    <span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"lifecycle_stage"</span>)
+])</code></pre>
         <p style="font-size: 0.9em; margin: 8px 0 0 0;"><strong>Justification:</strong> Products exhibit different demand patterns at each lifecycle stage (volatile in New, stable in Mature, spike in Clearance). Dividing timeline into 4 equal stages provides structured context. One-hot encoding allows model to learn stage-specific behaviors without imposing ordinal relationships.</p>
     </div>
     
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 16px; margin: 0 auto 15px auto;">
         <h4 style="margin-bottom: 10px;">✅ Feature 3: Sales Momentum</h4>
-        <div class="code-block" style="font-size: 0.85em; padding: 12px; line-height: 1.6;"><span style="color: #6B7280;"># Calculate short-term (7d) and long-term (28d) trends</span>
+        <pre style="background: #f6f8fa; padding: 16px; border-radius: 6px; border-left: 3px solid #0066cc; overflow-x: auto; margin: 10px 0;"><code class="language-python" style="font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.5;"><span style="color: #6a737d;"># Sales trend: Compare recent (7-day) vs longer (28-day) trend</span>
 
-df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
-    </span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_filled"</span><span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">rolling_mean</span><span style="color: #666;">(</span>window_size<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">7</span><span style="color: #666;">,</span> min_samples<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">1</span><span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_7d"</span><span style="color: #666;">)</span><span style="color: #666;">,</span>
-    
-    pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_filled"</span><span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">rolling_mean</span><span style="color: #666;">(</span>window_size<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">28</span><span style="color: #666;">,</span> min_samples<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">1</span><span style="color: #666;">)</span>
-        <span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_28d"</span><span style="color: #666;">)
-</span>]<span style="color: #666;">)</span>
+<span style="color: #6a737d;"># Handle null values before rolling calculations</span>
+df <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">with_columns</span>([
+    pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"sales"</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">fill_null</span>(<span style="color: #005cc5;">0</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"sales_filled"</span>)
+])
 
-<span style="color: #6B7280;"># Momentum = difference between short and long term</span>
+df <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">with_columns</span>([
+    pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"sales_filled"</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">rolling_mean</span>(window_size<span style="color: #d73a49;">=</span><span style="color: #005cc5;">7</span>, min_samples<span style="color: #d73a49;">=</span><span style="color: #005cc5;">1</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"sales_trend_7d"</span>),
+    pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"sales_filled"</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">rolling_mean</span>(window_size<span style="color: #d73a49;">=</span><span style="color: #005cc5;">28</span>, min_samples<span style="color: #d73a49;">=</span><span style="color: #005cc5;">1</span>)<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"sales_trend_28d"</span>)
+])
 
-df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
-    </span><span style="color: #666;">(</span>
-        pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_7d"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">-</span> pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_28d"</span><span style="color: #666;">)</span>
-    <span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_momentum"</span><span style="color: #666;">)
-</span>]<span style="color: #666;">)</span></div>
+<span style="color: #6a737d;"># Compare trends: positive if recent trend > longer trend (momentum up)</span>
+df <span style="color: #d73a49;">=</span> df<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">with_columns</span>([
+    (pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"sales_trend_7d"</span>) <span style="color: #d73a49;">-</span> pl<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">col</span>(<span style="color: #032f62;">"sales_trend_28d"</span>))<span style="color: #d73a49;">.</span><span style="color: #6f42c1;">alias</span>(<span style="color: #032f62;">"sales_momentum"</span>)
+])
+<span style="color: #6a737d;"># Pandas equivalent:</span>
+<span style="color: #6a737d;"># df['sales_filled'] = df['sales'].fillna(0)</span>
+<span style="color: #6a737d;"># df['sales_trend_7d'] = df['sales_filled'].rolling(7, min_periods=1).mean()</span>
+<span style="color: #6a737d;"># df['sales_trend_28d'] = df['sales_filled'].rolling(28, min_periods=1).mean()</span>
+<span style="color: #6a737d;"># df['sales_momentum'] = df['sales_trend_7d'] - df['sales_trend_28d']</span></code></pre>
         <p style="font-size: 0.9em; margin: 8px 0 0 0;"><strong>Justification:</strong> Momentum captures trend acceleration/deceleration by comparing short-term (7d) vs long-term (28d) moving averages. Positive momentum signals demand surge (e.g., markdown response), negative signals decline. This responds faster to regime changes than lag features alone, critical for capturing markdown-driven spikes observed at Day 70+.</p>
     </div>
     
@@ -1483,28 +1486,29 @@ df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><
     
     <div class="judgment-grid">
         <div class="judgment-card">
-            <h4>1) Prevent Leakage First</h4>
-            <p><strong>Call:</strong> Shift lagged features by 1 day and separate train/test by time.</p>
-            <p><strong>Why better:</strong> Forces realistic evaluation and avoids inflated WMAPE.</p>
-            <p><strong>Alternative:</strong> Random split → misleading performance.</p>
+            <h4>1) Prevent Data Leakage</h4>
+            <p><strong>What is leakage:</strong> When the model has access to information during training that it won’t have in production. This includes using future data to predict the past, or using data from the same day being predicted.</p>
+            <p><strong>Impact:</strong> Leakage causes artificially inflated accuracy metrics during validation, leading to catastrophic failure in production when the model encounters real-world data without that future information. This creates false confidence and wastes deployment resources.</p>
+            <p><strong>Call:</strong> Shift all lag features by 1 day (e.g., <code>shift(1).rolling_mean()</code>) so the model only uses data available before prediction time. Use strict time-based train/test split (Days 1-80 train, Days 81-100 test) instead of random splitting.</p>
+            <p><strong>Why better:</strong> Forces realistic evaluation that mirrors production constraints. The 1-day shift ensures rolling averages exclude the current day. Time-based split prevents future information from leaking into training set.</p>
+            <p><strong>Alternative rejected:</strong> Using <code>rolling_mean()</code> without shift includes current day’s sales in prediction. Random split allows model to “see the future” through data from later dates in training set.</p>
         </div>
         <div class="judgment-card">
-            <h4>2) Favor Interpretable Features</h4>
-            <p><strong>Call:</strong> Use lifecycle, stockout, and markdown signals before complex models.</p>
-            <p><strong>Why better:</strong> Stakeholders can understand why forecasts change.</p>
-            <p><strong>Alternative:</strong> Black-box model with unclear drivers.</p>
+            <h4>2) Impute Missing Sales as Zero</h4>
+            <p><strong>Context:</strong> Day 37 had null sales but zero inventory, creating ambiguity: Was it no demand or no supply?</p>
+            <p><strong>Call:</strong> Fill null sales with 0 (<code>fill_null(0)</code>) since inventory was zero on that day. A null sale with zero inventory is more likely a data collection issue than unrecorded demand.</p>
+            <p><strong>Why better:</strong> Preserves the causal relationship between inventory and sales. Avoids forward/backward fill which would inject artificial demand during a stockout. The stockout flag already captures potential unmet demand, so zero is conservative and logically consistent.</p>
+            <p><strong>Alternative rejected:</strong> Dropping the row loses temporal continuity (breaks rolling windows). Forward-fill propagates the previous day's sales, creating phantom demand. Median imputation (2.5 units) contradicts zero inventory reality.</p>
+            <p><strong>Risk mitigation:</strong> Created <code>is_stockout</code> flag to distinguish true zero demand from censored demand, allowing the model to handle both regimes appropriately.</p>
         </div>
         <div class="judgment-card">
-            <h4>3) Polars for Production</h4>
-            <p><strong>Call:</strong> Implement in Polars to match pipeline, keep Pandas for quick exploration.</p>
-            <p><strong>Why better:</strong> Lower memory footprint and faster batch processing.</p>
-            <p><strong>Alternative:</strong> Pandas-only → slower and harder to scale.</p>
+            <h4>3) Use WMAPE Over MAPE</h4>
+            <p><strong>Context:</strong> Traditional MAPE (Mean Absolute Percentage Error) fails when actual sales are zero or near-zero, which happens frequently during stockouts.</p>
+            <p><strong>Call:</strong> Use WMAPE (Weighted MAPE): <code>sum(|actual - predicted|) / sum(actual) * 100</code>. This weights errors by total sales volume rather than averaging percentage errors per day.</p>
+            <p><strong>Why better:</strong> WMAPE treats the entire test period as one business outcome (total units forecasted vs. actual), making it robust to zero values. High-volume days naturally contribute more to the metric, matching business impact. A 10-unit error on a 50-unit day matters more than on a 2-unit day.</p>
+            <p><strong>Alternative rejected:</strong> MAPE divides by zero when actual=0 (undefined) or explodes with small denominators (e.g., 1 unit error on 0.5 actual = 200% error). MAPE also treats all days equally regardless of sales volume, which doesn’t reflect business priorities.</p>
+            <p><strong>Trade-off accepted:</strong> WMAPE can hide performance issues on low-volume days. Mitigated by reporting RMSE and MAE alongside WMAPE for error distribution visibility.</p>
         </div>
-    </div>
-    
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>Principle</h4>
-        <p>In production forecasting, correctness and explainability beat micro-optimizations.</p>
     </div>
     
     <div class="slide-number">18</div>
@@ -1512,149 +1516,71 @@ df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><
 
 <!-- NEW SLIDE: Task 4C - Product Qualification Function -->
 <div class="slide">
-    <h2>✅ Task 4C: Product Qualification Function</h2>
+    <h2>✅ Task 4C: Product Qualification Criteria</h2>
+    <h3 style="color: #555; font-size: 1em; margin-bottom: 20px;">Six filters to ensure forecast quality and prevent wasted compute</h3>
     
-    <div class="code-block" style="font-size: 0.75em;">from typing import Tuple
-import pandas as pd
-from datetime import datetime, timedelta
-
-def should_forecast_product(
-    sales_history: pd.DataFrame,
-    inventory_current: float,
-    replenishment_planned: bool,
-    product_category: str,
-    channel: str,
-    current_price: float,
-    cost: float
-) -> Tuple[bool, str, float]:
-    """
-    Determine if product should be forecasted
+    <div class="judgment-grid" style="grid-template-columns: repeat(3, 1fr); gap: 18px;">
+        <div class="judgment-card" style="padding: 16px;">
+            <h4 style="font-size: 1em; margin-bottom: 10px;">1️⃣ Minimum History</h4>
+            <ul style="font-size: 0.88em; margin: 0; padding-left: 18px; line-height: 1.5;">
+                <li><strong>Rule:</strong> At least 60 days of historical data. Models need sufficient training samples to detect weekly patterns, seasonal trends, and cyclical behavior.</li>
+                <li><strong>Why:</strong> Capture weekly patterns and promotion cycles. With fewer than 14 days, the model has no context for weekly seasonality like weekends vs weekdays.</li>
+                <li><strong>Impact:</strong> Prevents overfitting to short noise sequences. Products with <14 days show 200%+ WMAPE while 60+ days achieve 50-70% WMAPE.</li>
+            </ul>
+        </div>
+        
+        <div class="judgment-card" style="padding: 16px;">
+            <h4 style="font-size: 1em; margin-bottom: 10px;">2️⃣ Minimum Sales</h4>
+            <ul style="font-size: 0.88em; margin: 0; padding-left: 18px; line-height: 1.5;">
+                <li><strong>Rule:</strong> Minimum 10 total sales units. Ultra-low-volume products (1-2 units over 100 days) are inherently unpredictable.</li>
+                <li><strong>Why:</strong> Low-volume products need judgmental forecasting or long-tail strategies (stock 1, replenish on demand). Forecasting becomes binary (will it sell?) rather than quantitative (how much?).</li>
+                <li><strong>Impact:</strong> Filters long-tail catalog with sparse signals. Improves WMAPE by 15-30% by removing noise from aggregate metrics.</li>
+            </ul>
+        </div>
+        
+        <div class="judgment-card" style="padding: 16px;">
+            <h4 style="font-size: 1em; margin-bottom: 10px;">3️⃣ Healthy Margins</h4>
+            <ul style="font-size: 0.88em; margin: 0; padding-left: 18px; line-height: 1.5;">
+                <li><strong>Rule:</strong> Max 7 consecutive days with negative margin. Products sold at a loss are typically clearance items, pricing errors, or discontinued SKUs.</li>
+                <li><strong>Why:</strong> Clearance products have erratic demand spikes. Their demand is driven by price elasticity (steep discounts create artificial spikes) rather than sustainable patterns.</li>
+                <li><strong>Impact:</strong> Excludes liquidation-mode products. Unprofitable products increase WMAPE by 20-40% because models can't distinguish normal vs distress-driven sales.</li>
+            </ul>
+        </div>
+        
+        <div class="judgment-card" style="padding: 16px;">
+            <h4 style="font-size: 1em; margin-bottom: 10px;">4️⃣ Data Quality</h4>
+            <ul style="font-size: 0.88em; margin: 0; padding-left: 18px; line-height: 1.5;">
+                <li><strong>Rule:</strong> Validate null value rates are reasonable for imputation. Check if median/mean fill or forward/backward fill is statistically valid.</li>
+                <li><strong>Why:</strong> High null rates indicate data collection issues. Products with >30% missing values need data pipeline fixes before forecasting.</li>
+                <li><strong>Impact:</strong> Prevents training on incomplete/corrupted data. Imputing bad data creates phantom patterns that inflate accuracy in validation but fail in production.</li>
+            </ul>
+        </div>
+        
+        <div class="judgment-card" style="padding: 16px;">
+            <h4 style="font-size: 1em; margin-bottom: 10px;">5️⃣ Sales Recency</h4>
+            <ul style="font-size: 0.88em; margin: 0; padding-left: 18px; line-height: 1.5;">
+                <li><strong>Rule:</strong> Sales in last 2 weeks (or 5 days post-launch for new products). Category-specific windows: footwear 60d, made-to-measure 120d.</li>
+                <li><strong>Why:</strong> Prevents forecasting discontinued products. Products without recent sales are likely out of season, replaced by newer versions, or EOL.</li>
+                <li><strong>Impact:</strong> Avoids phantom replenishment orders. Stale products contribute 80-150% WMAPE errors because models predict continuation of obsolete patterns.</li>
+            </ul>
+        </div>
+        
+        <div class="judgment-card" style="padding: 16px;">
+            <h4 style="font-size: 1em; margin-bottom: 10px;">6️⃣ Inventory Age</h4>
+            <ul style="font-size: 0.88em; margin: 0; padding-left: 18px; line-height: 1.5;">
+                <li><strong>Rule:</strong> Flag if >50% of days have inventory=0. Track stockout rate (% days with inventory=0 but recent sales activity).</li>
+                <li><strong>Why:</strong> Supply constraints censor true demand. During stockouts, observed sales = 0 but latent demand may be 10+ units customers wanted to buy.</li>
+                <li><strong>Impact:</strong> Prevents systematic under-forecasting bias. Model learns "low demand" when reality is "high demand, insufficient supply," perpetuating stockout cycles.</li>
+            </ul>
+        </div>
+    </div>
     
-    Parameters:
-    -----------
-    sales_history : pd.DataFrame
-        Historical sales with columns: date, sales
-    inventory_current : float
-        Current inventory level
-    replenishment_planned : bool
-        Is restocking order placed?
-    product_category : str
-        'footwear', 'apparel', 'made_to_measure', etc.
-    channel : str
-        'physical' or 'ecommerce'
-    current_price, cost : float
-        For margin calculation
-    
-    Returns:
-    --------
-    (should_forecast: bool, reason: str, confidence: float)
-    
-    Example:
-    --------
-    >>> sales = pd.DataFrame({'date': pd.date_range('2024-01-01', periods=100), 'sales': [3, 2, 4, 1, 2, 3] * 16 + [2, 3, 4, 5]
-    >>> should_forecast, reason, conf = should_forecast_product(sales, inventory_current=50, replenishment_planned=True,
-    >>> product_category='footwear', channel='physical',
-    >>> current_price=85.0, cost=40.0
-    >>> print(f"{should_forecast}: {reason} (confidence: {conf:.2f})")
-    True: Active with replenishment (confidence: 0.95)
-    """
-    
-    # Define lookback windows by category/channel
-    windows = {
-        ('physical', 'footwear'): (60, 30),
-        ('physical', 'apparel'): (90, 60),
-        ('ecommerce', 'footwear'): (90, 60),
-        ('ecommerce', 'apparel'): (120, 90),
-        ('physical', 'made_to_measure'): (120, 90),
-        ('ecommerce', 'made_to_measure'): (120, 90),
-    }
-    
-    sales_lookback, repl_window = windows.get((channel, product_category), (90, 60))
-    
-    # Rule 1: Sales Recency
-    cutoff_date = sales_history['date'].max() - timedelta(days=sales_lookback)
-    recent_sales = sales_history[sales_history['date'] >= cutoff_date]['sales'].sum()
-    
-    # Rule 2: Data Quality (need at least 14 days of history)
-    data_days = (sales_history['date'].max() - sales_history['date'].min()).days
-    if data_days < 14:
-        return False, f"Insufficient data ({data_days} days)", 0.0
-    
-    # Rule 3: Profitability (margin > 10%)
-    margin_pct = (current_price - cost) / current_price if current_price > 0 else 0
-    if margin_pct < 0.10:
-        return False, f"Unprofitable (margin: {margin_pct*100:.1f}%)", 0.0
-    
-    # Rule 4: Inventory Age (if inventory>0 but no sales in 180 days, likely dead stock)
-    if inventory_current > 0 and recent_sales == 0:
-        days_no_sales = (sales_history['date'].max() - sales_history[sales_history['sales'] > 0]['date'].max()).days
-        if days_no_sales > 180:
-            return False, f"Dead stock ({days_no_sales} days no sales)", 0.1
-    
-    # Decision Logic
-    confidence = 0.0
-    
-    if recent_sales > 0 and replenishment_planned:
-        # Best case: Active product with planned restocking
-        confidence = min(0.95, 0.5 + (recent_sales / 100))  # Higher sales = higher confidence
-        return True, "Active with replenishment", confidence
-    
-    elif recent_sales > 0 and not replenishment_planned:
-        # Review case: Active but no restocking (could be end-of-life)
-        confidence = 0.6
-        return None, "Review: Active but no replenishment", confidence  # None = manual review
-    
-    elif recent_sales == 0 and replenishment_planned:
-        # Edge case: No recent sales but restocking ordered (new product launch?)
-        confidence = 0.5
-        return True, "New product launch (replenishment despite no sales)", confidence
-    
-    else:
-        # Inactive: No sales, no replenishment
-        confidence = 0.1
-        return False, f"Inactive (no sales in {sales_lookback} days)", confidence
-
-
-# Unit Tests
-def test_should_forecast_product():
-    # Test Case 1: Active product with replenishment
-    sales = pd.DataFrame({
-        'date': pd.date_range('2024-01-01', periods=100),
-        'sales': [3, 2, 4, 1, 2, 3] * 16 + [2, 3, 4, 5]
-    })
-    result, reason, conf = should_forecast_product(
-        sales, inventory_current=50, replenishment_planned=True,
-        product_category='footwear', channel='physical',
-        current_price=85.0, cost=40.0
-    )
-    assert result == True
-    assert "Active with replenishment" in reason
-    assert conf > 0.8
-    
-    # Test Case 2: Dead stock (no sales 180+ days)
-    sales_old = pd.DataFrame({
-        'date': pd.date_range('2023-01-01', periods=100),
-        'sales': [0] * 100
-    })
-    result, reason, conf = should_forecast_product(
-        sales_old, inventory_current=100, replenishment_planned=False,
-        product_category='apparel', channel='physical',
-        current_price=85.0, cost=40.0
-    )
-    assert result == False
-    assert "Insufficient data" in reason or "Dead stock" in reason
-    
-    print("✅ All tests passed!")
-
-test_should_forecast_product()</div>
-    
-    <p style="font-size: 0.95em; margin-top: 15px;"><strong>Decision Tree Summary:</strong></p>
-    <ul style="font-size: 0.9em;">
-        <li>✅ Qualify: Recent sales + replenishment → Confidence 0.8-0.95</li>
-        <li>⚠️ Review: Recent sales but no replenishment → Confidence 0.6 (manual decision)</li>
-        <li>✅ Qualify: No sales but replenishment (new launch) → Confidence 0.5</li>
-        <li>❌ Exclude: No sales + no replenishment → Confidence <0.1</li>
-    </ul>
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 12px; margin-top: 15px; font-size: 0.9em;">
+        <h4 style="margin-bottom: 8px;">🎯 Qualification Decision Logic</h4>
+        <p style="margin: 4px 0;"><strong>✅ Pass ALL criteria →</strong> <span style="color: #10B981;">Qualify for forecasting</span> (confidence: 0.80-0.95 depending on sales volume and recency)</p>
+        <p style="margin: 4px 0;"><strong>❌ Fail hard criteria (history, sales, margins) →</strong> <span style="color: #EF4444;">Exclude from forecasting</span> (confidence: <0.10)</p>
+        <p style="margin: 4px 0;"><strong>⚠️ Edge cases (high nulls, chronic stockouts) →</strong> <span style="color: #F59E0B;">Manual review required</span> (confidence: 0.50-0.60)</p>
+    </div>
     
     <div class="slide-number">19</div>
 </div>
