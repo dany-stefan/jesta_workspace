@@ -1408,249 +1408,75 @@
     <div class="slide-number">16</div>
 </div>
 
-<!-- Slide 17: Feature Engineering -->
+<!-- Slide 17: Task 4B - Feature Engineering -->
 <div class="slide">
-    <h2>🔧 Task 4B: Feature Engineering (19 Features)</h2>
-    <h3>From 1 Feature → 19 Features</h3>
-    <svg class="chart-container" viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 1100px; width: 100%;">
-        <!-- Feature importance bars -->
-        <rect x="50" y="50" width="420" height="40" fill="url(#barGrad1)" rx="4"/>
-        <text x="60" y="75" fill="white" font-size="14" font-weight="bold">Inventory (Current)</text>
-        <text x="480" y="75" fill="#667eea" font-size="14" font-weight="bold">63.7%</text>
-        
-        <rect x="50" y="110" width="190" height="40" fill="url(#barGrad2)" rx="4"/>
-        <text x="60" y="135" fill="white" font-size="14" font-weight="bold">28d Inventory Trend</text>
-        <text x="250" y="135" fill="#f093fb" font-size="14" font-weight="bold">14.3%</text>
-        
-        <rect x="50" y="170" width="75" height="40" fill="url(#barGrad3)" rx="4"/>
-        <text x="60" y="195" fill="white" font-size="14" font-weight="bold">7d Trend</text>
-        <text x="135" y="195" fill="#4facfe" font-size="14" font-weight="bold">5.6%</text>
-        
-        <rect x="50" y="230" width="70" height="40" fill="url(#barGrad4)" rx="4"/>
-        <text x="60" y="255" fill="white" font-size="14" font-weight="bold">Weekday</text>
-        <text x="130" y="255" fill="#10B981" font-size="14" font-weight="bold">5.2%</text>
-        
-        <rect x="50" y="290" width="45" height="40" fill="#cccccc" rx="4"/>
-        <text x="60" y="315" fill="white" font-size="14" font-weight="bold">Other</text>
-        <text x="105" y="315" fill="#666" font-size="14" font-weight="bold">11.2%</text>
-        
-        <!-- Feature categories -->
-        <rect x="550" y="50" width="300" height="280" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2" rx="8"/>
-        <text x="700" y="80" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Feature Categories</text>
-        
-        <circle cx="570" cy="110" r="6" fill="#667eea"/>
-        <text x="590" y="115" font-size="12">Lag Features (7d, 14d, 28d MA)</text>
-        
-        <circle cx="570" cy="140" r="6" fill="#f093fb"/>
-        <text x="590" y="145" font-size="12">Inventory Features (current, trends)</text>
-        
-        <circle cx="570" cy="170" r="6" fill="#4facfe"/>
-        <text x="590" y="175" font-size="12">Momentum Features (sales, stage)</text>
-        
-        <circle cx="570" cy="200" r="6" fill="#10B981"/>
-        <text x="590" y="205" font-size="12">Lifecycle Stages (one-hot)</text>
-        
-        <circle cx="570" cy="230" r="6" fill="#F59E0B"/>
-        <text x="590" y="235" font-size="12">Price Features (current, original)</text>
-        
-        <circle cx="570" cy="260" r="6" fill="#EF4444"/>
-        <text x="590" y="265" font-size="12">Time Features (weekday, weeks)</text>
-        
-        <circle cx="570" cy="290" r="6" fill="#8B5CF6"/>
-        <text x="590" y="295" font-size="12">Stockout Flag (binary)</text>
-        
-        <defs>
-            <linearGradient id="barGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="barGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="barGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="barGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-    </svg>
+    <h2>🔧 Task 4B: Feature Engineering (3 Key Features)</h2>
+    
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 16px; margin: 0 auto 15px auto;">
+        <h4 style="margin-bottom: 10px;">✅ Feature 1: Stockout Detection</h4>
+        <div class="code-block" style="font-size: 0.85em; padding: 12px; line-height: 1.6;"><span style="color: #6B7280;"># Flag stockout periods with recent sales history</span>
+
+df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
+    </span><span style="color: #666;">(</span>
+        <span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"inventory"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">==</span> <span style="color: #F59E0B;">0</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">&</span>
+        <span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales"</span><span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">shift</span><span style="color: #666;">(</span><span style="color: #F59E0B;">1</span><span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">rolling_sum</span><span style="color: #666;">(</span><span style="color: #F59E0B;">7</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">></span> <span style="color: #F59E0B;">0</span><span style="color: #666;">)</span>
+    <span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"is_stockout"</span><span style="color: #666;">)
+</span>]<span style="color: #666;">)</span></div>
+        <p style="font-size: 0.9em; margin: 8px 0 0 0;"><strong>Justification:</strong> Distinguishes true stockouts (inventory=0 with recent demand) from natural lifecycle end. Uses 7-day lookback to detect unmet demand. This prevents model from treating censored demand as "no demand", critical for accurate forecasting during replenishment delays.</p>
+    </div>
+    
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 16px; margin: 0 auto 15px auto;">
+        <h4 style="margin-bottom: 10px;">✅ Feature 2: Product Lifecycle Stage</h4>
+        <div class="code-block" style="font-size: 0.85em; padding: 12px; line-height: 1.6;"><span style="color: #6B7280;"># Calculate weeks since product launch</span>
+
+df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
+    </span><span style="color: #666;">(</span>
+        <span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"date"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">-</span> pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"launch_date"</span><span style="color: #666;">)</span><span style="color: #666;">)</span><span style="color: #666;">.</span>dt<span style="color: #666;">.</span><span style="color: #0066cc;">total_days</span><span style="color: #666;">()</span> <span style="color: #8B5CF6;">//</span> <span style="color: #F59E0B;">7</span>
+    <span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)
+</span>]<span style="color: #666;">)</span>
+
+<span style="color: #6B7280;"># Classify into 4 lifecycle stages</span>
+
+df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
+    </span>pl<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">when</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;"><=</span> stage_threshold<span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">then</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"New"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
+    <span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">when</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;"><=</span> stage_threshold <span style="color: #8B5CF6;">*</span> <span style="color: #F59E0B;">2</span><span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">then</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"Growth"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
+    <span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">when</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"weeks_since_launch"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;"><=</span> stage_threshold <span style="color: #8B5CF6;">*</span> <span style="color: #F59E0B;">3</span><span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">then</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"Mature"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
+    <span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">otherwise</span><span style="color: #666;">(</span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">lit</span><span style="color: #666;">(</span><span style="color: #10B981;">"Clearance"</span><span style="color: #666;">)</span><span style="color: #666;">)</span>
+    <span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"lifecycle_stage"</span><span style="color: #666;">)
+</span>]<span style="color: #666;">)</span></div>
+        <p style="font-size: 0.9em; margin: 8px 0 0 0;"><strong>Justification:</strong> Products exhibit different demand patterns at each lifecycle stage (volatile in New, stable in Mature, spike in Clearance). Dividing timeline into 4 equal stages provides structured context. One-hot encoding allows model to learn stage-specific behaviors without imposing ordinal relationships.</p>
+    </div>
+    
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 16px; margin: 0 auto 15px auto;">
+        <h4 style="margin-bottom: 10px;">✅ Feature 3: Sales Momentum</h4>
+        <div class="code-block" style="font-size: 0.85em; padding: 12px; line-height: 1.6;"><span style="color: #6B7280;"># Calculate short-term (7d) and long-term (28d) trends</span>
+
+df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
+    </span>pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_filled"</span><span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">rolling_mean</span><span style="color: #666;">(</span>window_size<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">7</span><span style="color: #666;">,</span> min_samples<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">1</span><span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_7d"</span><span style="color: #666;">)</span><span style="color: #666;">,</span>
+    
+    pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_filled"</span><span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">rolling_mean</span><span style="color: #666;">(</span>window_size<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">28</span><span style="color: #666;">,</span> min_samples<span style="color: #8B5CF6;">=</span><span style="color: #F59E0B;">1</span><span style="color: #666;">)</span>
+        <span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_28d"</span><span style="color: #666;">)
+</span>]<span style="color: #666;">)</span>
+
+<span style="color: #6B7280;"># Momentum = difference between short and long term</span>
+
+df <span style="color: #8B5CF6;">=</span> df<span style="color: #666;">.</span><span style="color: #0066cc; font-weight: 600;">with_columns</span><span style="color: #666;">(</span>[<span style="color: #666;">
+    </span><span style="color: #666;">(</span>
+        pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_7d"</span><span style="color: #666;">)</span> <span style="color: #8B5CF6;">-</span> pl<span style="color: #666;">.</span><span style="color: #0066cc;">col</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_trend_28d"</span><span style="color: #666;">)</span>
+    <span style="color: #666;">)</span><span style="color: #666;">.</span><span style="color: #0066cc;">alias</span><span style="color: #666;">(</span><span style="color: #10B981;">"sales_momentum"</span><span style="color: #666;">)
+</span>]<span style="color: #666;">)</span></div>
+        <p style="font-size: 0.9em; margin: 8px 0 0 0;"><strong>Justification:</strong> Momentum captures trend acceleration/deceleration by comparing short-term (7d) vs long-term (28d) moving averages. Positive momentum signals demand surge (e.g., markdown response), negative signals decline. This responds faster to regime changes than lag features alone, critical for capturing markdown-driven spikes observed at Day 70+.</p>
+    </div>
+    
     <div class="slide-number">17</div>
 </div>
 
-<!-- NEW SLIDE: Task 4B - Feature Implementation Details -->
-<div class="slide">
-    <h2>🔧 Task 4B: Feature Implementation (Choose 3 of 4)</h2>
-    
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>✅ Feature 1: Stockout Detection (Implemented)</h4>
-        <div class="code-block">def detect_stockout(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Flag periods where inventory=0 but recent sales existed
-    
-    Logic: If inventory hits 0 and sales in prior 7 days > 0, 
-           this is a stockout (unmet demand), not end of lifecycle
-    """
-    df = df.copy()
-    
-    # Calculate 7-day rolling sales before current day
-    df['sales_7d_lag'] = df['sales'].shift(1).rolling(window=7, min_periods=1).sum()
-    
-    # Stockout flag: inventory=0 AND recent sales existed
-    df['is_stockout'] = (
-        (df['inventory'] == 0) & 
-        (df['sales_7d_lag'] > 0)
-    ).astype(int)
-    
-    # Count consecutive stockout days
-    df['stockout_duration'] = df.groupby(
-        (df['is_stockout'] != df['is_stockout'].shift(1)).cumsum()
-    )['is_stockout'].cumsum()
-    
-    return df
-
-# Example from Day 41-50 stockout period
-# Day 40: inventory=10, sales=3 → sales_7d_lag=21
-# Day 41: inventory=0, sales=0 → is_stockout=1 (unmet demand!)
-# Days 41-50: All flagged as stockout</div>
-        <p><strong>Impact:</strong> Model learns to impute demand during stockout periods instead of treating zeros as "no demand".</p>
-    </div>
-    
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>✅ Feature 2: Product Lifecycle (Implemented)</h4>
-        <div class="code-block">from datetime import datetime, timedelta
-
-def calculate_lifecycle_stage(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Classify products into: New, Growth, Mature, Clearance
-    
-    Logic:
-    - New: <30 days since launch
-    - Growth: Sales trending up (7d > 28d MA)
-    - Mature: Stable sales, no markdown
-    - Clearance: Price dropped >20% from original
-    """
-    df = df.copy()
-    
-    # Weeks since launch
-    df['date'] = pd.to_datetime(df['date'])
-    df['launch_date'] = pd.to_datetime(df['launch_date'])
-    df['weeks_since_launch'] = ((df['date'] - df['launch_date']).dt.days / 7).astype(int)
-    
-    # Sales momentum (7d vs 28d)
-    df['sales_ma_7'] = df['sales'].rolling(window=7, min_periods=1).mean()
-    df['sales_ma_28'] = df['sales'].rolling(window=28, min_periods=1).mean()
-    df['sales_momentum'] = df['sales_ma_7'] - df['sales_ma_28']
-    
-    # Markdown depth
-    df['markdown_pct'] = 1 - (df['current_price'] / df['original_price'])
-    
-    # Lifecycle stage classification
-    df['stage'] = 'Unknown'
-    df.loc[df['weeks_since_launch'] < 4, 'stage'] = 'New'
-    df.loc[(df['weeks_since_launch'] >= 4) & (df['sales_momentum'] > 0) & (df['markdown_pct'] < 0.10), 'stage'] = 'Growth'
-    df.loc[(df['weeks_since_launch'] >= 4) & (abs(df['sales_momentum']) <= 1) & (df['markdown_pct'] < 0.10), 'stage'] = 'Mature'
-    df.loc[df['markdown_pct'] >= 0.20, 'stage'] = 'Clearance'
-    
-    # One-hot encode
-    df = pd.get_dummies(df, columns=['stage'], prefix='stage', drop_first=False)
-    
-    return df
-
-# Example: Day 70 markdown starts → stage switches from Mature to Clearance</div>
-        <p><strong>Impact:</strong> Model adapts predictions based on lifecycle stage (e.g., expect higher sales variability in Growth, surge in Clearance).</p>
-    </div>
-    
-    <div class="slide-number">18</div>
-</div>
-
-<!-- NEW SLIDE: Task 4B - More Features -->
-<div class="slide">
-    <h2>🔧 Task 4B: Additional Features (Continued)</h2>
-    
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>✅ Feature 3: Sales Momentum (Implemented)</h4>
-        <div class="code-block">def calculate_sales_momentum(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compare recent trend (7-day) vs longer trend (28-day)
-    
-    Positive momentum = accelerating sales
-    Negative momentum = decelerating sales
-    """
-    df = df.copy()
-    
-    # Moving averages with 1-day shift (prevent leakage)
-    df['sales_ma_7'] = df['sales'].shift(1).rolling(window=7, min_periods=1).mean()
-    df['sales_ma_28'] = df['sales'].shift(1).rolling(window=28, min_periods=1).mean()
-    
-    # Momentum: difference between short-term and long-term trend
-    df['sales_momentum'] = df['sales_ma_7'] - df['sales_ma_28']
-    
-    # Momentum direction (categorical)
-    df['momentum_direction'] = 'Stable'
-    df.loc[df['sales_momentum'] > 1.0, 'momentum_direction'] = 'Accelerating'
-    df.loc[df['sales_momentum'] < -1.0, 'momentum_direction'] = 'Decelerating'
-    
-    # Rate of change
-    df['sales_roc'] = df['sales_ma_7'].pct_change()
-    
-    return df
-
-# Example interpretation:
-# Day 60: sales_ma_7=3.2, sales_ma_28=2.8 → momentum=+0.4 (Growth)
-# Day 75 (post-markdown): sales_ma_7=6.5, sales_ma_28=3.1 → momentum=+3.4 (Surge!)</div>
-        <p><strong>Impact:</strong> Captures acceleration/deceleration trends that simple lags miss. Critical for detecting markdown-driven spikes.</p>
-    </div>
-    
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>✅ Feature 4: Inventory Health (Implemented)</h4>
-        <div class="code-block">def calculate_inventory_health(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Calculate: days of supply, markdown depth, margin status
-    
-    Days of Supply = inventory / avg daily sales (measures overstocking)
-    Margin Status = healthy (>30%), warning (10-30%), critical (<10%)
-    """
-    df = df.copy()
-    
-    # Average daily sales (trailing 28 days)
-    df['avg_daily_sales'] = df['sales'].rolling(window=28, min_periods=1).mean()
-    
-    # Days of supply (how many days current inventory will last)
-    df['days_of_supply'] = df['inventory'] / (df['avg_daily_sales'] + 1e-6)  # Avoid div by zero
-    df['days_of_supply'] = df['days_of_supply'].clip(upper=365)  # Cap outliers
-    
-    # Inventory trend (7-day and 28-day)
-    df['inventory_ma_7'] = df['inventory'].rolling(window=7, min_periods=1).mean()
-    df['inventory_ma_28'] = df['inventory'].rolling(window=28, min_periods=1).mean()
-    df['inventory_trend_7'] = df['inventory'].diff().rolling(window=7, min_periods=1).mean()
-    df['inventory_trend_28'] = df['inventory'].diff().rolling(window=28, min_periods=1).mean()
-    
-    # Markdown depth (from original price)
-    df['markdown_depth'] = 1 - (df['current_price'] / df['original_price'])
-    df['markdown_depth'] = df['markdown_depth'].clip(lower=0)  # No negative markdowns
-    
-    # Margin status
-    df['margin_pct'] = (df['current_price'] - df['cost']) / df['current_price']
-    df['margin_status'] = 'Healthy'
-    df.loc[(df['margin_pct'] >= 0.10) & (df['margin_pct'] < 0.30), 'margin_status'] = 'Warning'
-    df.loc[df['margin_pct'] < 0.10, 'margin_status'] = 'Critical'
-    
-    return df
-
-# Example: Day 75 (clearance)
-# inventory=50, avg_daily_sales=6 → days_of_supply=8.3 (healthy)
-# markdown_depth=0.35 (35% off) → margin_status='Warning'</div>
-        <p><strong>Impact:</strong> Helps model understand inventory pressure → Predicts clearance events and urgency to sell.</p>
-    </div>
-    
-    <div class="slide-number">19</div>
-</div>
-
-<!-- NEW SLIDE: Judgment Calls (Part 2) -->
 <div class="slide">
     <h2>🧠 Judgment Calls: Engineering Choices</h2>
     <h3>Pragmatic decisions to keep signal high and leakage low</h3>
@@ -1681,7 +1507,7 @@ def calculate_lifecycle_stage(df: pd.DataFrame) -> pd.DataFrame:
         <p>In production forecasting, correctness and explainability beat micro-optimizations.</p>
     </div>
     
-    <div class="slide-number">20</div>
+    <div class="slide-number">18</div>
 </div>
 
 <!-- NEW SLIDE: Task 4C - Product Qualification Function -->
@@ -1830,10 +1656,10 @@ test_should_forecast_product()</div>
         <li>❌ Exclude: No sales + no replenishment → Confidence <0.1</li>
     </ul>
     
-    <div class="slide-number">21</div>
+    <div class="slide-number">19</div>
 </div>
 
-<!-- Slide 7: Model Comparison (Task 5) -->
+<!-- Slide 20: Model Comparison (Task 5) -->
 <div class="slide">
     <h2>🤖 Task 5: Model Comparison</h2>
     <h3>Gradient Boosting Regressor (scikit-learn)</h3>
@@ -1898,7 +1724,7 @@ test_should_forecast_product()</div>
             </marker>
         </defs>
     </svg>
-    <div class="slide-number">22</div>
+    <div class="slide-number">20</div>
 </div>
 
 <!-- Slide 8: Results -->
@@ -2044,7 +1870,7 @@ test_should_forecast_product()</div>
         </ul>
     </div>
     
-    <div class="slide-number">24</div>
+    <div class="slide-number">21</div>
 </div>
 
 <!-- NEW SLIDE: Task 6 - Production Quality Code -->
@@ -2087,7 +1913,7 @@ test_should_forecast_product()</div>
     assert result["is_stockout"].to_list() == [False, True]</div>
     </div>
     
-    <div class="slide-number">25</div>
+    <div class="slide-number">22</div>
 </div>
 
 <!-- ...remaining slides for Part 2 Q&A, Final Summary, Thank You... -->
@@ -2134,13 +1960,13 @@ test_should_forecast_product()</div>
         <p><strong>Trade-off:</strong> LightGBM is faster but adds dependency complexity; GBR is sufficient for the sample.</p>
     </div>
     
-    <div class="slide-number">26</div>
+    <div class="slide-number">23</div>
 </div>
 
 <!-- Continue with existing final slides... -->
-<!-- ...existing code for slides 23-27 (Roadmap, Risk Assessment, Success Metrics, Final Recommendations, Thank You)... -->
+<!-- ...existing code for slides 24-25 (Roadmap, Risk Assessment, Success Metrics, Final Recommendations, Thank You)... -->
 
-<!-- Slide 27: Thank You -->
+<!-- Slide 25: Thank You -->
 <div class="slide gradient-bg centered">
     <h1 style="font-size: 4em;">Thank You! 🙏</h1>
     <h3 style="margin-top: 40px;">Questions & Discussion</h3>
@@ -2154,7 +1980,7 @@ test_should_forecast_product()</div>
         <p>✅ Production-ready code with tests and documentation</p>
     </div>
     
-    <div class="slide-number" style="color: white;">27</div>
+    <div class="slide-number" style="color: white;">25</div>
 </div>
 
 </body>
