@@ -511,6 +511,7 @@
 
 <!-- NEW SLIDE: Task 2 - Month 1 Deep Dive (Part 1) -->
 <div class="slide">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8em; font-weight: bold; color: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 0; white-space: nowrap;">ANNEX</div>
     <h2>📅 Task 2: Month 1 Deep Dive</h2>
     
     <div style="background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%); padding: 25px; border-radius: 8px; margin: 20px 0; max-width: 1100px; width: 100%;">
@@ -638,6 +639,7 @@
 
 <!-- NEW SLIDE: Task 2 - Month 2 Deep Dive -->
 <div class="slide">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8em; font-weight: bold; color: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 0; white-space: nowrap;">ANNEX</div>
     <h2>📅 Task 2: Month 2 Deep Dive</h2>
     
     <div style="background: linear-gradient(135deg, #f093fb22 0%, #f5576c22 100%); padding: 25px; border-radius: 8px; margin: 20px 0; max-width: 1100px; width: 100%;">
@@ -767,6 +769,7 @@
 
 <!-- NEW SLIDE: Task 2 - Month 3 Deep Dive -->
 <div class="slide">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8em; font-weight: bold; color: rgba(239, 68, 68, 0.15); pointer-events: none; z-index: 0; white-space: nowrap;">ANNEX</div>
     <h2>📅 Task 2: Month 3 Deep Dive</h2>
     
     <div style="background: linear-gradient(135deg, #4facfe22 0%, #00f2fe22 100%); padding: 25px; border-radius: 8px; margin: 20px 0; max-width: 1100px; width: 100%;">
@@ -896,6 +899,22 @@
         <p style="font-size: 0.95em;"><strong>Month 2:</strong> WMAPE 35% → 28% (Feature Engineering)</p>
         <p style="font-size: 0.95em;"><strong>Month 3:</strong> WMAPE 28% → 25% (Hyperparameters + Production)</p>
         <p style="font-size: 0.95em; margin-top: 10px;"><strong>Total Improvement:</strong> 50% reduction in error (50% → 25% WMAPE)</p>
+    </div>
+    
+    <div class="answer-box" style="margin-top: 20px; background: #fff4e6; border-left: 5px solid #F59E0B;">
+        <h4 style="color: #F59E0B;">💡 What I Would Do Differently:</h4>
+        <ul style="font-size: 0.9em; line-height: 1.6;">
+            <li><strong>Adjust Impact Labels:</strong> If everything is marked "High Impact," nothing is important—it dilutes the label. I would mark some weeks (e.g., Month 3 Week 3 & 4) as <span class="badge" style="background: #6B7280;">Low</span> to better reflect priorities and focus areas.</li>
+            <li><strong>Trim Deployment from Junior's Scope:</strong> Skip last 2 weeks of Month 3 (CI/CD and MVP BETA prep) for the junior. Delegate deployment to the senior so junior can focus on:
+                <ul style="margin-top: 5px; font-size: 0.95em;">
+                    <li>Feature engineering and feature importance analysis</li>
+                    <li>Memory optimization (splitting into chunks, parallel processing)</li>
+                    <li>Monitoring setup and correlation analysis</li>
+                </ul>
+            </li>
+            <li><strong>Trim Last Week of Month 1:</strong> Week 4 (modular refactoring) can be compressed or shifted to Month 2 buffer time. Junior should focus on core product qualification and infrastructure improvements first.</li>
+            <li><strong>Focus Junior on Core ML Work:</strong> Junior's strength lies in data engineering, feature work, and model improvements—not production deployment. Keep junior focused on areas that directly impact WMAPE reduction.</li>
+        </ul>
     </div>
     
     <div class="slide-number">9</div>
