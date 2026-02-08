@@ -636,126 +636,257 @@
     <div class="slide-number">7</div>
 </div>
 
-<!-- NEW SLIDE: Task 2 - Month 2 & 3 Roadmap -->
+<!-- NEW SLIDE: Task 2 - Month 2 Deep Dive -->
 <div class="slide">
-    <h2>📅 Task 2: Month 2 & 3 Roadmap</h2>
+    <h2>📅 Task 2: Month 2 Deep Dive</h2>
     
     <div style="background: linear-gradient(135deg, #f093fb22 0%, #f5576c22 100%); padding: 25px; border-radius: 8px; margin: 20px 0; max-width: 1100px; width: 100%;">
         <h3 style="color: #f093fb; margin-top: 0;">📊 Month 2 Goal: WMAPE 35% → 28% (Feature Engineering)</h3>
     </div>
     
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>Month 2 Breakdown:</h4>
-        <ul style="font-size: 0.9em; line-height: 1.6;">
-            <li><strong>Week 1: Simple Feature Engineering (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>One-hot encode categorical features to numerical</li>
-                    <li>Describe feature columns with stats, locate outliers (95th s.d.)</li>
-                    <li>Flags for discounts, events, holidays, day of week</li>
-                    <li>Fill missing values with median/mean</li>
-                    <li>Interaction features (category × season)</li>
-                    <li>Lag features, normalize to range denominator</li>
-                    <li><strong>Expected Impact:</strong> Standardize dataset for numerical regression, normal distribution on features</li>
-                    <li><em>Effort:</em> 10h exploring data + 25h implement + 2h debrief with senior + 5h buffer</li>
-                </ul>
-            </li>
-            <li><strong>Week 2: Stockout Feature Engineering (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Duration, lags (moving average sales, no stock duration), flags</li>
-                    <li>Tackles censored demand problem (recognize lack of inventory ≠ lack of demand)</li>
-                    <li>Sub-problem: classification model to predict stockout OR NOT</li>
-                    <li><strong>Expected Impact:</strong> Directly impact WMAPE, feature importance analysis</li>
-                    <li><em>Effort:</em> 20h implement stockout features + 20h test classification sub-model</li>
-                </ul>
-            </li>
-            <li><strong>Week 3: Price Elasticity Features (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Discount flag, causation, percentage</li>
-                    <li>Price × promotion, price × season</li>
-                    <li>Price relative to category (hot accessory item)</li>
-                    <li><strong>Expected Impact:</strong> Contain volatile price changes, lower MAE during discount periods</li>
-                    <li><em>Effort:</em> 10h feature implementation + 25h test on holdout sets + 5h buffer</li>
-                </ul>
-            </li>
-            <li><strong>Week 4: Monitoring Setup (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Accuracy measures: precision/recall for classification stockout feature</li>
-                    <li>Report based analysis on correlation matrix, feature importance</li>
-                    <li><strong>Expected Impact:</strong> Visibility on pertinent features, synthesize WMAPE savings for leadership</li>
-                    <li><em>Metrics:</em> MAE, WMAPE, correlation, time to train</li>
-                    <li><em>Effort:</em> 15h gather metrics + 20h run predictions/results + 5h debugging</li>
-                </ul>
-            </li>
-        </ul>
-        <p style="font-size: 0.9em; margin-top: 10px;"><strong>Checkpoint:</strong> Validate feature impact on WMAPE using holdout sets. Aim for at least 5% WMAPE reduction from Month 1.</p>
-        <p style="font-size: 0.9em;"><strong>Key Risks:</strong></p>
-        <ul style="font-size: 0.9em;">
-            <li><strong>Wrong logic for feature calculations (lag)</strong> [LIKELY] → Senior reviews via backward engineering, focus on most important first</li>
-            <li><strong>Overfitting with too many features</strong> [POSSIBLE & CRUCIAL] → Holdout sets, remove low importance features, early stopping</li>
-            <li><strong>Stakeholder misalignment on key metrics</strong> [LESS LIKELY] → Early alignment meetings</li>
-            <li><strong>Scope creep with too many features</strong> [POSSIBLE] → Weekly check-ins, prioritization</li>
+    <table class="data-table" style="max-width: 1100px; width: 100%; font-size: 0.92em;">
+        <tr>
+            <th style="width: 15%;">Week</th>
+            <th style="width: 30%;">Task</th>
+            <th style="width: 25%;">Expected Impact</th>
+            <th style="width: 15%;">Effort</th>
+            <th style="width: 15%;">Validation</th>
+        </tr>
+        <tr>
+            <td><strong>Week 1</strong></td>
+            <td>
+                <strong>Simple Feature Engineering</strong><br>
+                • One-hot encode categorical features to numerical<br>
+                • Describe feature columns with stats, locate outliers (95th s.d.)<br>
+                • Flags for discounts, events, holidays, day of week<br>
+                • Fill missing values with median/mean<br>
+                • Interaction features (category × season)<br>
+                • Lag features, normalize to range denominator
+            </td>
+            <td>
+                <span class="badge badge-success">High</span><br>
+                Standardize dataset for numerical regression<br>
+                Normal distribution on features<br>
+                N/A values handled
+            </td>
+            <td>40 hrs<br><small>(10h explore data + 25h implement + 2h debrief + 3h buffer)</small></td>
+            <td>
+                • Feature distributions<br>
+                • Outlier detection<br>
+                • Missing value handling
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Week 2</strong></td>
+            <td>
+                <strong>Stockout Feature Engineering</strong><br>
+                • Duration, lags (moving average sales, no stock duration)<br>
+                • Flags for stockout periods<br>
+                • Tackles censored demand problem<br>
+                • Sub-problem: classification model to predict stockout OR NOT
+            </td>
+            <td>
+                <span class="badge badge-success">High</span><br>
+                Directly impact WMAPE<br>
+                Feature importance analysis<br>
+                Censored demand addressed
+            </td>
+            <td>40 hrs<br><small>(20h implement stockout features + 20h test classification)</small></td>
+            <td>
+                • Stockout prediction accuracy<br>
+                • Feature correlation<br>
+                • WMAPE impact test
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Week 3</strong></td>
+            <td>
+                <strong>Price Elasticity Features</strong><br>
+                • Discount flag, causation, percentage<br>
+                • Price × promotion, price × season<br>
+                • Price relative to category (hot accessory item)<br>
+                • Test on holdout sets to validate impact
+            </td>
+            <td>
+                <span class="badge badge-warning">Medium</span><br>
+                Contain volatile price changes<br>
+                Lower MAE during discount periods<br>
+                Holdout set validation
+            </td>
+            <td>40 hrs<br><small>(10h feature implementation + 25h test holdout + 5h buffer)</small></td>
+            <td>
+                • MAE during promotions<br>
+                • Price sensitivity metrics<br>
+                • Holdout set accuracy
+            </td>
+        </tr>
+        <tr style="background: #10B98122;">
+            <td><strong>Week 4</strong></td>
+            <td>
+                <strong>Monitoring Setup</strong><br>
+                • Accuracy measures: precision/recall for classification<br>
+                • Report analysis on correlation matrix<br>
+                • Feature importance tracking<br>
+                • Synthesize WMAPE savings for leadership
+            </td>
+            <td>
+                <span class="badge badge-success">High</span><br>
+                Visibility on pertinent features<br>
+                Leadership reporting<br>
+                Track MAE, WMAPE, correlation
+            </td>
+            <td>40 hrs<br><small>(15h gather metrics + 20h run predictions + 5h debug)</small></td>
+            <td>
+                • Metrics dashboard<br>
+                • Feature importance report<br>
+                • WMAPE tracking
+            </td>
+        </tr>
+    </table>
+    
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; max-width: 1100px; width: 100%;">
+        <p style="font-size: 0.9em; margin: 0;"><strong>Checkpoint:</strong> Validate feature impact on WMAPE using holdout sets. Aim for at least 5% WMAPE reduction from Month 1.</p>
+    </div>
+    
+    <div class="answer-box" style="margin-top: 20px;">
+        <h4>🚨 Key Risks for Month 2:</h4>
+        <ul style="font-size: 0.95em;">
+            <li><strong>Wrong logic for feature calculations (lag)</strong> [LIKELY]<br>
+                → <em>Mitigation:</em> Senior reviews via backward engineering, focus on most important first</li>
+            <li><strong>Overfitting with too many features</strong> [POSSIBLE & CRUCIAL]<br>
+                → <em>Mitigation:</em> Holdout sets, remove low importance features, early stopping</li>
+            <li><strong>Stakeholder misalignment on key metrics</strong> [LESS LIKELY]<br>
+                → <em>Mitigation:</em> Early alignment meetings to set expectations</li>
+            <li><strong>Scope creep with too many features</strong> [POSSIBLE]<br>
+                → <em>Mitigation:</em> Weekly check-ins, prioritization, track 3-month MVP timeline</li>
         </ul>
     </div>
     
     <div class="slide-number">8</div>
 </div>
 
-<!-- NEW SLIDE: Task 2 - Month 3 Production Ready -->
+<!-- NEW SLIDE: Task 2 - Month 3 Deep Dive -->
 <div class="slide">
-    <h2>📅 Task 2: Month 3 - Production Ready</h2>
+    <h2>📅 Task 2: Month 3 Deep Dive</h2>
     
     <div style="background: linear-gradient(135deg, #4facfe22 0%, #00f2fe22 100%); padding: 25px; border-radius: 8px; margin: 20px 0; max-width: 1100px; width: 100%;">
         <h3 style="color: #4facfe; margin-top: 0;">🚀 Month 3 Goal: WMAPE 28% → 25% (Production Ready)</h3>
     </div>
     
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>Month 3 Breakdown:</h4>
-        <ul style="font-size: 0.9em; line-height: 1.6;">
-            <li><strong>Week 1: Feature Refinement & Grid Search (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Leave time for refinement from last month (buffer for Month 2 overflow)</li>
-                    <li>Choose best features with grid search</li>
-                    <li>Train/test split, test with many simulated clients</li>
-                    <li><strong>Expected Impact:</strong> Drive value, KT to best features, finalize sub-feature analysis for reuse</li>
-                    <li><em>Metrics:</em> Evaluate train vs test MAE, overfit gap, tree-based feature importance (XGBoost, Random Forest, LGBM)</li>
-                    <li><em>Target:</em> 10% reduction in MAE, at least 5% improvement on WMAPE</li>
-                    <li><em>Effort:</em> 25h refine features + 10h grid search + 5h buffer</li>
-                </ul>
-            </li>
-            <li><strong>Week 2: End-to-End Testing & Debug (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Run end-to-end processing, training, testing</li>
-                    <li>Polish data type errors, identify slow processing</li>
-                    <li><strong>Expected Impact:</strong> Verify no memory crashes, trim if feature selection uses too much memory</li>
-                    <li><em>Metrics:</em> Seconds timestamp, logging, uptime</li>
-                    <li><em>Effort:</em> 30h run and rerun + 5h debug (caching bugs) + 5h buffer</li>
-                </ul>
-            </li>
-            <li><strong>Week 3: Monitoring Platform & CI/CD (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Integrate logging in alerts and monitoring platform</li>
-                    <li>Release model using CI/CD and model VCS</li>
-                    <li><strong>Expected Impact:</strong> Production readiness, reusable for other clients</li>
-                    <li><em>Metrics:</em> Model maintains accuracy, systems integration tests</li>
-                    <li><em>Effort:</em> 15h monitoring platform + 20h CI/CD pipeline + 5h buffer</li>
-                </ul>
-            </li>
-            <li><strong>Week 4: MVP BETA Prep (40h)</strong>
-                <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Prep MVP BETA of model and dataset to present</li>
-                    <li><strong>Expected Impact:</strong> Deployable model, ready to integrate in client's infrastructure</li>
-                    <li><em>Metrics:</em> Uptime, CPU compute, build time, dependencies download</li>
-                    <li><em>Effort:</em> 25h integration and prep + 10h dry run + 5h buffer</li>
-                </ul>
-            </li>
-        </ul>
-        <p style="font-size: 0.9em; margin-top: 10px;"><strong>Checkpoint:</strong> Deployable model that is trained and tested, ready to integrate for client's stack. Aim for at least 5% WMAPE reduction from Month 2.</p>
-        <p style="font-size: 0.9em;"><strong>Key Risks:</strong></p>
-        <ul style="font-size: 0.9em;">
-            <li><strong>Integration with CI/CD and client's infrastructure</strong> [POSSIBLE] → Early meetings to gather requirements</li>
-            <li><strong>Last-minute bugs and issues</strong> → Buffer time allocated</li>
-            <li><strong>Performance bottlenecks</strong> → Profiling techniques, feature selection based on profile</li>
-            <li><strong>Security concerns</strong> → Follow best practices, consult security experts (authentication, API keys)</li>
+    <table class="data-table" style="max-width: 1100px; width: 100%; font-size: 0.92em;">
+        <tr>
+            <th style="width: 15%;">Week</th>
+            <th style="width: 30%;">Task</th>
+            <th style="width: 25%;">Expected Impact</th>
+            <th style="width: 15%;">Effort</th>
+            <th style="width: 15%;">Validation</th>
+        </tr>
+        <tr>
+            <td><strong>Week 1</strong></td>
+            <td>
+                <strong>Feature Refinement & Grid Search</strong><br>
+                • Leave time for refinement from last month<br>
+                • Choose best features with grid search<br>
+                • Train/test split, test with many simulated clients<br>
+                • Buffer for Month 2 overflow<br>
+                • Finalize sub-feature analysis for reuse
+            </td>
+            <td>
+                <span class="badge badge-success">High</span><br>
+                Drive value to results<br>
+                KT to best features<br>
+                Target: 10% MAE reduction, 5% WMAPE improvement
+            </td>
+            <td>40 hrs<br><small>(25h refine features + 10h grid search + 5h buffer)</small></td>
+            <td>
+                • Train vs test MAE gap<br>
+                • Overfit metrics<br>
+                • Feature importance (XGBoost, RF, LGBM)
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Week 2</strong></td>
+            <td>
+                <strong>End-to-End Testing & Debug</strong><br>
+                • Run end-to-end processing, training, testing<br>
+                • Polish data type errors<br>
+                • Identify slow processing bottlenecks<br>
+                • Verify no memory crashes
+            </td>
+            <td>
+                <span class="badge badge-success">High</span><br>
+                Verify no OOM crashes<br>
+                Trim memory-heavy features<br>
+                Processing speed validation
+            </td>
+            <td>40 hrs<br><small>(30h run and rerun + 5h debug caching + 5h buffer)</small></td>
+            <td>
+                • Timestamp logging<br>
+                • Memory usage<br>
+                • Uptime tracking
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Week 3</strong></td>
+            <td>
+                <strong>Monitoring Platform & CI/CD</strong><br>
+                • Integrate logging in alerts and monitoring platform<br>
+                • Release model using CI/CD and model VCS<br>
+                • Setup production monitoring<br>
+                • Systems integration tests
+            </td>
+            <td>
+                <span class="badge badge-warning">Medium</span><br>
+                Production readiness<br>
+                Reusable for other clients<br>
+                Model maintains accuracy
+            </td>
+            <td>40 hrs<br><small>(15h monitoring platform + 20h CI/CD pipeline + 5h buffer)</small></td>
+            <td>
+                • CI/CD pipeline success<br>
+                • Model accuracy preserved<br>
+                • Integration tests pass
+            </td>
+        </tr>
+        <tr style="background: #10B98122;">
+            <td><strong>Week 4</strong></td>
+            <td>
+                <strong>MVP BETA Prep</strong><br>
+                • Prep MVP BETA of model and dataset to present<br>
+                • Integration with client's infrastructure<br>
+                • Dry run and final testing<br>
+                • Documentation complete
+            </td>
+            <td>
+                <span class="badge badge-success">High</span><br>
+                Deployable model<br>
+                Ready to integrate<br>
+                Client infrastructure compatible
+            </td>
+            <td>40 hrs<br><small>(25h integration and prep + 10h dry run + 5h buffer)</small></td>
+            <td>
+                • Uptime metrics<br>
+                • CPU compute efficiency<br>
+                • Build time, dependencies
+            </td>
+        </tr>
+    </table>
+    
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; max-width: 1100px; width: 100%;">
+        <p style="font-size: 0.9em; margin: 0;"><strong>Checkpoint:</strong> Deployable model that is trained and tested, ready to integrate for client's stack. Aim for at least 5% WMAPE reduction from Month 2.</p>
+    </div>
+    
+    <div class="answer-box" style="margin-top: 20px;">
+        <h4>🚨 Key Risks for Month 3:</h4>
+        <ul style="font-size: 0.95em;">
+            <li><strong>Integration with CI/CD and client's infrastructure</strong> [POSSIBLE]<br>
+                → <em>Mitigation:</em> Early meetings to gather requirements and align on expectations</li>
+            <li><strong>Last-minute bugs and issues</strong> [POSSIBLE]<br>
+                → <em>Mitigation:</em> Buffer time allocated, comprehensive testing in Week 2</li>
+            <li><strong>Performance bottlenecks</strong> [POSSIBLE]<br>
+                → <em>Mitigation:</em> Profiling techniques, feature selection based on profile</li>
+            <li><strong>Security concerns</strong> [LESS LIKELY]<br>
+                → <em>Mitigation:</em> Follow best practices, consult security experts (authentication, API keys)</li>
         </ul>
     </div>
     
