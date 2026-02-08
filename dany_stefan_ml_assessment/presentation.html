@@ -382,35 +382,39 @@
     </div>
     
     <div class="answer-box" style="margin: 15px 0; max-width: 1100px; width: 100%; padding: 16px;">
-        <h4 style="font-size: 1em;">Root Cause: Different category dynamics require different filtering thresholds</h4>
-        <p style="font-size: 0.88em; margin: 8px 0;"><strong>Investigations:</strong> (1) Plot weekly sales patterns with seasonal decomposition, (2) Measure product churn rates per category, (3) Segment error by days-since-last-sale, (4) Compare active vs inactive subsets</p>
+        <h4 style="font-size: 1em;">Q2: Root Cause Analysis</h4>
+        <p style="font-size: 0.88em; margin: 8px 0; line-height: 1.5;">The difference comes from these categories having fundamentally different product, sales, and demand patterns. Footwear addresses one body part, whereas made-to-measure can dress your whole body with products. This affects the modeling of these categories.</p>
+        <p style="font-size: 0.88em; margin: 8px 0; line-height: 1.5;"><strong>Footwear:</strong> High-velocity with many SKUs, frequent stockouts, aggressive markdowns, and strong seasonality. Inventory takes a hit with some variations (e.g., color) more popular than others; thus, censored demand problems arise where out-of-stock does not mean low demand.</p>
+        <p style="font-size: 0.88em; margin: 8px 0; line-height: 1.5;"><strong>Made-to-measure:</strong> Low-velocity, where the inventory pipeline is more controlled and prices stay fixed, as it caters to a niche audience with custom orders. Demand is more predictable and less affected by stockouts or markdowns. The model's error is lower because the data is cleaner, less censored, and less affected by external factors.</p>
+        <p style="font-size: 0.88em; margin: 8px 0; line-height: 1.5;"><strong>Investigations:</strong> Stockout frequency, SKU churn on active products or less popular products, markdown events and their frequency, seasonality, and traffic on websites measuring abandonment rates.</p>
     </div>
     
     <div class="highlight-box" style="background: linear-gradient(135deg, #10B98122 0%, #05966922 100%); border-left: 5px solid #10B981; margin-top: 20px; max-width: 1100px; width: 100%; padding: 20px;">
-        <h3 style="color: #10B981; margin: 0 0 10px 0; font-size: 1.2em;">⚡ Q3: Week 1 Critical Decision</h3>
-        <p style="font-size: 0.9em; margin: 5px 0;"><strong>Decision:</strong> Implement Product Qualification Pipeline FIRST (before features or tuning)</p>
+        <h3 style="color: #10B981; margin: 0 0 10px 0; font-size: 1em;">⚡ Q3: Week 1 Critical Decision - Quick Win Priority</h3>
+        <p style="font-size: 0.88em; margin: 8px 0; line-height: 1.5;"><strong>Decision:</strong> Set up a window of replenishable time—if the product saw a restock in the last x days, then we mark it as an active catalog product. This means our subset has active, in-stock, replenishable products with sales history.</p>
         
         <div style="display: flex; gap: 20px; margin: 15px 0;">
             <div style="flex: 1;">
-                <p style="font-size: 0.85em; margin: 3px 0;"><strong>✅ Why First?</strong></p>
-                <ul style="font-size: 0.8em; line-height: 1.4; margin: 5px 0;">
-                    <li>Highest impact: 30% error reduction</li>
-                    <li>Fast: Business rules >> ML tuning</li>
-                    <li>Enables everything: Clean data → better models</li>
-                    <li>OOM eliminated: 60% less data</li>
+                <p style="font-size: 0.85em; margin: 3px 0;"><strong>✅ Why This First?</strong></p>
+                <ul style="font-size: 0.78em; line-height: 1.45; margin: 5px 0;">
+                    <li>Immediately fixes OOM crashes, enables demos, and reveals model performance improvements</li>
+                    <li>For business folks, show progress—tackling memory issue first shows quick result time</li>
+                    <li>Unlocks downstream wait times and holdups</li>
+                    <li>Dead stock is the quickest win, with a window variable we can set and tune later</li>
                 </ul>
             </div>
             <div style="flex: 1;">
-                <p style="font-size: 0.85em; margin: 3px 0;"><strong>📋 Week 1 Plan:</strong></p>
-                <ul style="font-size: 0.8em; line-height: 1.4; margin: 5px 0;">
-                    <li>Day 1-2: Define rules (90d physical, 120d e-com, 60d Footwear)</li>
-                    <li>Day 3-4: Implement Polars filter (12.6M → 5M products)</li>
-                    <li>Day 5: Validate & deploy to staging</li>
+                <p style="font-size: 0.85em; margin: 3px 0;"><strong>🎯 Strategic Approach:</strong></p>
+                <ul style="font-size: 0.78em; line-height: 1.45; margin: 5px 0;">
+                    <li>Make the system stable first—then tackle censored demand and price features</li>
+                    <li>Think agile, modular, and iterative</li>
+                    <li>Fix things in my domain first (data engineering and computer processing)</li>
+                    <li>Speed things up first, then feature engineering and model improvements later with domain experts</li>
                 </ul>
             </div>
         </div>
         
-        <p style="font-size: 0.85em; margin: 8px 0 0 0; font-weight: 600;">Expected Impact: Dataset -60% → Memory -60% → WMAPE -15 to -20pp → OOM eliminated</p>
+        <p style="font-size: 0.85em; margin: 8px 0 0 0; font-weight: 600;">Expected Impact: Dataset -60% (12.6M → 5M) → Memory -60% → WMAPE -15 to -20pp → OOM eliminated</p>
     </div>
     
     <div class="slide-number">4</div>
@@ -510,98 +514,108 @@
         <tr>
             <td><strong>Week 1</strong></td>
             <td>
-                <strong>Product Qualification</strong><br>
-                • Define business rules with merchandising<br>
-                • Implement Polars filter<br>
-                • Deploy to staging
+                <strong>Filter Inactive Products</strong><br>
+                • Analyze inventory drops<br>
+                • Speak to SMEs about non-replenishable products<br>
+                • Implement filtering logic (inventory=0, known rule-set)<br>
+                • Test and validate
             </td>
             <td>
                 <span class="badge badge-success">High</span><br>
-                WMAPE: 50% → 42%<br>
-                Dataset: 12.6M → 5M<br>
-                Memory: -60%
+                Batch size: -25% in MB<br>
+                Dataset: 12.6M → ~10M<br>
+                Training set reduced
             </td>
-            <td>40 hrs</td>
+            <td>40 hrs<br><small>(15h analyze + 10h implement + 5h test + 5h buffer + 5h ramp-up)</small></td>
             <td>
-                • Qualified product count<br>
-                • False positive rate<br>
-                • Runtime metrics
+                • Batch load size (MB)<br>
+                • Product count reduction<br>
+                • Filter logic accuracy
             </td>
         </tr>
         <tr>
             <td><strong>Week 2</strong></td>
             <td>
-                <strong>Parallel Processing</strong><br>
-                • Implement chunked processing<br>
-                • Optimize memory footprint<br>
-                • Add monitoring
+                <strong>Filter Dead Stock</strong><br>
+                • Research best window period with SME (sales=0)<br>
+                • Experiment with small sets<br>
+                • Implement filtering logic and combinations<br>
+                • Mark inactive products for purge
             </td>
             <td>
-                <span class="badge badge-warning">Medium</span><br>
-                Runtime: 12hrs → 3hrs<br>
-                OOM: Eliminated<br>
-                Cost: -70%
+                <span class="badge badge-success">High</span><br>
+                Batch size: -25% additional<br>
+                Training time faster (ms benchmark)<br>
+                Dataset: ~10M → ~5M
             </td>
-            <td>30 hrs</td>
+            <td>40 hrs<br><small>(20h research + 10h implement + 5h test + 5h buffer)</small></td>
             <td>
-                • Peak memory usage<br>
-                • Job completion rate<br>
-                • Cost per forecast
+                • Training speed comparison<br>
+                • Dataset size reduction<br>
+                • OOM crashes eliminated
             </td>
         </tr>
         <tr>
             <td><strong>Week 3</strong></td>
             <td>
-                <strong>Data Quality Fixes</strong><br>
-                • Handle missing sales (Day 37)<br>
-                • Fix stockout period logic<br>
-                • Validate data consistency
+                <strong>Parallel Processing</strong><br>
+                • Research best practices for parallel processing in Polars<br>
+                • Implement chunked batch processing with threads<br>
+                • Test chunk re-stitching or keep separate<br>
+                • Make elegant, reproducible, scalable
             </td>
             <td>
                 <span class="badge badge-warning">Medium</span><br>
-                WMAPE: 42% → 38%<br>
-                Data quality score: 85%<br>
-                Edge cases: Handled
+                ETL load: 2× faster<br>
+                Reduce deadlocking/hanging<br>
+                Hit CPU not memory
             </td>
-            <td>25 hrs</td>
+            <td>40 hrs<br><small>(15h research + 20h implement/test + 5h buffer)</small></td>
             <td>
-                • Missing value count<br>
-                • Anomaly detection<br>
-                • Data lineage check
+                • Processing speed (2× target)<br>
+                • CPU vs memory usage<br>
+                • Data integrity checks
             </td>
         </tr>
         <tr style="background: #10B98122;">
             <td><strong>Week 4</strong></td>
             <td>
-                <strong>Validation & Documentation</strong><br>
-                • A/B test vs old system<br>
-                • Document changes<br>
-                • Train team on new pipeline
+                <strong>Modular Code & Monitoring</strong><br>
+                • Refactor code into reusable components<br>
+                • Setup monitoring tools for training speed<br>
+                • Document and create examples<br>
+                • Train junior on design patterns (OOP, polymorphism)
             </td>
             <td>
                 <span class="badge badge-success">High</span><br>
-                WMAPE: 38% → 35%<br>
-                Confidence: High<br>
-                Team alignment: ✅
+                Futureproof codebase<br>
+                Learn new design pattern<br>
+                In-house SDK approach
             </td>
-            <td>20 hrs</td>
+            <td>40 hrs<br><small>(20h refactor + 3h document + 17h buffer)</small></td>
             <td>
-                • A/B test results<br>
-                • Stakeholder approval<br>
-                • Documentation complete
+                • Code modularity<br>
+                • Documentation complete<br>
+                • Monitoring setup
             </td>
         </tr>
     </table>
     
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; max-width: 1100px; width: 100%;">
+        <p style="font-size: 0.9em; margin: 0;"><strong>Checkpoint:</strong> Validate reduced memory usage and training time without OOM crashes. Dataset reduced from 12.6M to ~3-4M products.</p>
+    </div>
+    
     <div class="answer-box" style="margin-top: 20px;">
-        <h4>🚨 Key Risk: Merchandising Pushback on Qualification Rules</h4>
-        <p><strong>Scenario:</strong> "We need to forecast everything, even slow movers, just in case."</p>
-        <p><strong>Mitigation:</strong></p>
+        <h4>🚨 Key Risks for Month 1:</h4>
         <ul style="font-size: 0.95em;">
-            <li><strong>Data-driven approach:</strong> Show 90+ day no-sales products have 500% error → destroys overall accuracy</li>
-            <li><strong>Tiered system:</strong> Create "Review" bucket for borderline products (30-90 days) → Manual merchandising decision</li>
-            <li><strong>Feedback loop:</strong> Track false negatives (excluded products that later sell) → Adjust rules quarterly</li>
-            <li><strong>Cost argument:</strong> "Forecasting dead stock costs $X/month in compute with zero business value"</li>
+            <li><strong>Junior stuck on Polars and parallel processing</strong> [LIKELY]<br>
+                → <em>Mitigation:</em> Senior provides resources and pair programming sessions early in week 2 (deadlocks with threads, hanging time)</li>
+            <li><strong>Refactoring over-engineering in Week 4</strong> [LESS LIKELY]<br>
+                → <em>Mitigation:</em> Senior reviews progress mid-week, ensures scope control, no scope bleed</li>
+            <li><strong>Data corruption when splitting in chunks</strong> [POSSIBLE]<br>
+                → <em>Mitigation:</em> Add unit tests and data validation after each step, verify row counts match after re-stitching</li>
+            <li><strong>Filtering removes too many products</strong> [POSSIBLE & CRUCIAL]<br>
+                → <em>Mitigation:</em> Validate logic with SMEs, run A/B tests on small subset before full rollout</li>
         </ul>
     </div>
     
@@ -619,25 +633,54 @@
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
         <h4>Month 2 Breakdown:</h4>
         <ul style="font-size: 0.9em; line-height: 1.6;">
-            <li><strong>Week 5-6: Stockout Detection</strong>
+            <li><strong>Week 1: Simple Feature Engineering (40h)</strong>
                 <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Implement censored demand imputation</li>
-                    <li>Add stockout flag feature (binary: 0/1)</li>
-                    <li><strong>Impact:</strong> WMAPE 35% → 32% (especially Footwear)</li>
-                    <li><strong>Validation:</strong> Compare forecast during stockout vs actual post-replenishment</li>
+                    <li>One-hot encode categorical features to numerical</li>
+                    <li>Describe feature columns with stats, locate outliers (95th s.d.)</li>
+                    <li>Flags for discounts, events, holidays, day of week</li>
+                    <li>Fill missing values with median/mean</li>
+                    <li>Interaction features (category × season)</li>
+                    <li>Lag features, normalize to range denominator</li>
+                    <li><strong>Expected Impact:</strong> Standardize dataset for numerical regression, normal distribution on features</li>
+                    <li><em>Effort:</em> 10h exploring data + 25h implement + 2h debrief with senior + 5h buffer</li>
                 </ul>
             </li>
-            <li><strong>Week 7-8: Price Elasticity Features</strong>
+            <li><strong>Week 2: Stockout Feature Engineering (40h)</strong>
                 <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Add: price_ratio, markdown_depth, margin_status</li>
-                    <li>Lifecycle stage (new/growth/mature/clearance)</li>
-                    <li><strong>Impact:</strong> WMAPE 32% → 28% (clearance periods)</li>
-                    <li><strong>Validation:</strong> Measure accuracy during markdown events (Day 70+)</li>
+                    <li>Duration, lags (moving average sales, no stock duration), flags</li>
+                    <li>Tackles censored demand problem (recognize lack of inventory ≠ lack of demand)</li>
+                    <li>Sub-problem: classification model to predict stockout OR NOT</li>
+                    <li><strong>Expected Impact:</strong> Directly impact WMAPE, feature importance analysis</li>
+                    <li><em>Effort:</em> 20h implement stockout features + 20h test classification sub-model</li>
+                </ul>
+            </li>
+            <li><strong>Week 3: Price Elasticity Features (40h)</strong>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
+                    <li>Discount flag, causation, percentage</li>
+                    <li>Price × promotion, price × season</li>
+                    <li>Price relative to category (hot accessory item)</li>
+                    <li><strong>Expected Impact:</strong> Contain volatile price changes, lower MAE during discount periods</li>
+                    <li><em>Effort:</em> 10h feature implementation + 25h test on holdout sets + 5h buffer</li>
+                </ul>
+            </li>
+            <li><strong>Week 4: Monitoring Setup (40h)</strong>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
+                    <li>Accuracy measures: precision/recall for classification stockout feature</li>
+                    <li>Report based analysis on correlation matrix, feature importance</li>
+                    <li><strong>Expected Impact:</strong> Visibility on pertinent features, synthesize WMAPE savings for leadership</li>
+                    <li><em>Metrics:</em> MAE, WMAPE, correlation, time to train</li>
+                    <li><em>Effort:</em> 15h gather metrics + 20h run predictions/results + 5h debugging</li>
                 </ul>
             </li>
         </ul>
-        <p style="font-size: 0.9em;"><strong>Key Risk:</strong> Feature engineering requires domain expertise → might overfit if not validated on holdout set</p>
-        <p style="font-size: 0.9em;"><strong>Mitigation:</strong> Use time-series cross-validation (rolling window) + keep 10% holdback set for final evaluation</p>
+        <p style="font-size: 0.9em; margin-top: 10px;"><strong>Checkpoint:</strong> Validate feature impact on WMAPE using holdout sets. Aim for at least 5% WMAPE reduction from Month 1.</p>
+        <p style="font-size: 0.9em;"><strong>Key Risks:</strong></p>
+        <ul style="font-size: 0.9em;">
+            <li><strong>Wrong logic for feature calculations (lag)</strong> [LIKELY] → Senior reviews via backward engineering, focus on most important first</li>
+            <li><strong>Overfitting with too many features</strong> [POSSIBLE & CRUCIAL] → Holdout sets, remove low importance features, early stopping</li>
+            <li><strong>Stakeholder misalignment on key metrics</strong> [LESS LIKELY] → Early alignment meetings</li>
+            <li><strong>Scope creep with too many features</strong> [POSSIBLE] → Weekly check-ins, prioritization</li>
+        </ul>
     </div>
     
     <div class="slide-number">8</div>
@@ -654,30 +697,52 @@
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
         <h4>Month 3 Breakdown:</h4>
         <ul style="font-size: 0.9em; line-height: 1.6;">
-            <li><strong>Week 9-10: Hyperparameter Tuning</strong>
+            <li><strong>Week 1: Feature Refinement & Grid Search (40h)</strong>
                 <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Grid search: learning_rate, max_depth, n_estimators</li>
-                    <li>Category-specific models (Footwear vs MTO)</li>
-                    <li><strong>Impact:</strong> WMAPE 28% → 26%</li>
+                    <li>Leave time for refinement from last month (buffer for Month 2 overflow)</li>
+                    <li>Choose best features with grid search</li>
+                    <li>Train/test split, test with many simulated clients</li>
+                    <li><strong>Expected Impact:</strong> Drive value, KT to best features, finalize sub-feature analysis for reuse</li>
+                    <li><em>Metrics:</em> Evaluate train vs test MAE, overfit gap, tree-based feature importance (XGBoost, Random Forest, LGBM)</li>
+                    <li><em>Target:</em> 10% reduction in MAE, at least 5% improvement on WMAPE</li>
+                    <li><em>Effort:</em> 25h refine features + 10h grid search + 5h buffer</li>
                 </ul>
             </li>
-            <li><strong>Week 11: Monitoring & Alerting</strong>
+            <li><strong>Week 2: End-to-End Testing & Debug (40h)</strong>
                 <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>Set up Prometheus + Grafana dashboards</li>
-                    <li>Alerts: WMAPE drift >5%, OOM, data quality</li>
-                    <li><strong>Impact:</strong> Catch regressions early</li>
+                    <li>Run end-to-end processing, training, testing</li>
+                    <li>Polish data type errors, identify slow processing</li>
+                    <li><strong>Expected Impact:</strong> Verify no memory crashes, trim if feature selection uses too much memory</li>
+                    <li><em>Metrics:</em> Seconds timestamp, logging, uptime</li>
+                    <li><em>Effort:</em> 30h run and rerun + 5h debug (caching bugs) + 5h buffer</li>
                 </ul>
             </li>
-            <li><strong>Week 12: CI/CD Pipeline</strong>
+            <li><strong>Week 3: Monitoring Platform & CI/CD (40h)</strong>
                 <ul style="font-size: 0.95em; margin-top: 5px;">
-                    <li>GitHub Actions: test → build → deploy</li>
-                    <li>Blue-green deployment (25% → 50% → 100%)</li>
-                    <li><strong>Impact:</strong> WMAPE 26% → 25% (stable prod)</li>
+                    <li>Integrate logging in alerts and monitoring platform</li>
+                    <li>Release model using CI/CD and model VCS</li>
+                    <li><strong>Expected Impact:</strong> Production readiness, reusable for other clients</li>
+                    <li><em>Metrics:</em> Model maintains accuracy, systems integration tests</li>
+                    <li><em>Effort:</em> 15h monitoring platform + 20h CI/CD pipeline + 5h buffer</li>
+                </ul>
+            </li>
+            <li><strong>Week 4: MVP BETA Prep (40h)</strong>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
+                    <li>Prep MVP BETA of model and dataset to present</li>
+                    <li><strong>Expected Impact:</strong> Deployable model, ready to integrate in client's infrastructure</li>
+                    <li><em>Metrics:</em> Uptime, CPU compute, build time, dependencies download</li>
+                    <li><em>Effort:</em> 25h integration and prep + 10h dry run + 5h buffer</li>
                 </ul>
             </li>
         </ul>
-        <p style="font-size: 0.9em; margin-top: 10px;"><strong>Key Risk:</strong> Stakeholder pressure to deploy before Month 3 → premature production</p>
-        <p style="font-size: 0.9em;"><strong>Mitigation:</strong> Shadow mode in Month 2 (run new model alongside old, don't use forecasts) → Prove 28% WMAPE before replacing production</p>
+        <p style="font-size: 0.9em; margin-top: 10px;"><strong>Checkpoint:</strong> Deployable model that is trained and tested, ready to integrate for client's stack. Aim for at least 5% WMAPE reduction from Month 2.</p>
+        <p style="font-size: 0.9em;"><strong>Key Risks:</strong></p>
+        <ul style="font-size: 0.9em;">
+            <li><strong>Integration with CI/CD and client's infrastructure</strong> [POSSIBLE] → Early meetings to gather requirements</li>
+            <li><strong>Last-minute bugs and issues</strong> → Buffer time allocated</li>
+            <li><strong>Performance bottlenecks</strong> → Profiling techniques, feature selection based on profile</li>
+            <li><strong>Security concerns</strong> → Follow best practices, consult security experts (authentication, API keys)</li>
+        </ul>
     </div>
     
     <div class="highlight-box" style="margin-top: 20px;">
@@ -784,6 +849,28 @@
 <div class="slide">
     <h2>📥📤 Task 3: System Design - Inputs/Outputs</h2>
     
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px; margin-bottom: 25px;">
+        <h4>📥 Detailed Inputs Description:</h4>
+        <ul style="font-size: 0.9em; line-height: 1.6;">
+            <li><strong>Raw Sales Data:</strong> Historical sales data (90-120 days) to identify active products and patterns in SKU lifecycle</li>
+            <li><strong>Inventory Levels:</strong> Current stock status to determine availability and distinguish genuine dead stock from temporary stockouts</li>
+            <li><strong>Product Metadata:</strong> Category, price, seasonality flags, channel (online/in-store) - understand demand drivers and where product exists in real life</li>
+            <li><strong>Stocking History:</strong> Current levels showing which products get restocked regularly and ones that can be replenished</li>
+            <li><strong>Replenishment Patterns:</strong> Planned orders (next 60-90 days) to identify active restocking</li>
+            <li><strong>Promotional Event Data:</strong> To capture demand spikes tied to sales, holidays, markdown events</li>
+        </ul>
+        <h4>📤 Detailed Outputs Description:</h4>
+        <ul style="font-size: 0.9em; line-height: 1.6;">
+            <li><strong>Cleaned Dataset:</strong> Only active, replenishable products with reduced noise from irrelevant SKUs</li>
+            <li><strong>Engineered Features:</strong> Stockout indicators, price elasticity metrics, seasonality flags</li>
+            <li><strong>Normalized Data:</strong> Categorical converted to numerical, lag features for stockouts/price changes, interaction features (price × seasonality)</li>
+            <li><strong>Format:</strong> Compatible with existing modeling pipeline, normally distributed, limited skewness and outliers</li>
+            <li><strong>Storage:</strong> Data lake or database accessible by modeling component for training and forecasting</li>
+        </ul>
+        <h4>🔄 Pipeline Integration:</h4>
+        <p style="font-size: 0.9em;">This component sits in the ETL pipeline as a <strong>data processing and feature engineering module</strong> before the modeling step. It takes raw data, filters inactive products, engineers relevant features, and outputs a cleaned dataset ready for model training. Can be deployed as a <strong>Lambda function</strong> (stateless, scales horizontally) with custom Python code using <strong>Polars</strong> for speed and low memory footprint, containerized with <strong>Docker</strong>, monitored with <strong>Prometheus/Grafana</strong>, and exposed via <strong>FastAPI</strong> endpoints for integration.</p>
+    </div>
+    
     <svg viewBox="0 0 1100 450" xmlns="http://www.w3.org/2000/svg" style="max-width: 1100px; width: 100%;">
         <!-- Input Layer -->
         <rect x="50" y="30" width="250" height="150" fill="#667eea22" stroke="#667eea" stroke-width="3" rx="8"/>
@@ -862,6 +949,11 @@
 <div class="slide">
     <h2>📋 Task 3: Business Rules by Channel & Category</h2>
     
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px; margin-bottom: 20px;">
+        <h4>📋 Business Rules Context:</h4>
+        <p style="font-size: 0.9em;">Different channels and categories require tailored qualification logic due to fundamentally different sales patterns, inventory constraints, and demand dynamics. The Product Qualification component applies these rules to ensure only active, replenishable, relevant products are forecasted.</p>
+    </div>
+    
     <table class="data-table" style="font-size: 0.88em; max-width: 1100px; width: 100%;">
         <tr>
             <th>Channel</th>
@@ -875,28 +967,82 @@
             <td>Standard</td>
             <td>90 days</td>
             <td>60 days</td>
-            <td>Higher carrying costs → Shorter lookback</td>
+            <td>Higher carrying costs, shelf space constraints → Shorter lookback to identify active products</td>
         </tr>
         <tr>
             <td>Footwear (High velocity)</td>
             <td>60 days</td>
             <td>30 days</td>
-            <td>Fast fashion cycles → Tighter window</td>
+            <td>Fast fashion cycles, frequent stockouts, aggressive markdowns → Tighter window for agile filtering</td>
         </tr>
         <tr>
             <td rowspan="2"><strong>E-commerce</strong></td>
             <td>Standard</td>
             <td>120 days</td>
             <td>90 days</td>
-            <td>Lower storage costs → Longer tail</td>
+            <td>Lower storage costs, no shelf space limits, volatile demand (flash sales, digital marketing) → Longer tail for online products</td>
         </tr>
         <tr>
             <td>Made-to-Measure</td>
             <td>120 days</td>
             <td>90 days</td>
-            <td>Custom orders have longer lead times</td>
+            <td>Custom orders, niche audience, stable pricing, longer lead times → Longer window for predictable demand patterns</td>
         </tr>
     </table>
+    
+    <div style="display: flex; gap: 20px; margin-top: 25px; max-width: 1100px; width: 100%;">
+        <div class="answer-box" style="flex: 1; padding: 15px;">
+            <h4 style="margin-top: 0; font-size: 0.95em;">📦 High-Volume Categories (e.g., Groceries):</h4>
+            <ul style="font-size: 0.85em; line-height: 1.5;">
+                <li>Lookback: 30-45 days (capture recent velocity)</li>
+                <li>Include: ≥10 sales/week in last 30 days</li>
+                <li>Include: Restocked ≥2× in last 60 days</li>
+                <li>Include: Top 20% by sales/revenue in category</li>
+                <li>Exclude: No sales in last 30 days</li>
+                <li>Exclude: Not restocked in last 60 days</li>
+                <li>Exclude: Negative margins or high return rates</li>
+                <li>Monitor: Stockout periods frequently (crucial for high-velocity SKUs driving revenue)</li>
+            </ul>
+        </div>
+        <div class="answer-box" style="flex: 1; padding: 15px;">
+            <h4 style="margin-top: 0; font-size: 0.95em;">💎 Low-Volume Categories (e.g., Luxury):</h4>
+            <ul style="font-size: 0.85em; line-height: 1.5;">
+                <li>Lookback: 90-180 days (capture niche demand)</li>
+                <li>Include: ≥1 sale/week avg in last 90 days</li>
+                <li>Include: Restocked in last 60 days</li>
+                <li>Include: Brand identity products (pride items)</li>
+                <li>Include: Strategic for upsell/cross-sell (even if not forecasted directly)</li>
+                <li>Exclude: Not restocked in 60 days + declining velocity</li>
+                <li>Exclude: Disrupts supply chain or low margins</li>
+                <li>Monitor: Custom orders, pre-order unique patterns, less frequent due to stable demand</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 20px; margin-top: 20px; max-width: 1100px; width: 100%;">
+        <div class="answer-box" style="flex: 1; padding: 15px;">
+            <h4 style="margin-top: 0; font-size: 0.95em;">🆕 New Products (within 60 days):</h4>
+            <ul style="font-size: 0.85em; line-height: 1.5;">
+                <li>Lookback: 30-45 days (grace period)</li>
+                <li>Include: ≥3 sales or 10 web sessions in first 30 days</li>
+                <li>Include: Restocked ≥1× since launch</li>
+                <li>Exclude: Fails launch sales objectives or not restocked after initial launch</li>
+                <li>Flag: Limited editions, marketing campaigns</li>
+                <li>Monitor: Frequent adjustments due to high volatility and limited history</li>
+            </ul>
+        </div>
+        <div class="answer-box" style="flex: 1; padding: 15px;">
+            <h4 style="margin-top: 0; font-size: 0.95em;">📊 Mature Products (>60 days):</h4>
+            <ul style="font-size: 0.85em; line-height: 1.5;">
+                <li>Lookback: 90-180 days (comprehensive trends)</li>
+                <li>Include: ≥1 sale/week avg in last 90 days</li>
+                <li>Include: Restocked in last 60 days</li>
+                <li>Exclude: Not restocked in 60 days or declining velocity</li>
+                <li>Monitor: Seasonal fluctuations, market changes, competitor actions</li>
+                <li>Review: Category performance (growing vs declining segment)</li>
+            </ul>
+        </div>
+    </div>
     
     <div class="answer-box" style="margin-top: 25px;">
         <h4>Decision Logic (Implemented in Polars):</h4>
@@ -1028,34 +1174,60 @@ final_qualified = pl.concat(results)</div>
     </div>
     
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
-        <h4>✅ Validation Strategy:</h4>
+        <h4>✅ Comprehensive Validation Strategy:</h4>
         
-        <p><strong>Metric 1: Qualification Rate</strong></p>
+        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+            <p style="margin: 0; font-size: 0.9em;"><strong>Validation Approach:</strong> Combine operational metrics (data engineering POV) + business metrics (forecasting POV) to ensure the Product Qualification component works effectively</p>
+        </div>
+        
+        <p><strong>Metric 1: Qualification Rate by Category</strong></p>
         <ul style="font-size: 0.95em;">
-            <li>Target: 30-50% of products qualified (not too aggressive, not too lenient)</li>
+            <li>Target: 30-50% of products qualified overall (balanced filtering)</li>
             <li>Monitor by category: Footwear ~30%, Made-to-Measure ~60%</li>
-            <li>Alert if rate suddenly drops >10% (data quality issue or business change)</li>
+            <li>Alert if rate suddenly drops >10% (signals data quality issue or business change)</li>
+            <li><em>Purpose:</em> Identify if certain categories are being over or under-filtered</li>
         </ul>
         
-        <p><strong>Metric 2: False Negative Rate</strong></p>
+        <p><strong>Metric 2: False Negative Rate (FN)</strong></p>
         <ul style="font-size: 0.95em;">
-            <li>Track products excluded but later sold (missed opportunities)</li>
-            <li>Target: <10% false negatives</li>
-            <li>Monthly review with merchandising: adjust rules if FN rate trends up</li>
+            <li>Track products excluded by qualification logic but later recorded sales (missed opportunities)</li>
+            <li>Target: <strong><10% false negatives</strong></li>
+            <li>Monthly review with merchandising SMEs: adjust rules if FN rate trends up</li>
+            <li>Keep <strong>discarded items log</strong> to see if any start selling again in the future (refine logic over time)</li>
+            <li><em>Risk:</em> High FN indicates filtering criteria too strict</li>
         </ul>
         
-        <p><strong>Metric 3: False Positive Rate</strong></p>
+        <p><strong>Metric 3: False Positive Rate (FP)</strong></p>
         <ul style="font-size: 0.95em;">
-            <li>Track products qualified but never sold (wasted compute)</li>
-            <li>Target: <10% false positives</li>
+            <li>Track products included in forecasting dataset but never recorded any sales (wasted compute)</li>
+            <li>Target: <strong><10% false positives</strong></li>
             <li>Calculate: (qualified but zero sales in next 30 days) / total qualified</li>
+            <li><em>Risk:</em> High FP suggests filtering criteria too lenient</li>
         </ul>
         
         <p><strong>Metric 4: Downstream WMAPE Impact</strong></p>
         <ul style="font-size: 0.95em;">
-            <li>Most important: Does qualification improve forecast accuracy?</li>
+            <li><strong>Most important:</strong> Does qualification improve forecast accuracy?</li>
             <li>A/B test: Old system (all products) vs New (qualified only)</li>
-            <li>Expected: WMAPE reduction 15-20 percentage points</li>
+            <li>Expected: <strong>WMAPE reduction 15-20 percentage points</strong></li>
+            <li>Measure by category: ensure improvements across Footwear, Made-to-Measure, etc.</li>
+        </ul>
+        
+        <p><strong>Operational Metrics:</strong></p>
+        <ul style="font-size: 0.95em;">
+            <li><strong>Reduction in product count:</strong> 12.6M → 5M (60% reduction)</li>
+            <li><strong>Peak memory usage:</strong> 64 GB → 8 GB per worker (chunked processing)</li>
+            <li><strong>Processing time:</strong> 45 min → 12 min (parallel processing)</li>
+            <li><strong>OOM crashes:</strong> Eliminated (from frequent to none)</li>
+            <li><strong>Error rates:</strong> Data corruption checks, row count validation</li>
+        </ul>
+        
+        <p><strong>Validation Processes:</strong></p>
+        <ul style="font-size: 0.95em;">
+            <li><strong>Manual Audits:</strong> Regularly review sample of qualified and excluded products with SMEs to ensure logic aligns with business expectations</li>
+            <li><strong>SME Reviews:</strong> Include merchandising experts to review excluded items list, reinforce completeness of A/B testing</li>
+            <li><strong>Alert Setup:</strong> Trigger if sudden spike in FN/FP, or abnormal processing time/memory usage (signals inefficiencies or bugs)</li>
+            <li><strong>Continuous Refinement:</strong> Regularly review metrics and adjust filtering criteria, quarterly adjustments by category and channel</li>
         </ul>
     </div>
     
