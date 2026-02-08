@@ -1265,10 +1265,15 @@
 <div class="slide">
     <h2>❓ Part 1 Q&A: Strategy Deep-Dive (Devil's Advocate Edition)</h2>
     
-    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 14px; margin-bottom: 12px;">
+    <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 18px;">
         <h4 style="font-size: 0.95em;">Q1: Why not just use better models (XGBoost, LSTM) instead of filtering data?</h4>
-        <p style="font-size: 0.88em; margin: 8px 0;"><strong>Answer:</strong> No model can learn signal from noise. Dead stock has zero future demand—forecasting it is mathematically impossible, not a modeling problem.</p>
-        <p style="font-size: 0.85em; margin: 5px 0; color: #555;"><em>Trade-off:</em> Even the best model will overfit on irrelevant products (12.6M → 5M reduces noise by 60%). Filtering first lets model focus on learnable patterns. Better models help <strong>after</strong> we fix data quality. Industry standard is active catalog filtering before modeling.</p>
+        <p><strong>Answer:</strong> It’s the highest-leverage fix.</p>
+        <ul style="font-size: 0.95em;">
+            <li>Removes dead stock noise that inflates WMAPE.</li>
+            <li>Cuts compute and memory usage, eliminating OOM crashes.</li>
+            <li>Improves signal quality so downstream models actually learn demand.</li>
+        </ul>
+        <p><strong>Trade-off:</strong> Delays model tuning by ~1–2 weeks, but avoids optimizing on bad data.</p>
     </div>
     
     <div class="answer-box" style="max-width: 1100px; width: 100%; padding: 14px; margin-bottom: 12px;">
