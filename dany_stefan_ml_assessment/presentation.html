@@ -23,17 +23,21 @@
         }
         .slide {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            padding: 40px;
+            padding: 60px 40px 80px 40px;
             box-sizing: border-box;
             page-break-after: always;
             background: white;
             margin-bottom: 20px;
             position: relative;
+        }
+        .slide.centered {
+            justify-content: center;
+            padding: 40px;
         }
         .slide.gradient-bg {
             background: var(--bg-gradient);
@@ -45,10 +49,10 @@
         .slide.gradient-bg p {
             color: white;
         }
-        h1 { font-size: 3em; margin: 0; color: #333; }
-        h2 { font-size: 2.5em; margin: 20px 0; color: var(--primary-blue); }
-        h3 { font-size: 1.8em; margin: 15px 0; color: var(--secondary-purple); }
-        p, li { font-size: 1.3em; line-height: 1.6; color: #444; }
+        h1 { font-size: 2.8em; margin: 0 0 10px 0; color: #333; }
+        h2 { font-size: 2.2em; margin: 15px 0 10px 0; color: var(--primary-blue); }
+        h3 { font-size: 1.5em; margin: 12px 0 8px 0; color: var(--secondary-purple); }
+        p, li { font-size: 1.1em; line-height: 1.5; color: #444; margin: 8px 0; }
         .slide-number { position: absolute; bottom: 20px; right: 20px; color: #999; font-size: 1.2em; }
         ul { text-align: left; max-width: 800px; }
         
@@ -116,23 +120,28 @@
         .answer-box {
             background: #f8f9fa;
             border-left: 4px solid var(--success-green);
-            padding: 15px 20px;
-            margin: 15px 0;
+            padding: 12px 18px;
+            margin: 12px 0;
             border-radius: 4px;
             text-align: left;
             max-width: 850px;
         }
         
         .answer-box h4 {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             color: var(--success-green);
-            font-size: 1.1em;
+            font-size: 1em;
         }
         
         .answer-box p {
             margin: 5px 0;
-            font-size: 1em;
-            line-height: 1.5;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        .answer-box ul {
+            margin: 5px 0;
+            font-size: 0.9em;
         }
         
         .recommendation {
@@ -146,18 +155,19 @@
         .code-block {
             background: #2d2d2d;
             color: #f8f8f2;
-            padding: 15px;
+            padding: 12px;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
-            font-size: 0.9em;
+            font-size: 0.8em;
             overflow-x: auto;
-            margin: 10px 0;
+            margin: 8px 0;
+            line-height: 1.4;
         }
         
         table.data-table {
             border-collapse: collapse;
-            margin: 20px auto;
-            font-size: 1em;
+            margin: 15px auto;
+            font-size: 0.9em;
             max-width: 800px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -165,13 +175,15 @@
         table.data-table th {
             background: var(--primary-blue);
             color: white;
-            padding: 12px 15px;
+            padding: 10px 12px;
             text-align: left;
+            font-size: 0.95em;
         }
         
         table.data-table td {
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-bottom: 1px solid #ddd;
+            font-size: 0.9em;
         }
         
         table.data-table tr:nth-child(even) {
@@ -232,7 +244,7 @@
 <body>
 
 <!-- Slide 1: Title -->
-<div class="slide gradient-bg">
+<div class="slide gradient-bg centered">
     <h1>🚀 Fixing Fashion Forecasting</h1>
     <h3>From 50% Error to Production-Ready</h3>
     <p style="font-size: 1.5em; margin-top: 40px;">Dany Stefan | Senior ML Engineer Assessment</p>
@@ -241,7 +253,7 @@
 </div>
 
 <!-- PART 1 DIVIDER -->
-<div class="slide gradient-bg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+<div class="slide gradient-bg centered" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
     <h1 style="font-size: 3.5em;">📋 PART 1</h1>
     <h2 style="color: white;">Strategy & Architecture</h2>
     <p style="font-size: 1.3em; margin-top: 30px;">Root Cause Analysis, 90-Day Roadmap, System Design</p>
@@ -352,7 +364,7 @@
     <div class="slide-number">4</div>
 </div>
 
-<!-- NEW SLIDE: Task 1 - Top 3 Reasons -->
+<!-- NEW SLIDE: Task 1 - Top 3 Reasons (Part 1) -->
 <div class="slide">
     <h2>📊 Task 1: Top 3 Reasons for 50% Error</h2>
     
@@ -368,13 +380,20 @@
     
     <div class="answer-box">
         <h4>🥈 Reason #2: Censored Demand (Rank: Medium Impact - 12% error contribution)</h4>
-        <p><strong>What's Wrong:</strong> Zero inventory = zero sales recorded, but demand existed. Model learns "no demand" when reality is "couldn't serve demand".</p>
+        <p><strong>What's Wrong:</strong> Zero inventory = zero sales recorded, but demand existed. Model learns "no  demand" when reality is "couldn't serve demand".</p>
         <p><strong>Why It Matters:</strong> Days 41-50 stockout period shows systematic underestimation. Model can't distinguish "no demand" from "no stock".</p>
         <p><strong>Impact Estimate:</strong> Addressing stockout periods could reduce WMAPE by 5-8 percentage points, especially in high-velocity categories (Footwear).</p>
         <div class="recommendation">
             💡 Fix: Add stockout detection feature + impute demand during out-of-stock periods
         </div>
     </div>
+    
+    <div class="slide-number">2</div>
+</div>
+
+<!-- NEW SLIDE: Task 1 - Top 3 Reasons (Part 2) -->
+<div class="slide">
+    <h2>📊 Task 1: Top 3 Reasons (continued)</h2>
     
     <div class="answer-box">
         <h4>🥉 Reason #3: Missing Price Features (Rank: Medium Impact - 8% error contribution)</h4>
@@ -386,16 +405,27 @@
         </div>
     </div>
     
-    <div class="slide-number">2</div>
+    <div class="highlight-box" style="margin-top: 30px;">
+        <h3 style="margin-top: 0;">Combined Impact</h3>
+        <p>Addressing all three issues:</p>
+        <ul>
+            <li>Dead Stock Noise: -15 to -20 percentage points</li>
+            <li>Censored Demand: -5 to -8 percentage points</li>
+            <li>Price Features: -3 to -5 percentage points</li>
+        </ul>
+        <p><strong>Total Expected Improvement: WMAPE 50% → 22-27%</strong></p>
+    </div>
+    
+    <div class="slide-number">2a</div>
 </div>
 
-<!-- NEW SLIDE: Task 1 - Footwear vs MTO Analysis -->
+<!-- NEW SLIDE: Task 1 - Footwear vs MTO Analysis (Part 1) -->
 <div class="slide">
     <h2>🔍 Task 1: Why Footwear (233% error) vs Made-to-Measure (40% error)?</h2>
     
     <div class="answer-box">
         <h4>Hypothesis 1: Seasonality & Trend Sensitivity</h4>
-        <table class="data-table">
+        <table class="data-table" style="font-size: 0.9em;">
             <tr>
                 <th>Category</th>
                 <th>Characteristics</th>
@@ -417,7 +447,7 @@
     
     <div class="answer-box">
         <h4>Hypothesis 2: Product Lifecycle Velocity</h4>
-        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 750px;">
+        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 750px; margin: 15px 0;">
             <!-- Footwear lifecycle (fast) -->
             <text x="50" y="30" font-size="13" font-weight="bold">Footwear Lifecycle:</text>
             <rect x="50" y="40" width="80" height="30" fill="#EF4444" rx="4"/>
@@ -453,10 +483,17 @@
         <p><strong>Investigation:</strong> Calculate product churn rate (% discontinued per quarter). If Footwear churn >50% but model trains on 1 year data, it's forecasting mostly dead products.</p>
     </div>
     
+    <div class="slide-number">3</div>
+</div>
+
+<!-- NEW SLIDE: Task 1 - Footwear vs MTO Analysis (Part 2) -->
+<div class="slide">
+    <h2>🔍 Task 1: Footwear vs MTO (continued)</h2>
+    
     <div class="answer-box">
         <h4>Hypothesis 3: Dead Stock Ratio</h4>
         <p><strong>Scenario:</strong> Of 4.2M Footwear SKUs, 70% might be inactive (old seasons, wrong sizes). Of 800K Made-to-Measure, only 30% inactive (custom demand persists).</p>
-        <div class="code-block">Footwear:
+        <div class="code-block" style="font-size: 0.85em;">Footwear:
 Active: 1.3M (30%) → Model should forecast these
 Dead Stock: 2.9M (70%) → Inflating error
 
@@ -466,7 +503,18 @@ Dead Stock: 240K (30%) → Lower noise</div>
         <p><strong>Investigation:</strong> Group products by "days since last sale". Calculate error separately for 0-30d, 30-90d, 90+ day buckets. Likely: 90+ day bucket has 500%+ error.</p>
     </div>
     
-    <div class="slide-number">3</div>
+    <div class="highlight-box" style="margin-top: 25px;">
+        <h3 style="margin-top: 0;">Recommended Investigations</h3>
+        <ul style="font-size: 0.95em; line-height: 1.6;">
+            <li><strong>Test 1:</strong> Plot weekly sales patterns with seasonal decomposition</li>
+            <li><strong>Test 2:</strong> Measure product churn rates per category</li>
+            <li><strong>Test 3:</strong> Segment error analysis by days-since-last-sale</li>
+            <li><strong>Test 4:</strong> Compare model performance on active vs. inactive subsets</li>
+        </ul>
+        <p style="margin-top: 15px;"><strong>Expected Finding:</strong> Footwear's higher error driven primarily by dead stock ratio (Hypothesis 3), compounded by fast lifecycle velocity (Hypothesis 2).</p>
+    </div>
+    
+    <div class="slide-number">3a</div>
 </div>
 
 <!-- NEW SLIDE: Task 1 - Week 1 Decision -->
@@ -717,72 +765,87 @@ Day 5: Validate & Deploy
     <div class="slide-number">5</div>
 </div>
 
-<!-- NEW SLIDE: Task 2 - Month 2 & 3 -->
+<!-- NEW SLIDE: Task 2 - Month 2 & 3 Roadmap -->
 <div class="slide">
     <h2>📅 Task 2: Month 2 & 3 Roadmap</h2>
     
-    <div style="background: linear-gradient(135deg, #f093fb22 0%, #f5576c22 100%); padding: 25px; border-radius: 8px; margin: 20px 0;">
+    <div style="background: linear-gradient(135deg, #f093fb22 0%, #f5576c22 100%); padding: 20px; border-radius: 8px; margin: 15px 0;">
         <h3 style="color: #f093fb; margin-top: 0;">📊 Month 2 Goal: WMAPE 35% → 28% (Feature Engineering)</h3>
     </div>
     
     <div class="answer-box">
         <h4>Month 2 Breakdown:</h4>
-        <ul style="font-size: 0.95em; line-height: 1.7;">
+        <ul style="font-size: 0.9em; line-height: 1.6;">
             <li><strong>Week 5-6: Stockout Detection</strong>
-                <ul>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
                     <li>Implement censored demand imputation</li>
                     <li>Add stockout flag feature (binary: 0/1)</li>
                     <li><strong>Impact:</strong> WMAPE 35% → 32% (especially Footwear)</li>
-                    <li><strong>Validation:</strong> Compare forecast during stockout periods vs actual demand post-replenishment</li>
+                    <li><strong>Validation:</strong> Compare forecast during stockout vs actual post-replenishment</li>
                 </ul>
             </li>
             <li><strong>Week 7-8: Price Elasticity Features</strong>
-                <ul>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
                     <li>Add: price_ratio, markdown_depth, margin_status</li>
-                    <li>Lifecycle stage classification (new/growth/mature/clearance)</li>
+                    <li>Lifecycle stage (new/growth/mature/clearance)</li>
                     <li><strong>Impact:</strong> WMAPE 32% → 28% (clearance periods)</li>
                     <li><strong>Validation:</strong> Measure accuracy during markdown events (Day 70+)</li>
                 </ul>
             </li>
         </ul>
-        <p><strong>Key Risk:</strong> Feature engineering requires domain expertise → might overfit if not validated on holdout set</p>
-        <p><strong>Mitigation:</strong> Use time-series cross-validation (rolling window) + keep 10% holdback set untouched for final evaluation</p>
+        <p style="font-size: 0.9em;"><strong>Key Risk:</strong> Feature engineering requires domain expertise → might overfit if not validated on holdout set</p>
+        <p style="font-size: 0.9em;"><strong>Mitigation:</strong> Use time-series cross-validation (rolling window) + keep 10% holdback set for final evaluation</p>
     </div>
     
-    <div style="background: linear-gradient(135deg, #4facfe22 0%, #00f2fe22 100%); padding: 25px; border-radius: 8px; margin: 20px 0;">
+    <div class="slide-number">6</div>
+</div>
+
+<!-- NEW SLIDE: Task 2 - Month 3 Production Ready -->
+<div class="slide">
+    <h2>📅 Task 2: Month 3 - Production Ready</h2>
+    
+    <div style="background: linear-gradient(135deg, #4facfe22 0%, #00f2fe22 100%); padding: 20px; border-radius: 8px; margin: 15px 0;">
         <h3 style="color: #4facfe; margin-top: 0;">🚀 Month 3 Goal: WMAPE 28% → 25% (Production Ready)</h3>
     </div>
     
     <div class="answer-box">
         <h4>Month 3 Breakdown:</h4>
-        <ul style="font-size: 0.95em; line-height: 1.7;">
+        <ul style="font-size: 0.9em; line-height: 1.6;">
             <li><strong>Week 9-10: Hyperparameter Tuning</strong>
-                <ul>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
                     <li>Grid search: learning_rate, max_depth, n_estimators</li>
                     <li>Category-specific models (Footwear vs MTO)</li>
                     <li><strong>Impact:</strong> WMAPE 28% → 26%</li>
                 </ul>
             </li>
             <li><strong>Week 11: Monitoring & Alerting</strong>
-                <ul>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
                     <li>Set up Prometheus + Grafana dashboards</li>
                     <li>Alerts: WMAPE drift >5%, OOM, data quality</li>
                     <li><strong>Impact:</strong> Catch regressions early</li>
                 </ul>
             </li>
             <li><strong>Week 12: CI/CD Pipeline</strong>
-                <ul>
+                <ul style="font-size: 0.95em; margin-top: 5px;">
                     <li>GitHub Actions: test → build → deploy</li>
                     <li>Blue-green deployment (25% → 50% → 100%)</li>
-                    <li><strong>Impact:</strong> WMAPE 26% → 25% (stable prod deployment)</li>
+                    <li><strong>Impact:</strong> WMAPE 26% → 25% (stable prod)</li>
                 </ul>
             </li>
         </ul>
-        <p><strong>Key Risk:</strong> Stakeholder pressure to deploy before Month 3 → premature production</p>
-        <p><strong>Mitigation:</strong> Shadow mode in Month 2 (run new model alongside old, don't use forecasts) → Prove 28% WMAPE before replacing production</p>
+        <p style="font-size: 0.9em; margin-top: 10px;"><strong>Key Risk:</strong> Stakeholder pressure to deploy before Month 3 → premature production</p>
+        <p style="font-size: 0.9em;"><strong>Mitigation:</strong> Shadow mode in Month 2 (run new model alongside old, don't use forecasts) → Prove 28% WMAPE before replacing production</p>
     </div>
     
-    <div class="slide-number">6</div>
+    <div class="highlight-box" style="margin-top: 20px;">
+        <h3 style="margin-top: 0;">90-Day Summary</h3>
+        <p style="font-size: 0.95em;"><strong>Month 1:</strong> WMAPE 50% → 35% (Product Qualification + Infrastructure)</p>
+        <p style="font-size: 0.95em;"><strong>Month 2:</strong> WMAPE 35% → 28% (Feature Engineering)</p>
+        <p style="font-size: 0.95em;"><strong>Month 3:</strong> WMAPE 28% → 25% (Hyperparameters + Production)</p>
+        <p style="font-size: 0.95em; margin-top: 10px;"><strong>Total Improvement:</strong> 50% reduction in error (50% → 25% WMAPE)</p>
+    </div>
+    
+    <div class="slide-number">6a</div>
 </div>
 
 <!-- Slide 9: Production Architecture (Task 3) -->
@@ -1204,7 +1267,7 @@ final_qualified = pl.concat(results)</div>
 </div>
 
 <!-- PART 2 DIVIDER -->
-<div class="slide gradient-bg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+<div class="slide gradient-bg centered" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
     <h1 style="font-size: 4em;">💻 PART 2</h1>
     <h2 style="color: white;">Hands-On Engineering</h2>
     <p style="font-size: 1.3em; margin-top: 30px;">Analysis, Features, Model Comparison, Production Quality</p>
@@ -2019,7 +2082,7 @@ test_should_forecast_product()</div>
 <!-- ...existing code for slides 23-27 (Roadmap, Risk Assessment, Success Metrics, Final Recommendations, Thank You)... -->
 
 <!-- Slide 27: Thank You -->
-<div class="slide gradient-bg">
+<div class="slide gradient-bg centered">
     <h1 style="font-size: 4em;">Thank You! 🙏</h1>
     <h3 style="margin-top: 40px;">Questions & Discussion</h3>
     <p style="font-size: 1.5em; margin-top: 30px;">Let's build better forecasts together! 🚀</p>
